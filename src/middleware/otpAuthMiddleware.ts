@@ -1,16 +1,16 @@
 import { Request, Response, NextFunction } from "express";
+import { cache } from "../utils/otpSendAndStore";
 
-const otpAuthMiddleware = (req: Request, res: Response, next: NextFunction) => {
+const otpAuthMiddleware = async(req: Request, res: Response, next: NextFunction) => {
   try {
-
     const { id } = req.params;
-    const sessionValue = req.session.stepOneOtp;
-
-    if (sessionValue === null) {
+    const { enteredOtp } = req.body;
+    const value = cache.get(id);
+    if (!value) {
       return res.status(401).json({ message: "Un-Authorized request" });
     } else {
-      if (parseInt(id) === sessionValue) {
-        req.session.stepOneOtp = null;
+      if (parseInt(enteredOtp) === value) {
+        cache.del(id);
         next();
       } else {
         return res.status(400).json({ message: "Invalid OTP" });

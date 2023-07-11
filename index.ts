@@ -29,21 +29,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan("dev"));
 
-// make change in session data
-declare module "express-session" {
-  interface SessionData {
-    stepOneOtp:number | null ;
-  }
-}
-// Session middleware setup
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET as string,
-    resave: false,
-    saveUninitialized: true,
-  })
-);
-
 // user route
 app.use('/', userRoute);
 
