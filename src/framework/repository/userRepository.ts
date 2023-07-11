@@ -3,7 +3,7 @@ import { MongoDBUser } from "../database/models/userModel";
 import bcrypt from 'bcryptjs';
 
 export type userRepository = {
-  findByUsername: (username: string) => Promise<User | null >;
+  findByUsername: (username: string) => Promise<User | null>;
   findByEmail: (email: string) => Promise<User | null >;
   findOne: (user: User) => Promise<User | null>;
   create: (user: User) => Promise<User | null>;
@@ -34,6 +34,7 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
    email: user.email,
    password: hashPass,
    role: user.role,
+   status:true,
    isGoogle: user.isGoogle
   }
   const createdUser = await userModel.create(newUser);

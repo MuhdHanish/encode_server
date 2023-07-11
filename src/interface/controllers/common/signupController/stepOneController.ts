@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { otpSender } from "../../../../utils/otpSender";
+import { otpSender } from "../../../../utils/otpSendAndStore";
 import { validationResult } from "express-validator";
 import { userModel } from "../../../../framework/database/models/userModel";
 import { userRepositoryEmpl } from "../../../../framework/repository/userRepository";
@@ -17,10 +17,8 @@ const stepOneController = async (req: Request, res: Response) => {
   const { userExist, message } = await signupStepOne(userRepository)(username, email);
   
   if (!userExist) {
-   otpSender(email, `otp varification of ${role}`).then((response) => {
-    req.session.stepOneOtp = response.otp;
-    return res.status(200).json({ message });
-   }).catch(error => { throw new Error(error) });
+   
+   otpSender(email, `otp varification of ${role}`)
 
   } else {
    return res.status(409).json({ message });

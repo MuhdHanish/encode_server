@@ -8,7 +8,8 @@ import stepTwoController from "../controllers/common/signupController/stepTwoCon
 import otpAuthMiddleware from "../../middleware/otpAuthMiddleware";
 
 // validator middlewares
-import { signupValidatorOne, signupValidatorTwo } from "../../utils/requestValidator";
+import { loginValidator, signupValidatorOne, signupValidatorTwo } from "../../utils/requestValidator";
+import { loginController } from "../controllers/common/LoginController";
 
 const router = Router();
 
@@ -17,8 +18,11 @@ router.get('/', (req, res) => {
  res.send('getted');
 })
 
-// POST 
-router.post('/register/stepone',signupValidatorOne, stepOneController);
-router.post("/register/steptwo/:id",signupValidatorTwo,otpAuthMiddleware, stepTwoController);
+// POST  signup
+router.post("/register/stepone",signupValidatorOne, stepOneController);
+router.post("/register/steptwo/:id", signupValidatorTwo, otpAuthMiddleware, stepTwoController);
+
+// POST login
+router.post("/login",loginValidator,loginController);
 
 export default router;

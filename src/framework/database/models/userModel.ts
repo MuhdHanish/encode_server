@@ -8,6 +8,7 @@ const userSchema = new Schema<User>({
   email: { type: String, required: true, unique: true },
   password: { type: String, required: true },
   isGoogle: { type: Boolean, required: true },
+  status: {type:Boolean,required:true},
   profile: {
     type: String,
     default:
