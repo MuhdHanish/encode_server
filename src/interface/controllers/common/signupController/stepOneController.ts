@@ -12,7 +12,7 @@ const stepOneController = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
   const { email,username,role } = req.body;
-  const { message,uId } = await signupStepOne(userRepository)(username, email,role);
+  const { message,uId } = await signupStepOne(userRepository)(username,email,role);
   if (uId) {
     return res.status(200).json({ uId });
   } else {
@@ -23,4 +23,4 @@ const stepOneController = async (req: Request, res: Response) => {
  }
 };
 
-export default stepOneController
+export default stepOneController;

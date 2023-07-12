@@ -16,7 +16,7 @@ export const otpSender = async (
       email,
       subject
     );
-    cache.set(uId, otp, 60);
+    cache.set(uId, otp, 65);
     return uId;
   } catch (error: any) {
     throw new Error(error);

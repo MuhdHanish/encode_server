@@ -11,7 +11,14 @@ export const userLogin =
         currentUser.password &&
         bcrypt.compareSync(password, currentUser.password)
       ) {
-        return currentUser;
+        const user: User = {
+          _id: currentUser._id,
+          username: currentUser.username,
+          email: currentUser.email,
+          role: currentUser.role,
+          profile: currentUser.profile
+        }
+        return user;
       } else {
         return null;
       }

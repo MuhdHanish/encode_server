@@ -3,10 +3,7 @@ import { MongoDBUser } from "../database/models/userModel";
 import bcrypt from "bcryptjs";
 
 export type userRepository = {
-  findByUsernameAndEmail: (
-    username: string,
-    email: string
-  ) => Promise<User | null>;
+  findByUsernameAndEmail: (username: string,email: string) => Promise<User | null>;
   findByEmail: (email: string) => Promise<User | null>;
   findOne: (user: User) => Promise<User | null>;
   create: (user: User) => Promise<User | null>;
@@ -31,16 +28,17 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
 
   const create = async (user: User): Promise<User | null> => {
     const hashPass: string = await bcrypt.hash(user.password as string, 12);
-    const newUser: User = {
-      username: user.username,
-      email: user.email,
-      password: hashPass,
-      role: user.role,
-      status: true,
-      isGoogle: user.isGoogle,
+    const newUser: User = { username: user.username,email: user.email,
+      password: hashPass,role: user.role,
+      status: true,isGoogle: user.isGoogle,
     };
-    const createdUser = await userModel.create(newUser);
-    return createdUser.toObject();
+    const createdUser = (await userModel.create(newUser)).toObject();
+    const userData:User = {
+      _id: createdUser._id,username: createdUser.username,
+      email: createdUser.email,role: createdUser.role,
+      profile: createdUser.profile,
+    }
+    return userData;
   };
 
   return {
