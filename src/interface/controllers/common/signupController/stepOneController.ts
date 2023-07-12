@@ -1,5 +1,4 @@
 import { Request, Response } from "express";
-import { otpSender } from "../../../../utils/otpSendAndStore";
 import { validationResult } from "express-validator";
 import { userModel } from "../../../../framework/database/models/userModel";
 import { userRepositoryEmpl } from "../../../../framework/repository/userRepository";
@@ -13,10 +12,9 @@ const stepOneController = async (req: Request, res: Response) => {
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
 
   const { email,username,role } = req.body;
-  const { message } = await signupStepOne(userRepository)(username, email);
-  if (!message) {
-    const uId = await otpSender(email, `otp varification of ${role}`);
-    return res.status(200).json({ message: "otp sent sucessfully", uId });
+  const { message,uId } = await signupStepOne(userRepository)(username, email,role);
+  if (uId) {
+    return res.status(200).json({ uId });
   } else {
     return res.status(409).json({ message });
   }

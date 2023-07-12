@@ -13,7 +13,7 @@ const otpAuthMiddleware = async(req: Request, res: Response, next: NextFunction)
         cache.del(id);
         next();
       } else {
-        return res.status(400).json({ message: "Invalid OTP" });
+        return res.status(400).json({ message: "Given Otp is invalid" });
       }
     }
   } catch (error) {
