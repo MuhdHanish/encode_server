@@ -30,7 +30,7 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
     const hashPass: string = await bcrypt.hash(user.password as string, 12);
     const newUser: User = { username: user.username,email: user.email,
       password: hashPass,role: user.role,
-      status: true,isGoogle: user.isGoogle,
+      status: true,isGoogle: false,
     };
     const createdUser = (await userModel.create(newUser)).toObject();
     const userData:User = {

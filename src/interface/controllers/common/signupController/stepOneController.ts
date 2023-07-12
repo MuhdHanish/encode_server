@@ -14,7 +14,7 @@ const stepOneController = async (req: Request, res: Response) => {
   const { email,username,role } = req.body;
   const { message,uId } = await signupStepOne(userRepository)(username,email,role);
   if (uId) {
-    return res.status(200).json({ uId });
+    return res.status(200).json({ message:"Step one completed",uId });
   } else {
     return res.status(409).json({ message });
   }
