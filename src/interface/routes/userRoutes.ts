@@ -3,14 +3,15 @@ import { Router } from "express";
 // controllers
 import stepOneController from "../controllers/common/signupController/stepOneController";
 import stepTwoController from "../controllers/common/signupController/stepTwoController";
-import  loginController  from "../controllers/common/LoginController";
+
 
 // middlewares
 import otpAuthMiddleware from "../../middleware/otpAuthMiddleware";
 
 // validator middlewares
 import { loginValidator, signupValidatorOne, signupValidatorTwo } from "../../utils/requestValidator";
-import userAuthorization from "../../middleware/userAuthorizationMiddleware";
+import userAuthorization from "../../middleware/accessAuthorizationMiddleware";
+import loginController from "../controllers/common/loginController";
 
 const router = Router();
 

@@ -1,7 +1,7 @@
 import { Request, Response, NextFunction } from "express";
 import { cache } from "../utils/otpSendAndStore";
 
-const otpAuthMiddleware = async(req: Request, res: Response, next: NextFunction) => {
+const otpAuthMiddleware = (req: Request, res: Response, next: NextFunction) => {
   try {
     const { id } = req.params;
     const { enteredOtp } = req.body;

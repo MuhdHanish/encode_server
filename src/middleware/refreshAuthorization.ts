@@ -5,18 +5,19 @@ interface CustomRequest extends Request {
   userInfo?: { id: string; role: string };
 }
 
-const userAuthorization = async (req: CustomRequest, res: Response, next: NextFunction) => {
+
+const refreshAuthorization =  (req: CustomRequest, res: Response, next: NextFunction) => {
   if (
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
   ) {
     try {
       let token = req.headers.authorization.split(" ")[1];
-      const { id, role }: any = jwt.verify(token, process.env.JWT_ACCESS_SECRET as jwt.Secret);
+      const { id, role } = jwt.verify(token, process.env.JWT_REFRESH_SECRET as jwt.Secret) as jwt.JwtPayload;
       req.userInfo = { id, role };
       next();
     } catch (err) {
-      return res.status(403).json({ message: "Access Forbidden" });
+      return res.status(403).json({ message: "Access forbidden" });
     }
   }
   else {
@@ -24,4 +25,4 @@ const userAuthorization = async (req: CustomRequest, res: Response, next: NextFu
   }
 };
 
-export default userAuthorization;
+export default refreshAuthorization;

@@ -4,9 +4,7 @@ export const loginValidator = [
   body("email").notEmpty().withMessage("Email is required"),
   body("email").isEmail().withMessage("Invalid email address"),
   body("password").notEmpty().withMessage("Password is required"),
-  body("role").notEmpty().withMessage("Role is required"),
 ];
-
 
 export const signupValidatorOne = [
   body("username").notEmpty().withMessage("Username is required"),

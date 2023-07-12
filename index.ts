@@ -1,8 +1,9 @@
 // import dependencies
 import express from "express";
 import morgan from "morgan";
+import cookieParser from "cookie-parser";
 import cors from "cors";
-import session from "express-session";
+
 
 // import dotenv
 import { config } from "dotenv";
@@ -13,6 +14,7 @@ import connnectDatabase from "./src/framework/database/config/dbConfig";
 
 // import the route file
 import userRoute from "./src/interface/routes/userRoutes";
+import tokenRoute from "./src/interface/routes/tokenRoutes"
 
 // creat express application
 const app = express();
@@ -25,12 +27,18 @@ app.use(
   })
 );
 
+// middleware for json
 app.use(express.json());
+// middleware for handle form data
 app.use(express.urlencoded({ extended: true }));
+// middleware for cookies
+app.use(cookieParser());
+// middleware for log
 app.use(morgan("dev"));
 
 // user route
 app.use('/', userRoute);
+app.use('/refresh/token', tokenRoute);
 
 // database connecting & app listen
 const port = process.env.PORT || 8000;
