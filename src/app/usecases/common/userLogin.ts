@@ -11,13 +11,18 @@ export const userLogin =
         currentUser.password &&
         bcrypt.compareSync(password, currentUser.password)
       ) {
-        const user: User = {
-          _id: currentUser._id,
-          username: currentUser.username,
-          email: currentUser.email,
-          role: currentUser.role,
-          profile: currentUser.profile,
-        };
+        let user: User;
+        if (currentUser.role === "admin") {
+          user = {
+            _id: currentUser._id,
+            role: currentUser.role,
+          };
+        } else {
+          user = {_id: currentUser._id,username: currentUser.username,
+            email: currentUser.email,role: currentUser.role,
+            profile: currentUser.profile,
+          };
+        }
         return user;
       } else {
         return null;

@@ -1,32 +1,42 @@
-import mongoose from "mongoose";
-import { Categroy } from "../../domain/models/Category";
+import { Category } from "../../domain/models/Category";
 import { MongoDBCategory } from "../database/models/categoryModel";
 
-export type categoryRepostiory = {
- getCategories: () => Promise<Categroy[]|null>
- getCategoriesById: (catgoryId: string) => Promise<Categroy | null>,
- postCategory: (catgory: Categroy) => Promise<Categroy | null>,
-}
+export type categoryRepository = {
+  getCategories: () => Promise<Category[] | null>;
+  getCategoryById: (categoryId: string) => Promise<Category | null>;
+  postCategory: (category: Category) => Promise<Category | null>;
+  editCategory: (category: Category) => Promise<Category | null>;
+};
 
-export const categoryRepostioryEmpl = (categoryModel: MongoDBCategory): categoryRepostiory => {
- const getCategories = async (): Promise<Categroy[] | null> => {
-  const cagories = await categoryModel.aggregate().exec();
-  return cagories.length > 0 ? cagories : null;
- };
- const getCategoriesById = async (catgoryId:string): Promise<Categroy | null> => {
-  const category = await categoryModel.aggregate([{ $match: { _id: new mongoose.Types.ObjectId(catgoryId) } }]);
-  return category.length > 0 ? category[0] : null;
- };
- const postCategory = async (newCategory: Categroy): Promise<Categroy | null> => {
-  const createdCategory = (await categoryModel.create(newCategory)).toObject();
-  const catgoryData: Categroy = {
-   _id: createdCategory._id, categoryname: createdCategory.categoryname, description: createdCategory.description
+export const categoryRepositoryEmpl = (categoryModel: MongoDBCategory): categoryRepository => {
+
+  const getCategories = async (): Promise<Category[] | null> => {
+    const categories = await categoryModel.find().exec();
+    return categories.length > 0 ? categories : null;
   };
-  return catgoryData;
- };
- return  {
-  getCategories,
-  getCategoriesById,
-  postCategory
- }
-}
+
+  const getCategoryById = async (categoryId: string): Promise<Category | null> => {
+    const category = await categoryModel.findById(categoryId).exec();
+    return category !== null ? category.toObject() : null;
+  };
+
+  const postCategory = async (categoryDetails: Category): Promise<Category | null> => {
+    const createdCategory = await categoryModel.create(categoryDetails);
+    return createdCategory !== null ? createdCategory.toObject() : null;
+  };
+
+  const editCategory = async (categoryDetails: Category): Promise<Category | null> => {
+    const { _id, categoryname, description } = categoryDetails;
+   const updatedCategory = await categoryModel.findByIdAndUpdate(
+    _id, { categoryname, description }, { new: true }
+   ).exec();
+    return updatedCategory !== null ? updatedCategory.toObject() : null;
+  };
+
+  return {
+    getCategories,
+    getCategoryById,
+    postCategory,
+    editCategory,
+  };
+};

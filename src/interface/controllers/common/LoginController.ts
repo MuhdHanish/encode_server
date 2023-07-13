@@ -17,7 +17,7 @@ const userRepository = userRepositoryEmpl(userModel);
   if (user) {
   const accessToken = await generateAccessToken(user?._id as mongoose.Types.ObjectId, user?.role as string);
   const refreshToken = await generateRefreshToken(user?._id as mongoose.Types.ObjectId, user?.role as string);
-  return res.status(201).json({ message: "Login successfull", user, accessToken,refreshToken });
+  return res.status(200).json({ message: "Login successfull", user, accessToken,refreshToken });
   }else{
    return res.status(401).json({message: "No active account found with the given credentials"})
   }

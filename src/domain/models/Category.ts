@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-export interface Categroy {
+export interface Category {
  _id?: mongoose.Types.ObjectId,
  categoryname?: string,
  description?: string,
