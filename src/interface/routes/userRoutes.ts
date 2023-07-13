@@ -22,7 +22,7 @@ const router = Router();
 
 // GET category
 router.get("/get/categories", getCategoriesController);
-router.get("/get/category/:id", getCategoryByIdValidator, getCategoryByIdController);
+router.get("/get/category/:id([0-9a-fA-F]{24})", getCategoryByIdValidator, getCategoryByIdController);
 
 // POST category
 router.post("/admin/post/category",postCategoryValidator, postCategoryController);

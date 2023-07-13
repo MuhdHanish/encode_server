@@ -15,7 +15,7 @@ const postCategoryController = async (req: Request, res: Response) => {
   if (category) {
    return res.status(201).json({ message: "New category created", category });
   } else {
-   return res.status(400).json({ message: "Category creation failed" });
+   return res.status(409).json({ message: "Category creation failed" });
   }
  } catch (error) {
   console.log(error);

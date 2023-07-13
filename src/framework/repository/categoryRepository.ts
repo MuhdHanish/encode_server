@@ -2,21 +2,27 @@ import { Category } from "../../domain/models/Category";
 import { MongoDBCategory } from "../database/models/categoryModel";
 
 export type categoryRepository = {
-  getCategories: () => Promise<Category[] | null>;
-  getCategoryById: (categoryId: string) => Promise<Category | null>;
+  getCategoriesByCredentail: (credential: Partial<Category>) => Promise<Category[] | null>;
+  getCategoryByCredential: (credential:Partial<Category>) => Promise<Category | null>;
+  getCategoryById: (id:string) => Promise<Category | null>;
   postCategory: (category: Category) => Promise<Category | null>;
   editCategory: (category: Category) => Promise<Category | null>;
 };
 
 export const categoryRepositoryEmpl = (categoryModel: MongoDBCategory): categoryRepository => {
 
-  const getCategories = async (): Promise<Category[] | null> => {
-    const categories = await categoryModel.find().exec();
+  const getCategoriesByCredentail = async (credential:Partial<Category>): Promise<Category[] | null> => {
+    const categories = await categoryModel.find(credential).exec();
     return categories.length > 0 ? categories : null;
   };
 
   const getCategoryById = async (categoryId: string): Promise<Category | null> => {
-    const category = await categoryModel.findById(categoryId).exec();
+    const category = await categoryModel.findOne({_id:categoryId} ).exec();
+    return category !== null ? category.toObject() : null;
+  }
+
+  const getCategoryByCredential = async (credential:Partial<Category>): Promise<Category | null> => {
+    const category = await categoryModel.findOne({ $regex: new RegExp(`^${credential}$`, 'i') } ).exec();
     return category !== null ? category.toObject() : null;
   };
 
@@ -34,7 +40,8 @@ export const categoryRepositoryEmpl = (categoryModel: MongoDBCategory): category
   };
 
   return {
-    getCategories,
+    getCategoriesByCredentail,
+    getCategoryByCredential,
     getCategoryById,
     postCategory,
     editCategory,

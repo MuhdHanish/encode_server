@@ -4,12 +4,12 @@ import { User } from "../../../domain/models/User";
 export type MongoDBUser = Model<Document<any, any, any> & User>;
 
 const userSchema = new Schema<User>({
-  username: { type: String, required: true, unique: true },
-  email: { type: String, required: true, unique: true },
-  password: { type: String, required: true },
+  username: { type: String, required: true, unique: true, trim: true },
+  email: { type: String, required: true, unique: true, trim: true },
+  password: { type: String, required: true, trim: true },
   isGoogle: { type: Boolean, required: true },
-  status: { type: Boolean, required: true,default:true },
-  role:{ type: String,required:true },
+  status: { type: Boolean, required: true, default: true },
+  role: { type: String, required: true, trim: true },
   profile: {
     type: String,
     default:
