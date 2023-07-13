@@ -14,6 +14,9 @@ const getCoursesController = async (req: Request, res: Response) => {
     return res.status(400).json({ message: "Course fetching failed" });
   }
  } catch (error) {
+   console.log(error);
   res.status(500).json({ message: "Internal server error" });
  }
 }
+
+export default getCoursesController;

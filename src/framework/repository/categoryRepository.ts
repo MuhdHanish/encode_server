@@ -2,8 +2,8 @@ import { Category } from "../../domain/models/Category";
 import { MongoDBCategory } from "../database/models/categoryModel";
 
 export type categoryRepository = {
-  getCategoriesByCredentail: (credential: Partial<Category>) => Promise<Category[] | null>;
-  getCategoryByCredential: (credential:Partial<Category>) => Promise<Category | null>;
+  getCategories: () => Promise<Category[] | null>;
+  getCategoryByName: (categoryname:string) => Promise<Category | null>;
   getCategoryById: (id:string) => Promise<Category | null>;
   postCategory: (category: Category) => Promise<Category | null>;
   editCategory: (category: Category) => Promise<Category | null>;
@@ -11,8 +11,8 @@ export type categoryRepository = {
 
 export const categoryRepositoryEmpl = (categoryModel: MongoDBCategory): categoryRepository => {
 
-  const getCategoriesByCredentail = async (credential:Partial<Category>): Promise<Category[] | null> => {
-    const categories = await categoryModel.find(credential).exec();
+  const getCategories = async (): Promise<Category[] | null> => {
+    const categories = await categoryModel.find().exec();
     return categories.length > 0 ? categories : null;
   };
 
@@ -21,8 +21,8 @@ export const categoryRepositoryEmpl = (categoryModel: MongoDBCategory): category
     return category !== null ? category.toObject() : null;
   }
 
-  const getCategoryByCredential = async (credential:Partial<Category>): Promise<Category | null> => {
-    const category = await categoryModel.findOne({ $regex: new RegExp(`^${credential}$`, 'i') } ).exec();
+  const getCategoryByName = async (categoryname:string): Promise<Category | null> => {
+    const category = await categoryModel.findOne({categoryname:{ $regex: new RegExp(`^${categoryname}$`, 'i') }} ).exec();
     return category !== null ? category.toObject() : null;
   };
 
@@ -40,8 +40,8 @@ export const categoryRepositoryEmpl = (categoryModel: MongoDBCategory): category
   };
 
   return {
-    getCategoriesByCredentail,
-    getCategoryByCredential,
+    getCategories,
+    getCategoryByName,
     getCategoryById,
     postCategory,
     editCategory,

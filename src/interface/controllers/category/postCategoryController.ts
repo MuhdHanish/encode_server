@@ -8,10 +8,10 @@ const categoryRepository = categoryRepositoryEmpl(categoryModel);
 
 const postCategoryController = async (req: Request, res: Response) => {
  try {
-  const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
-  const { categoryDetails, description } = req.body;
-  const category = await postCategory(categoryRepository)(categoryDetails, description);
+  console.log(req.body)
+  
+  const { categoryame, description } = req.body;
+  const category = await postCategory(categoryRepository)(categoryame, description);
   if (category) {
    return res.status(201).json({ message: "New category created", category });
   } else {
