@@ -3,7 +3,8 @@ import { MongoDBUser } from "../database/models/userModel";
 import bcrypt from "bcryptjs";
 
 export type userRepository = {
-  findByUsernameAndEmail: (username: string,email: string) => Promise<User | null>;
+  findByUsernameAndEmail: (username: string, email: string) => Promise<User | null>;
+  findByUsernameOrEmail: (usernameOrEmail: string) => Promise<User | null>;
   findByEmail: (email: string) => Promise<User | null>;
   findOne: (user: User) => Promise<User | null>;
   create: (user: User) => Promise<User | null>;
@@ -14,6 +15,13 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
   const findByUsernameAndEmail = async (username: string,email: string): Promise<User | null> => {
     const users = await userModel.aggregate([ {$match: {$or: [{ username }, { email }],},},]).exec();
     return users.length > 0 ? users[0] : null;
+  };
+
+  const findByUsernameOrEmail = async (usernameOrEmail: string): Promise<User | null> => {
+  const user = await userModel.aggregate([
+    {$match: {$or: [{ username: usernameOrEmail },{ email: usernameOrEmail }]}}
+  ]).exec();
+  return user.length > 0 ? user[0] : null;
   };
 
   const findByEmail = async (email: string): Promise<User | null> => {
@@ -43,6 +51,7 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
 
   return {
     findByUsernameAndEmail,
+    findByUsernameOrEmail,
     findByEmail,
     findOne,
     create,

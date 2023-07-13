@@ -12,8 +12,8 @@ const userRepository = userRepositoryEmpl(userModel);
  try {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
-  const { email, password } = req.body;
-  const user = await userLogin(userRepository)(email, password);
+  const { identifier, password } = req.body;
+  const user = await userLogin(userRepository)(identifier, password);
   if (user) {
   const accessToken = await generateAccessToken(user?._id as mongoose.Types.ObjectId, user?.role as string);
   const refreshToken = await generateRefreshToken(user?._id as mongoose.Types.ObjectId, user?.role as string);

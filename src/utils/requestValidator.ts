@@ -1,8 +1,7 @@
 import { body } from "express-validator";
 
 export const loginValidator = [
-  body("email").notEmpty().withMessage("Email is required"),
-  body("email").isEmail().withMessage("Invalid email address"),
+  body("identifier").notEmpty().withMessage("Identifier is required (username or email)"),
   body("password").notEmpty().withMessage("Password is required"),
 ];
 

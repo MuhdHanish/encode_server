@@ -8,7 +8,7 @@ export const generateAccessToken = async (id: mongoose.Types.ObjectId, role: str
 };
 
 export const generateRefreshToken = async (id: mongoose.Types.ObjectId, role: string) => {
-  const expiresIn = "10m";
+  const expiresIn = "60s";
   const refreshToken =  jwt.sign({id,role}, process.env.JWT_REFRESH_SECRET as jwt.Secret, { expiresIn });
   return refreshToken;
 };

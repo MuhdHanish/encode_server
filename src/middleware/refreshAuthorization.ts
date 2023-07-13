@@ -17,11 +17,11 @@ const refreshAuthorization =  (req: CustomRequest, res: Response, next: NextFunc
       req.userInfo = { id, role };
       next();
     } catch (err) {
-      return res.status(403).json({ message: "Access forbidden" });
+      return res.status(403).json({ message: "Access forbidden, Invalid token" });
     }
   }
   else {
-    return res.status(401).json({ message: "Not authorized, token failed" });
+    return res.status(401).json({ message: "No authorization token found" });
   }
 };
 
