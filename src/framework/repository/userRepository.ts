@@ -3,7 +3,7 @@ import { MongoDBUser } from "../database/models/userModel";
 import bcrypt from "bcryptjs";
 
 export type userRepository = {
-  findByUsernameAndEmail: (username: string, email: string) => Promise<User | null>;
+  findByUsernameAndEmail: (sername: string,email: string) => Promise<User | null>;
   findByUsernameOrEmail: (usernameOrEmail: string) => Promise<User | null>;
   findOne: (user: User) => Promise<User | null>;
   create: (user: User) => Promise<User | null>;

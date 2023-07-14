@@ -10,5 +10,4 @@ export interface User {
   isGoogle?: boolean;
   profile?: string;
   seletedCourses?: mongoose.Types.ObjectId[];
-  publishedCourses?: mongoose.Types.ObjectId[];
 };

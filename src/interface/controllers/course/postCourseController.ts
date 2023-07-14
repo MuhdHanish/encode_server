@@ -1,12 +1,11 @@
 import { Request, Response } from "express";
+import { validationResult } from "express-validator";
+import { postCourse } from "../../../app/usecases/course/postCourse";
 import { courseModel } from "../../../framework/database/models/courseModel";
 import { categoryModel } from "../../../framework/database/models/categoryModel";
 import { courseRepositoryEmpl } from "../../../framework/repository/courseRepository";
 import { categoryRepositoryEmpl } from "../../../framework/repository/categoryRepository";
 import { getCategoryByName } from "../../../app/usecases/category/getCategoryByCredentail";
-import { postCourse } from "../../../app/usecases/course/postCourse";
-import { validationResult } from "express-validator";
-
 const courseRepository = courseRepositoryEmpl(courseModel);
 const categoryRepository = categoryRepositoryEmpl(categoryModel);
 
@@ -21,7 +20,7 @@ const postCourseController = async (req: Request, res: Response) => {
    if (course) {
     return res.status(201).json({ message: "Course posted sucessfully", course });
    } else {
-   return res.status(400).json({ message: "Course post failed" });
+   return res.status(400).json({ message: "Course upload failed" });
    }
   } else {
    return res.status(400).json({ message: "Category is not valid" });

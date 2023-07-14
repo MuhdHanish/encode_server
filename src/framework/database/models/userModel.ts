@@ -1,5 +1,6 @@
 import mongoose, { Model, Schema, Document } from "mongoose";
 import { User } from "../../../domain/models/User";
+import { courseModel } from "./courseModel";
 
 export type MongoDBUser = Model<Document<any, any, any> & User>;
 
@@ -15,6 +16,11 @@ const userSchema = new Schema<User>({
     default:
       "https://png.pngtree.com/element_our/20190528/ourlarge/pngtree-purple-game-icon-design-image_1168962.jpg",
   },
+  seletedCourses: [
+    {
+      type: mongoose.Types.ObjectId,
+    },
+  ]
 });
 
 export const userModel: MongoDBUser = mongoose.connection.model<Document<any, any, any> & User>('User', userSchema);
