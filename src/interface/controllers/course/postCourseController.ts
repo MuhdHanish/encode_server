@@ -3,7 +3,7 @@ import { courseModel } from "../../../framework/database/models/courseModel";
 import { categoryModel } from "../../../framework/database/models/categoryModel";
 import { courseRepositoryEmpl } from "../../../framework/repository/courseRepository";
 import { categoryRepositoryEmpl } from "../../../framework/repository/categoryRepository";
-import { getCategoryByCredential } from "../../../app/usecases/category/getCategoryByCredentail";
+import { getCategoryByName } from "../../../app/usecases/category/getCategoryByCredentail";
 import { postCourse } from "../../../app/usecases/course/postCourse";
 import { validationResult } from "express-validator";
 
@@ -15,7 +15,7 @@ const postCourseController = async (req: Request, res: Response) => {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
   const { category } = req.body;
-  const isExist = await getCategoryByCredential(categoryRepository)(category);
+  const isExist = await getCategoryByName(categoryRepository)(category);
   if (isExist) {
    const course = await postCourse(courseRepository)(req.body);
    if (course) {

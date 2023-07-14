@@ -21,10 +21,10 @@ export const categoryRepositoryEmpl = (categoryModel: MongoDBCategory): category
     return category !== null ? category.toObject() : null;
   }
 
-  const getCategoryByName = async (categoryname:string): Promise<Category | null> => {
-    const category = await categoryModel.findOne({categoryname:{ $regex: new RegExp(`^${categoryname}$`, 'i') }} ).exec();
-    return category !== null ? category.toObject() : null;
-  };
+  const getCategoryByName = async (categoryname: string): Promise<Category | null> => {
+  const category = await categoryModel.findOne({ categoryname: { $regex: new RegExp(`^${categoryname}$`, 'i') } }).exec();
+  return category !== null ? category.toObject() : null;
+ };
 
   const postCategory = async (categoryDetails: Category): Promise<Category | null> => {
     const createdCategory = await categoryModel.create(categoryDetails);

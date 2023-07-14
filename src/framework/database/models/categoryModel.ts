@@ -4,8 +4,8 @@ import { Category } from "../../../domain/models/Category";
 export type MongoDBCategory = Model<Document<any, any, any> & Category>;
 
 const categorySchema = new Schema<Category>({
-  categoryname: { type: String, required: true, trim: true },
-  description: { type: String, required: true, trim: true },
+  categoryname: { type: String, required: true },
+  description: { type: String, required: true },
   status: { type: Boolean, required: true, default: true },
 });
 

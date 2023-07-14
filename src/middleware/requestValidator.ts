@@ -9,6 +9,15 @@ export const getCategoryByIdValidator = [
   param("id").notEmpty().withMessage("Category id is required")
 ];
 
+export const getCourseByIdValidator = [
+  param("id").notEmpty().withMessage("Course id is required")
+];
+
+export const postCategoryValidator = [
+  body("categoryname").notEmpty().withMessage("Category name is required"),
+  body("description").notEmpty().withMessage("Description is required")
+]
+
 
 export const signupValidatorOne = [
   body("username").notEmpty().withMessage("Username is required"),
@@ -35,6 +44,7 @@ export const postCourseValidator = [
   body("tutorId").notEmpty().withMessage("Tutor id is required"),
   body("coursename").notEmpty().withMessage("Username is required"),
   body("shortDescription").notEmpty().withMessage("Short description is required"),
+  body("category").notEmpty().withMessage("Category is required"),
   body("isPaid").notEmpty().withMessage("Is paid is required"),
   body("price").notEmpty().withMessage("Price is required"),
   body("level").notEmpty().withMessage("Level is required"),

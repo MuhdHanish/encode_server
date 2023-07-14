@@ -14,7 +14,8 @@ import otpAuthMiddleware from "../../middleware/otpAuthMiddleware";
 // validator middlewares
 import {
  getCategoryByIdValidator,
- loginValidator, postCourseValidator, signupValidatorOne, signupValidatorTwo
+ getCourseByIdValidator,
+ loginValidator, postCategoryValidator, postCourseValidator, signupValidatorOne, signupValidatorTwo, 
 } from "../../middleware/requestValidator";
 import postCategoryController from "../controllers/category/postCategoryController";
 import getCoursesController from "../controllers/course/getCoursesController";
@@ -38,11 +39,11 @@ router.get("/get/categories", getCategoriesController);
 router.get("/get/category/:id([0-9a-fA-F]{24})", getCategoryByIdValidator, getCategoryByIdController);
 
 // POST category
-router.post("/admin/post/category",adminAuthorization, postCategoryController);
+router.post("/admin/post/category",adminAuthorization,postCategoryValidator,postCategoryController);
 
 // GET courses
 router.get("/get/courses", getCoursesController);
-router.get("/get/course/:id([0-9a-fA-F]{24})", getCourseByIdController);
+router.get("/get/course/:id([0-9a-fA-F]{24})",getCourseByIdValidator, getCourseByIdController);
 
 // POST course
 router.post("/tutor/post/course", tutorAuthorization, postCourseValidator, postCourseController);
