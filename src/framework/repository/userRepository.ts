@@ -19,12 +19,12 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
   const user = await userModel.findOne({
     $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }]
   }).exec();
-  if (user) {
+    if (user) {
     const passwordMatch = bcrypt.compareSync(password, user.password as string);
     if (passwordMatch) {
       if (user.role === "admin") {
-        const { username,email,password, ...userWithoutPassword } = user.toObject();
-        return userWithoutPassword;
+        const { _id, role, status } = user.toObject();
+        return {_id,role,status};
       } else {
          const { password, ...userWithoutPassword } = user.toObject();
         return userWithoutPassword;
@@ -43,7 +43,7 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
     };
     const createdUser = (await userModel.create(userData)).toObject();
     if (createdUser) {
-      const { password, ...userWithoutPassword } = createdUser.toObject();
+      const { password, ...userWithoutPassword } = createdUser;
       return userWithoutPassword;
     }
     return null;

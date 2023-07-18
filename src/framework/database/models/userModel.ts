@@ -20,6 +20,11 @@ const userSchema = new Schema<User>({
     {
       type: mongoose.Types.ObjectId,
     },
+  ],
+  uploadedCourses: [
+    {
+      type: mongoose.Types.ObjectId,
+    }
   ]
 });
 
