@@ -7,7 +7,7 @@ const otpAuthMiddleware = (req: Request, res: Response, next: NextFunction) => {
     const { enteredOtp } = req.body;
     const value = cache.get(id);
     if (!value) {
-      return res.status(401).json({ message: "Un-Authorized request" });
+      return res.status(401).json({ message: "Given Otp is invalid" });
     } else {
       if (parseInt(enteredOtp) === value) {
         cache.del(id);

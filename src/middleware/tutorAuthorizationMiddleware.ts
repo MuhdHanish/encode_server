@@ -6,11 +6,11 @@ interface CustomRequest extends Request {
 }
 
 const tutorAuthorization =  (req: CustomRequest, res: Response, next: NextFunction) => {
-  if (
-    req.headers.authorization &&
-    req.headers.authorization.startsWith("Bearer")
-  ) {
-    try {
+  try {
+      if (
+        req.headers.authorization &&
+        req.headers.authorization.startsWith("Bearer")
+      ) {
       let token = req.headers.authorization.split(" ")[1];
       const { id, role } = jwt.verify(token, process.env.JWT_ACCESS_SECRET as jwt.Secret) as jwt.JwtPayload;
       if (role == "tutor") { 
@@ -19,13 +19,13 @@ const tutorAuthorization =  (req: CustomRequest, res: Response, next: NextFuncti
       } else {
        return res.status(403).json({ message: "Un-Authorized, access forbidden" });
       }
+    }
+    else {
+      return res.status(401).json({ message: "No authorization token found" });
+    }
     } catch (err) {
       return res.status(403).json({ message: "Access forbidden, Invalid token" });
     }
-  }
-  else {
-    return res.status(401).json({ message: "No authorization token found" });
-  }
 };
 
 export default tutorAuthorization;

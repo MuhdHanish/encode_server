@@ -22,7 +22,7 @@ const app = express();
 // cors setting
 app.use(
   cors({
-    origin: ["http://localhost:5173", process.env.CORS_ORIGIN_URL as string ],
+    origin: ["http://localhost:5173", process.env.CORS_ORIGIN_URL as string],
     methods: ["GET", "POST", "PUT", "DELETE"],
   })
 );

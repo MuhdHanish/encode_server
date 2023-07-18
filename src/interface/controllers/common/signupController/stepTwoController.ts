@@ -19,7 +19,7 @@ const stepTwoController = async (req: Request, res: Response) => {
    } else {
      const accessToken = await generateAccessToken(user?._id as mongoose.Types.ObjectId, user?.role as string);
      const refreshToken = await generateRefreshToken(user?._id as mongoose.Types.ObjectId, user?.role as string);
-     return res.status(201).json({ message: "Registration successfull", user, accessToken,refreshToken });
+     return res.status(201).json({ user, accessToken,refreshToken });
    }
   } catch (error) {
    return res.status(500).json({ message: "Internal server error" });
