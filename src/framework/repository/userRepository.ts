@@ -3,9 +3,10 @@ import { MongoDBUser } from "../database/models/userModel";
 import bcrypt from "bcryptjs";
 
 export type userRepository = {
-  findByUsernameAndEmail: (sername: string,email: string) => Promise<User | null>;
+  findByUsernameAndEmail: (username: string,email: string) => Promise<User | null>;
   findByUsernameOrEmailAndPassword: (usernameOrEmail: string,password:string) => Promise<User | null>;
   create: (user: User) => Promise<User | null>;
+  googleUserCreate: (user: User) => Promise<User | null>;
 };
 
 export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
@@ -36,7 +37,7 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
 
 
   const create = async (userDetails: User): Promise<User | null> => {
-    const hashPass: string = await bcrypt.hash(userDetails.password as string, 12);
+    const hashPass: string =  bcrypt.hashSync(userDetails.password as string, 12);
     const userData: User = {
       username: userDetails.username, email: userDetails.email,
       password: hashPass, role: userDetails.role, isGoogle: false,
@@ -49,9 +50,24 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
     return null;
   };
 
+  const googleUserCreate = async (userDetails: User): Promise<User | null> => {
+    const hashPass: string = bcrypt.hashSync(userDetails.email as string, 12);
+    const userData: User = {
+      username: userDetails.username,  email: userDetails.email,
+      password: hashPass,role: userDetails.role,
+      profile: userDetails.profile,isGoogle: true,
+    }
+    const createdUser = (await userModel.create(userData)).toObject();
+    if (createdUser) { const { password, ...userWithoutPassword } = createdUser;
+      return userWithoutPassword;
+    }
+    return null;
+  }
+
   return {
     findByUsernameAndEmail,
     findByUsernameOrEmailAndPassword,
     create,
+    googleUserCreate,
   };
 };

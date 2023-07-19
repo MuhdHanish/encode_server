@@ -1,28 +1,26 @@
 import { Router } from "express";
 
 // controllers
-import loginController from "../controllers/common/loginController";
-import getCategoriesController from "../controllers/category/getCategoriesController";
-import stepOneController from "../controllers/common/signupController/stepOneController";
-import stepTwoController from "../controllers/common/signupController/stepTwoController";
-import getCategoryByIdController from "../controllers/category/getCategoriesByIdController";
-
+import { loginController, googleLoginController } from "../controllers/common";
+import { stepOneController, stepTwoController } from "../controllers/common/signupController";
+import { getCourseByIdController, getCoursesController, postCourseController } from "../controllers/course";
+import { getCategoriesController, getCategoryByIdController, postCategoryController } from "../controllers/category";
 
 // middlewares
-import otpAuthMiddleware from "../../middleware/otpAuthMiddleware";
+import {
+  adminAuthorization, googleLoginMiddleware,
+  googleSignupMiddelware, otpAuthMiddleware, tutorAuthorization
+} from "../../middleware";
+
 
 // validator middlewares
 import {
- getCategoryByIdValidator,
- getCourseByIdValidator,
- loginValidator, postCategoryValidator, postCourseValidator, signupValidatorOne, signupValidatorTwo, 
+  signupValidatorOne, signupValidatorTwo, 
+  getCategoryByIdValidator,getCourseByIdValidator,
+  loginValidator, postCategoryValidator, postCourseValidator,
 } from "../../middleware/requestValidator";
-import postCategoryController from "../controllers/category/postCategoryController";
-import getCoursesController from "../controllers/course/getCoursesController";
-import getCourseByIdController from "../controllers/course/getCourseByIdController";
-import adminAuthorization from "../../middleware/adminAuthorization";
-import tutorAuthorization from "../../middleware/tutorAuthorizationMiddleware";
-import postCourseController from "../controllers/course/postCourseController";
+import googleSignupController from "../controllers/common/signupController/googleSignupController";
+
 
 const router = Router();
 
@@ -33,6 +31,12 @@ router.post("/register/steptwo/:id", signupValidatorTwo, otpAuthMiddleware, step
 
 // POST login
 router.post("/login", loginValidator, loginController);
+
+// POST google login
+router.post("/google/login", googleLoginMiddleware, googleLoginController);
+
+// POST google signup
+router.post("/google/register", googleSignupMiddelware, googleSignupController);
 
 // GET category
 router.get("/get/categories", getCategoriesController);

@@ -22,7 +22,6 @@ const stepTwoController = async (req: Request, res: Response) => {
      return res.status(201).json({ user, accessToken,refreshToken });
    }
   } catch (error) {
-   console.log(error);
    return res.status(500).json({ message: "Internal server error" });
   }
 };

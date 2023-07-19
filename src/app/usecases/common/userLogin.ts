@@ -1,5 +1,4 @@
 import { User } from "../../../domain/models/User";
-import bcrypt from "bcryptjs";
 import { userRepository } from "../../../framework/repository/userRepository";
 
 export const userLogin =
