@@ -35,8 +35,7 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
  
   const postCourse = async (courseData: Course): Promise<Course | null> => {
     const courseDetails = {
-      ...courseData,
-      rating: 0,
+      ...courseData
     }
     const createdCourse = await courseModel.create(courseDetails);
     return createdCourse !== null ? createdCourse.toObject() : null;

@@ -18,7 +18,7 @@ const courseSchema = new Schema<Course>({
   level: { type: String, required: true },
   imgUrl: { type: String, required: true },
   videoUrl: { type: String, required: true },
-  rating: { type: Number, required: true },
+  rating: { type: Number, required: true, default: 0 },
   sylabus: [
     {
       session: { type: String, required: true },
