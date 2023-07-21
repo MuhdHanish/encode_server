@@ -14,7 +14,7 @@ const userSchema = new Schema<User>({
   profile: {
     type: String,
     default:
-      "https://png.pngtree.com/element_our/20190528/ourlarge/pngtree-purple-game-icon-design-image_1168962.jpg",
+      "https://cdn.create.vista.com/api/media/small/356209164/stock-vector-user-avatar-illustration-anonymous-sign",
   },
   seletedCourses: [
     {
@@ -24,8 +24,8 @@ const userSchema = new Schema<User>({
   uploadedCourses: [
     {
       type: mongoose.Types.ObjectId,
-    }
-  ]
+    },
+  ],
 });
 
 export const userModel: MongoDBUser = mongoose.connection.model<Document<any, any, any> & User>('User', userSchema);
