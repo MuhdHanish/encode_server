@@ -11,7 +11,7 @@ const getCoursesController = async (req: Request, res: Response) => {
   if (courses) {
     return res.status(200).json({ message: "Courses fetched sucessfully", courses });
   } else {
-    return res.status(400).json({ message: "Course fetching failed" });
+    return res.status(400).json({ message: "No courses found" });
   }
  } catch (error) {
    console.log(error);

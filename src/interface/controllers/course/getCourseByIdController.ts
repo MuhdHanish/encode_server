@@ -12,7 +12,7 @@ const getCourseByIdController = async (req: Request, res: Response) => {
   if (course) {
    return res.status(200).json({ message: "Course fetched successfully", course });
   } else {
-   return res.status(400).json({ message: "Course fetch failed" });
+   return res.status(400).json({ message: "No course found" });
   }
  } catch (error) {
   console.log(error);

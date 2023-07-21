@@ -3,6 +3,10 @@ import { courseRepository } from "../../../framework/repository/courseRepository
 
 
 export const postCourse = (courseRepository: courseRepository) => async (courseDetails: Course): Promise<Course | null> => {
- const course = await courseRepository.postCourse(courseDetails);
- return course;
+  const course = await courseRepository.postCourse(courseDetails);
+  if (course) {
+    return course;
+  } else {
+    return null;
+  }
 }
