@@ -19,19 +19,6 @@ const courseSchema = new Schema<Course>({
   imgUrl: { type: String, required: true },
   videoUrl: { type: String, required: true },
   rating: { type: Number, required: true, default: 0 },
-  sylabus: [
-    {
-      session: { type: String, required: true },
-      description: { type: String, required: true },
-    },
-  ],
-  assignments: [
-    {
-      question: { type: String, required: true },
-      rightAns: { type: String, required: true },
-      options: { type: [String], required: true },
-    },
-  ],
 });
 
 export const courseModel: MongoDBCourse = mongoose.connection.model<Document<any, any, any> & Course>('Course', courseSchema);
