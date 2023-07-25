@@ -43,13 +43,11 @@ export const signupValidatorTwo = [
 export const postCourseValidator = [
   body("tutorId").notEmpty().withMessage("Tutor id is required"),
   body("coursename").notEmpty().withMessage("Coursename is required"),
-  body("shortDescription").notEmpty().withMessage("Short description is required"),
   body("category").notEmpty().withMessage("Category is required"),
   body("isPaid").notEmpty().withMessage("Is paid is required"),
   body("price").notEmpty().withMessage("Price is required"),
   body("level").notEmpty().withMessage("Level is required"),
   body("description").notEmpty().withMessage("Description is required"),
-  body("imgUrl").notEmpty().withMessage("Image url is required"),
   body("videoUrl").notEmpty().withMessage("Video url is required"),
 ];
 

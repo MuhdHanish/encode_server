@@ -10,7 +10,6 @@ export interface Course {
   level?: string;
   description?: string;
   category?: string;
-  imgUrl?: string;
   videoUrl?: string;
   status?: boolean;
   rating?: number;

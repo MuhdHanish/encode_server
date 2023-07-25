@@ -12,7 +12,7 @@ export const otpSender = async (
     const uId = uuidv4();
     const { otp } = await sendOtp(
       process.env.SENDER_EMAIL as string,
-      process.env.SENDER_PASSWORD as string,
+      process.env.SENDER_PASSWORD as string,  
       email,
       subject
     );
