@@ -12,7 +12,6 @@ const refreshAuthorization =  (req: CustomRequest, res: Response, next: NextFunc
     req.headers.authorization &&
     req.headers.authorization.startsWith("Bearer")
   ) {
-      console.log(req.headers)
       let token = req.headers.authorization.split(" ")[1];
       const { id, role } = jwt.verify(token, process.env.JWT_REFRESH_SECRET as jwt.Secret) as jwt.JwtPayload;
       req.userInfo = { id, role };
@@ -21,9 +20,8 @@ const refreshAuthorization =  (req: CustomRequest, res: Response, next: NextFunc
       return res.status(401).json({ message: "No authorization token found" });
     }
   } catch (err) {
-      console.log(err)
       return res.status(403).json({ message: "Access forbidden, Invalid token" });
-    }
+  }
 };
 
 export default refreshAuthorization;
