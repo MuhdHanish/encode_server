@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { userModel } from "../../../../framework/database/models/userModel";
 import { userRepositoryEmpl } from "../../../../framework/repository/userRepository";
-import { signupStepOne } from "../../../../app/usecases/common/userSignup/signupStepOne";
+import { signupStepOne } from "../../../../app/usecases/authentication/userSignup/signupStepOne";
 
 const userRepository = userRepositoryEmpl(userModel);
  

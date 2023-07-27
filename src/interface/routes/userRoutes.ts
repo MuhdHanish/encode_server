@@ -1,8 +1,8 @@
 import { Router } from "express";
 
 // controllers
-import { loginController, googleLoginController } from "../controllers/common";
-import { stepOneController, stepTwoController } from "../controllers/common/signupController";
+import { loginController, googleLoginController } from "../controllers/authentication";
+import { stepOneController, stepTwoController } from "../controllers/authentication/signupController";
 import { getCourseByIdController, getCoursesController, postCourseController } from "../controllers/course";
 import { getCategoriesController, getCategoryByIdController, postCategoryController } from "../controllers/category";
 
@@ -19,7 +19,7 @@ import {
   getCategoryByIdValidator,getCourseByIdValidator,
   loginValidator, postCategoryValidator, postCourseValidator,
 } from "../../middleware/requestValidator";
-import googleSignupController from "../controllers/common/signupController/googleSignupController";
+import googleSignupController from "../controllers/authentication/signupController/googleSignupController";
 
 
 const router = Router();

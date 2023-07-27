@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { signupGoogle } from "../../../../app/usecases/common/userSignup/signupGoogle";
+import { signupGoogle } from "../../../../app/usecases/authentication/userSignup/signupGoogle";
 import { userRepositoryEmpl } from "../../../../framework/repository/userRepository";
 import { userModel } from "../../../../framework/database/models/userModel";
 import { generateAccessToken, generateRefreshToken } from "../../../../utils/jwtTokenUtils";

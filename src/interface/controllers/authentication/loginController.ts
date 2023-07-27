@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 import { Request, Response } from "express";
 import { validationResult } from "express-validator";
-import { userLogin } from "../../../app/usecases/common/userLogin";
+import { userLogin } from "../../../app/usecases/authentication/userLogin";
 import { userModel } from "../../../framework/database/models/userModel";
 import { userRepositoryEmpl } from "../../../framework/repository/userRepository";
 import { generateAccessToken, generateRefreshToken } from "../../../utils/jwtTokenUtils";
