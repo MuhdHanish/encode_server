@@ -11,42 +11,70 @@ export type courseRepository = {
 };
 
 export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseRepository => {
-
-  const getCourses = async (): Promise<Course[] | null> =>{
-   const courses = await courseModel.find().exec();
-    return courses.length > 0 ? courses : null;
-  }
-  
-  const getCoursesByCredential = async (credential:Partial<Course>): Promise<Course[] | null> =>{
-  const courses = await courseModel.find({ credential }).exec();
-  return courses.length > 0 ? courses : null;
-  }
- 
-  const getCourseByCredential = async (credential:Partial<Course>): Promise<Course | null> =>{
-   const course = await courseModel.findOne({credential}).exec();
-   return course !== null ? course.toObject() : null;
-  }
-  
- 
-  const getCourseById = async (courseId:string): Promise<Course | null> =>{
-   const course = await courseModel.findOne({_id:courseId}).exec();
-   return course !== null ? course.toObject() : null;
-  }
- 
-  const postCourse = async (courseData: Course): Promise<Course | null> => {
-    const courseDetails = {
-      ...courseData
+  const getCourses = async (): Promise<Course[] | null> => {
+    try {
+      const courses = await courseModel.find().exec();
+      return courses.length > 0 ? courses : null;
+    } catch (error) {
+      console.error("Error getting courses:", error);
+      return null;
     }
-    const createdCourse = await courseModel.create(courseDetails);
-    return createdCourse !== null ? createdCourse.toObject() : null;
+  };
+
+  const getCoursesByCredential = async (credential: Partial<Course>): Promise<Course[] | null> => {
+    try {
+      const courses = await courseModel.find(credential).exec();
+      return courses.length > 0 ? courses : null;
+    } catch (error) {
+      console.error("Error getting courses by credential:", error);
+      return null;
+    }
+  };
+
+  const getCourseByCredential = async (credential: Partial<Course>): Promise<Course | null> => {
+    try {
+      const course = await courseModel.findOne(credential).exec();
+      return course !== null ? course.toObject() : null;
+    } catch (error) {
+      console.error("Error getting course by credential:", error);
+      return null;
+    }
+  };
+
+  const getCourseById = async (courseId: string): Promise<Course | null> => {
+    try {
+      const course = await courseModel.findById(courseId).exec();
+      return course !== null ? course.toObject() : null;
+    } catch (error) {
+      console.error("Error getting course by ID:", error);
+      return null;
+    }
+  };
+
+  const postCourse = async (courseData: Course): Promise<Course | null> => {
+    try {
+      const courseDetails = {
+        ...courseData,
+      };
+      const createdCourse = await courseModel.create(courseDetails);
+      return createdCourse !== null ? createdCourse.toObject() : null;
+    } catch (error) {
+      console.error("Error creating course:", error);
+      return null;
+    }
   };
 
   const editCourse = async (CourseDetails: Course): Promise<Course | null> => {
-    const { _id, coursename, description } = CourseDetails;
-   const updatedCourse = await courseModel.findByIdAndUpdate(
-    _id, { coursename, description }, { new: true }
-   ).exec();
-    return updatedCourse !== null ? updatedCourse.toObject() : null;
+    try {
+      const { _id, coursename, description } = CourseDetails;
+      const updatedCourse = await courseModel
+        .findByIdAndUpdate(_id, { coursename, description }, { new: true })
+        .exec();
+      return updatedCourse !== null ? updatedCourse.toObject() : null;
+    } catch (error) {
+      console.error("Error editing course:", error);
+      return null;
+    }
   };
 
   return {
