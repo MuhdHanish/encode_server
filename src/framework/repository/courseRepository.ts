@@ -53,10 +53,7 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
 
   const postCourse = async (courseData: Course): Promise<Course | null> => {
     try {
-      const courseDetails = {
-        ...courseData,
-      };
-      const createdCourse = await courseModel.create(courseDetails);
+      const createdCourse = await courseModel.create(courseData);
       return createdCourse !== null ? createdCourse.toObject() : null;
     } catch (error) {
       console.error("Error creating course:", error);

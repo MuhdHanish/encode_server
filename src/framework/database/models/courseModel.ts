@@ -15,7 +15,7 @@ const courseSchema = new Schema<Course>({
   isPaid: { type: Boolean, required: true },
   price: { type: Number, required: true },
   level: { type: String, required: true },
-  videoUrl: { type: String, required: true },
+  videos: { type: [String], required: true },
   rating: { type: Number, required: true, default: 0 },
 });
 
