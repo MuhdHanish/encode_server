@@ -1,7 +1,8 @@
 import mongoose from "mongoose";
+import { User } from "./User";
 
 export interface Course {
-  tutorId?: mongoose.Types.ObjectId;
+  tutor?: mongoose.Types.ObjectId | User;
   _id?: mongoose.Types.ObjectId;
   coursename?: string;
   shortDescription?: string;

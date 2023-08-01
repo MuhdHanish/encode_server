@@ -4,7 +4,7 @@ import { Course } from "../../../domain/models/Course";
 export type MongoDBCourse = Model<Document<any, any, any> & Course>;
 
 const courseSchema = new Schema<Course>({
-  tutorId: {
+  tutor: {
     type: Schema.Types.ObjectId,
     ref: "User",
   },

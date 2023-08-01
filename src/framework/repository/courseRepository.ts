@@ -54,7 +54,7 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
 
   const getCourseById = async (courseId: string): Promise<Course | null> => {
     try {
-      const course = await courseModel.findById(courseId).exec();
+      const course = await courseModel.findById(courseId).populate("tutor").exec();
       return course !== null ? course.toObject() : null;
     } catch (error) {
       console.error("Error getting course by ID:", error);
