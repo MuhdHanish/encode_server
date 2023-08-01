@@ -2,19 +2,19 @@ import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { postCourse } from "../../../app/usecases/course/postCourse";
 import { courseModel } from "../../../framework/database/models/courseModel";
-import { categoryModel } from "../../../framework/database/models/LanguageModel";
+import { LanguageModel } from "../../../framework/database/models/LanguageModel";
 import { courseRepositoryEmpl } from "../../../framework/repository/courseRepository";
-import { categoryRepositoryEmpl } from "../../../framework/repository/LanguageRepository";
-import { getCategoryByName } from "../../../app/usecases/language/getLanguageByCredentail";
+import { languageRepositoryEmpl } from "../../../framework/repository/LanguageRepository";
+import { getLanguageByName } from "../../../app/usecases/language/getLanguageByCredentail";
 const courseRepository = courseRepositoryEmpl(courseModel);
-const categoryRepository = categoryRepositoryEmpl(categoryModel);
+const languageRepository = languageRepositoryEmpl(LanguageModel);
 
 const postCourseController = async (req: Request, res: Response) => {
  try {
   const errors = validationResult(req);
   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
-  const { category } = req.body;
-  const isExist = await getCategoryByName(categoryRepository)(category);
+  const { language } = req.body;
+  const isExist = await getLanguageByName(languageRepository)(language);
   if (isExist) {
    const course = await postCourse(courseRepository)(req.body);
    if (course) {

@@ -9,7 +9,7 @@ export interface Course {
   price?: number;
   level?: string;
   description?: string;
-  category?: string;
+  language?: string;
   videos?: string[];
   status?: boolean;
   rating?: number;

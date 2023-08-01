@@ -14,7 +14,7 @@ export const getCourseByIdValidator = [
 ];
 
 export const postLanguageValidator = [
-  body("languagename").notEmpty().withMessage("Category name is required"),
+  body("languagename").notEmpty().withMessage("Language name is required"),
   body("description").notEmpty().withMessage("Description is required")
 ]
 
