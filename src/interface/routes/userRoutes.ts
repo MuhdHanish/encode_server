@@ -3,8 +3,12 @@ import { Router } from "express";
 // controllers
 import { loginController, googleLoginController } from "../controllers/authentication";
 import { stepOneController, stepTwoController } from "../controllers/authentication/signupController";
-import { getCourseByIdController, getCoursesController, postCourseController } from "../controllers/course";
-import { getCategoriesController, getCategoryByIdController, postCategoryController } from "../controllers/category";
+import {
+  getCourseByIdController,
+  getPopularCoursesController,
+  postCourseController,
+} from "../controllers/course";
+import { getLanguagesController, getLanguageByIdController, postLanguageController } from "../controllers/language";
 
 // middlewares
 import {
@@ -16,8 +20,8 @@ import {
 // validator middlewares
 import {
   signupValidatorOne, signupValidatorTwo, 
-  getCategoryByIdValidator,getCourseByIdValidator,
-  loginValidator, postCategoryValidator, postCourseValidator,
+  getLanguageByIdValidator,getCourseByIdValidator,
+  loginValidator, postLanguageValidator, postCourseValidator,
 } from "../../middleware/requestValidator";
 import googleSignupController from "../controllers/authentication/signupController/googleSignupController";
 
@@ -38,15 +42,15 @@ router.post("/google/login", googleLoginMiddleware, googleLoginController);
 // POST google signup
 router.post("/google/register", googleSignupMiddelware, googleSignupController);
 
-// GET category
-router.get("/get/categories", getCategoriesController);
-router.get("/get/category/:id([0-9a-fA-F]{24})", getCategoryByIdValidator, getCategoryByIdController);
+// GET language
+router.get("/get/languages", getLanguagesController);
+router.get("/get/language/:id([0-9a-fA-F]{24})", getLanguageByIdValidator, getLanguageByIdController);
 
-// POST category
-router.post("/admin/post/category",adminAuthorization,postCategoryValidator,postCategoryController);
+// POST language
+router.post("/admin/post/language",adminAuthorization,postLanguageValidator,postLanguageController);
 
 // GET courses
-router.get("/get/courses", getCoursesController);
+router.get("/get/popular/courses", getPopularCoursesController);
 router.get("/get/course/:id([0-9a-fA-F]{24})",getCourseByIdValidator, getCourseByIdController);
 
 // POST course

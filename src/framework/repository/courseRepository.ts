@@ -2,6 +2,7 @@ import { Course } from "../../domain/models/Course";
 import { MongoDBCourse } from "../database/models/courseModel";
 
 export type courseRepository = {
+  getPopularCourses: ()=> Promise<Course[] | null>;
   getCourses: ()=> Promise<Course[] | null>;
   getCourseByCredential: (credential:Partial<Course>)=> Promise<Course | null>;
   getCoursesByCredential: (credential:Partial<Course>)=> Promise<Course[] | null>;
@@ -11,6 +12,16 @@ export type courseRepository = {
 };
 
 export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseRepository => {
+  const getPopularCourses = async (): Promise<Course[] | null> => {
+    try {
+      const courses = await courseModel.find().sort({rating:-1}).exec();
+      return courses.length > 0 ? courses : null;
+    } catch (error) {
+      console.error("Error getting courses:", error);
+      return null;
+    }
+  };
+
   const getCourses = async (): Promise<Course[] | null> => {
     try {
       const courses = await courseModel.find().exec();
@@ -75,6 +86,7 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
   };
 
   return {
+    getPopularCourses,
     getCourses,
     getCourseByCredential,
     getCoursesByCredential,

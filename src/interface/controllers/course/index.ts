@@ -1,9 +1,9 @@
 import getCourseByIdController from "./getCourseByIdController"; 
-import getCoursesController from "./getCoursesController";
+import getPopularCoursesController from "./getPopularCoursesController";
 import postCourseController from "./postCourseController";
 
 export {
   getCourseByIdController,
-  getCoursesController,
-  postCourseController
-}
+  getPopularCoursesController,
+  postCourseController,
+};

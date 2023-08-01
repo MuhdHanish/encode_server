@@ -1,8 +1,8 @@
 import mongoose from "mongoose";
 
-export interface Category {
+export interface Language {
  _id?: mongoose.Types.ObjectId,
- categoryname?: string,
+ languagename?: string,
  description?: string,
  status?: boolean
 };

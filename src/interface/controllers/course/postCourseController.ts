@@ -2,10 +2,10 @@ import { Request, Response } from "express";
 import { validationResult } from "express-validator";
 import { postCourse } from "../../../app/usecases/course/postCourse";
 import { courseModel } from "../../../framework/database/models/courseModel";
-import { categoryModel } from "../../../framework/database/models/categoryModel";
+import { categoryModel } from "../../../framework/database/models/LanguageModel";
 import { courseRepositoryEmpl } from "../../../framework/repository/courseRepository";
-import { categoryRepositoryEmpl } from "../../../framework/repository/categoryRepository";
-import { getCategoryByName } from "../../../app/usecases/category/getCategoryByCredentail";
+import { categoryRepositoryEmpl } from "../../../framework/repository/LanguageRepository";
+import { getCategoryByName } from "../../../app/usecases/language/getLanguageByCredentail";
 const courseRepository = courseRepositoryEmpl(courseModel);
 const categoryRepository = categoryRepositoryEmpl(categoryModel);
 

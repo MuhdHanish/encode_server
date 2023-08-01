@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { courseModel } from "../../../framework/database/models/courseModel";
 import { courseRepositoryEmpl } from "../../../framework/repository/courseRepository";
-import { getCourses } from "../../../app/usecases/course/getCourses";
+import { getPopularCourses } from "../../../app/usecases/course/getPopularCourses";
 
 const courseRepository = courseRepositoryEmpl(courseModel);
 
-const getCoursesController = async (req: Request, res: Response) => {
+const getPopularCoursesController = async (req: Request, res: Response) => {
  try {
-  const courses = await getCourses(courseRepository)();
+  const courses = await getPopularCourses(courseRepository)();
   if (courses) {
     return res.status(200).json({ message: "Courses fetched sucessfully", courses });
   } else {
@@ -19,4 +19,4 @@ const getCoursesController = async (req: Request, res: Response) => {
  }
 }
 
-export default getCoursesController;
+export default getPopularCoursesController;
