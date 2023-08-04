@@ -48,7 +48,8 @@ export const postCourseValidator = [
   body("price").notEmpty().withMessage("Price is required"),
   body("level").notEmpty().withMessage("Level is required"),
   body("description").notEmpty().withMessage("Description is required"),
-  body("videos").notEmpty().withMessage("videos is required"),
+  body("demoUrl").notEmpty().withMessage("Demo video url is required"),
+  body("chapters").notEmpty().withMessage("Demo video url is required"),
 ];
 
 

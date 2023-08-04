@@ -8,7 +8,7 @@ interface CustomRequest extends Request {
 
 const refreshTokenController = async (req: CustomRequest, res: Response):Promise<any> => {
  try {
-    const accessToken = await generateAccessToken(req.userInfo?.id as mongoose.Types.ObjectId ,req.userInfo?.role as string );
+   const accessToken = await generateAccessToken(req.userInfo?.id as mongoose.Types.ObjectId, req.userInfo?.role as string);
     return res.status(201).json(accessToken);
   } catch (error) {
     console.log(error);

@@ -2,9 +2,9 @@ import { Course } from "../../../domain/models/Course";
 import { courseRepository } from "../../../framework/repository/courseRepository";
 
 
-export const postCourse = (courseRepository: courseRepository) => async (courseDetails: Course): Promise<Course | null> => {
+export const updateCourse = (courseRepository: courseRepository) => async (courseDetails: Course,id:string): Promise<Course | null> => {
   try {
-    const course = await courseRepository.postCourse(courseDetails);
+    const course = await courseRepository.updateCourse(courseDetails, id);
     if (course) {
       return course;
     } else {

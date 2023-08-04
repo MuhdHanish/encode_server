@@ -23,7 +23,7 @@ const postCourseController = async (req: Request, res: Response) => {
    return res.status(400).json({ message: "Course upload failed" });
    }
   } else {
-   return res.status(400).json({ message: "Category is not valid" });
+   return res.status(400).json({ message: "Language is not valid" });
   }
  } catch (error) {
   console.log(error);

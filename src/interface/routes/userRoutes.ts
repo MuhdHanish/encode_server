@@ -7,6 +7,8 @@ import {
   getCourseByIdController,
   getPopularCoursesController,
   postCourseController,
+  getTutorCoursesController,
+  updateCourseController
 } from "../controllers/course";
 import { getLanguagesController, getLanguageByIdController, postLanguageController } from "../controllers/language";
 
@@ -52,8 +54,12 @@ router.post("/admin/post/language",adminAuthorization,postLanguageValidator,post
 // GET courses
 router.get("/get/popular/courses", getPopularCoursesController);
 router.get("/get/course/:id([0-9a-fA-F]{24})",getCourseByIdValidator, getCourseByIdController);
+router.get("/get/tutor/courses/:id([0-9a-fA-F]{24})",tutorAuthorization,getTutorCoursesController);
 
 // POST course
 router.post("/tutor/post/course", tutorAuthorization, postCourseValidator, postCourseController);
+
+// PATCH course
+router.put("/tutor/update/course/:id", tutorAuthorization, postCourseValidator, updateCourseController)
 
 export default router;
