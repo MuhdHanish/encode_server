@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import { Course } from "./Course";
 
 export interface User {
   _id?: mongoose.Types.ObjectId;
@@ -9,6 +10,6 @@ export interface User {
   status?: boolean;
   isGoogle?: boolean;
   profile?: string;
-  seletedCourses?: mongoose.Types.ObjectId[];
-  uploadedCourses?: mongoose.Types.ObjectId[];
+  seletedCourses?: [Course];
+  uploadedCourses?: [Course];
 };

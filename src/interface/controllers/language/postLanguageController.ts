@@ -25,7 +25,6 @@ const postLanguageController = async (req: Request, res: Response) => {
    return res.status(409).json({ message: "Language already existed" });
   }
  } catch (error) {
-  console.log(error);
   return res.status(500).json({ message: "Internal server error" });
  }
 }

@@ -7,6 +7,8 @@ export type userRepository = {
   findByUsernameOrEmailAndPassword: (usernameOrEmail: string,password:string) => Promise<User | null>;
   create: (user: User) => Promise<User | null>;
   googleUserCreate: (user: User) => Promise<User | null>;
+  setSelectedCourse: (userId: string, courseId:string) => Promise<User | null>;
+  setUploadedCourse: (userId: string, courseId:string) => Promise<User | null>;
 };
 
 export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
@@ -69,6 +71,32 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
     }
   };
 
+  const setSelectedCourse = async (userId: string, courseId:string): Promise<User | null> => {
+    try {
+      const user = await userModel.findByIdAndUpdate(userId, { $push: { seletedCourses: courseId } }, { new: true });
+      if (user) {
+        return user;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error adding course user:", error);
+      return null;
+    }
+  }
+
+  const setUploadedCourse = async (userId: string, courseId:string): Promise<User | null> => {
+    try {
+      const user = await userModel.findByIdAndUpdate(userId, { $push: { uploadedCourses: courseId } }, { new: true });
+      if (user) {
+        return user;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error adding course user:", error);
+      return null;
+    }
+  }
+
   const googleUserCreate = async (userDetails: User): Promise<User | null> => {
     try {
       const hashPass: string = bcrypt.hashSync(userDetails.email as string, 12);
@@ -93,9 +121,11 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
   };
 
   return {
+    create,
     findByUsernameAndEmail,
     findByUsernameOrEmailAndPassword,
-    create,
     googleUserCreate,
+    setSelectedCourse,
+    setUploadedCourse
   };
 };
