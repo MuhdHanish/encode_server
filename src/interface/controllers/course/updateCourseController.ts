@@ -20,9 +20,7 @@ const updateCourseController = async (req: Request, res: Response) => {
     if (isExist) {
       const course = await updateCourse(courseRepository)(req.body, id);
       if (course) {
-        return res
-          .status(201)
-          .json({ message: "Course posted sucessfully", course });
+        return res.status(201).json({ message: "Course posted sucessfully", course });
       } else {
         return res.status(400).json({ message: "Course update failed" });
       }

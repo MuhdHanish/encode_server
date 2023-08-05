@@ -14,16 +14,3 @@ export const setSelectedCourse = (userRepository: userRepository) => async (user
     return null
   }
 }
-
-export const setUploadedCourse = (userRepository: userRepository) => async (userId:string,courseId:string): Promise<User | null> => {
-  try {
-    const user = await userRepository.setUploadedCourse(userId, courseId);
-    if (user) {
-      return user;
-    } else {
-      return null;
-    }
-  } catch (error) {
-    return null
-  }
-}

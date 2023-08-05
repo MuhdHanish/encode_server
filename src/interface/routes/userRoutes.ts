@@ -15,7 +15,7 @@ import { getLanguagesController, getLanguageByIdController, postLanguageControll
 // middlewares
 import {
   adminAuthorization, googleLoginMiddleware,
-  googleSignupMiddelware, otpAuthMiddleware, tutorAuthorization
+  googleSignupMiddelware, otpAuthMiddleware, tutorAuthorization, userAuthorization
 } from "../../middleware";
 
 
@@ -23,9 +23,10 @@ import {
 import {
   signupValidatorOne, signupValidatorTwo, 
   getLanguageByIdValidator,getCourseByIdValidator,
-  loginValidator, postLanguageValidator, postCourseValidator,
+  loginValidator, postLanguageValidator, postCourseValidator,setSelectedCourseValidator
 } from "../../middleware/requestValidator";
 import googleSignupController from "../controllers/authentication/signupController/googleSignupController";
+import setSelectedCourseController from "../controllers/course/setSelectedCourseController";
 
 
 const router = Router();
@@ -51,13 +52,16 @@ router.get("/get/language/:id([0-9a-fA-F]{24})", getLanguageByIdValidator, getLa
 // POST language
 router.post("/admin/post/language",adminAuthorization,postLanguageValidator,postLanguageController);
 
-// GET courses
+// GET course
 router.get("/get/popular/courses", getPopularCoursesController);
 router.get("/get/course/:id([0-9a-fA-F]{24})",getCourseByIdValidator, getCourseByIdController);
 router.get("/get/tutor/courses/:id([0-9a-fA-F]{24})",tutorAuthorization,getTutorCoursesController);
 
 // POST course
 router.post("/tutor/post/course", tutorAuthorization, postCourseValidator, postCourseController);
+
+// PATCH course
+router.patch("/set/selected/course", userAuthorization, setSelectedCourseValidator ,setSelectedCourseController)
 
 // PATCH course
 router.put("/tutor/update/course/:id", tutorAuthorization, postCourseValidator, updateCourseController)

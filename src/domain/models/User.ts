@@ -11,5 +11,4 @@ export interface User {
   isGoogle?: boolean;
   profile?: string;
   seletedCourses?: [Course];
-  uploadedCourses?: [Course];
 };

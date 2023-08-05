@@ -15,7 +15,6 @@ const setSelectedCourseController = async (req: Request, res: Response) => {
       return res.status(400).json({ message: "No course found" });
     }
   } catch (error) {
-    console.log(error);
     return res.status(500).json({ message: "Internal server error" });
   }
 };

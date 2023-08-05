@@ -3,12 +3,17 @@ import { MongoDBUser } from "../database/models/userModel";
 import bcrypt from "bcryptjs";
 
 export type userRepository = {
-  findByUsernameAndEmail: (username: string,email: string) => Promise<User | null>;
-  findByUsernameOrEmailAndPassword: (usernameOrEmail: string,password:string) => Promise<User | null>;
+  findByUsernameAndEmail: (username: string, email: string) => Promise<User | null>;
+  findByUsernameOrEmailAndPassword: (usernameOrEmail: string, password: string) => Promise<User | null>;
   create: (user: User) => Promise<User | null>;
+  getUsers: () => Promise<User[] | null>;
+  getUsersCount: () => Promise<number | null>;
+  getUsersByRole: (role: string) => Promise<User[] | null>;
+  getUsersCountByRole: (role:string) => Promise<number | null>;
+  blockUser: (userId: string) => Promise<User | null>;
+  unBlockUser: (userId: string) => Promise<User | null>;
   googleUserCreate: (user: User) => Promise<User | null>;
   setSelectedCourse: (userId: string, courseId:string) => Promise<User | null>;
-  setUploadedCourse: (userId: string, courseId:string) => Promise<User | null>;
 };
 
 export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
@@ -84,15 +89,80 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
     }
   }
 
-  const setUploadedCourse = async (userId: string, courseId:string): Promise<User | null> => {
+  const getUsers = async (): Promise<User[] | null> => {
     try {
-      const user = await userModel.findByIdAndUpdate(userId, { $push: { uploadedCourses: courseId } }, { new: true });
+      const users = await userModel.find();
+      if (users) {
+        return users;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error get users:", error);
+      return null;
+    }
+  };
+
+  const getUsersCount = async (): Promise<number | null> => {
+    try {
+      const count = await userModel.find().countDocuments();
+      if (count) {
+        return count;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error get users count:", error);
+      return null;
+    }
+  };
+
+  const getUsersByRole = async (role: string): Promise<User[] | null> => {
+    try {
+      const users = await userModel.find({ role });
+      if (users) {
+        return users;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error get users by role:", error);
+      return null;
+    }
+  };
+
+  const getUsersCountByRole = async (role:string): Promise<number | null> => {
+    try {
+      const count = await userModel.find({role}).countDocuments();
+      if (count) {
+        return count;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error get users count by role:", error);
+      return null;
+    }
+  };
+
+  const blockUser = async (userId: string): Promise<User | null> => {
+    try {
+      const user = await userModel.findByIdAndUpdate(userId, { $set: { status: false } }, { new: true });
       if (user) {
         return user;
       }
       return null;
     } catch (error) {
-      console.error("Error adding course user:", error);
+      console.error("Error block user:", error);
+      return null;
+    }
+  }
+
+  const unBlockUser = async (userId: string): Promise<User | null> => {
+    try {
+      const user = await userModel.findByIdAndUpdate(userId, { $set: { status: true } }, { new: true });
+      if (user) {
+        return user;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error un block:", error);
       return null;
     }
   }
@@ -124,8 +194,13 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
     create,
     findByUsernameAndEmail,
     findByUsernameOrEmailAndPassword,
+    getUsersByRole,
+    getUsers,
+    getUsersCount,
+    blockUser,
+    unBlockUser,
+    getUsersCountByRole,
     googleUserCreate,
     setSelectedCourse,
-    setUploadedCourse
   };
 };

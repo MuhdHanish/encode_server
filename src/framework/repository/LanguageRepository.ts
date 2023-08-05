@@ -3,7 +3,10 @@ import { MongoDBLanguage } from "../database/models/LanguageModel";
 
 export type languageRepository = {
   getLanguages: () => Promise<Language[] | null>;
+  getLanguagesCount: () => Promise<number | null>;
   getLanguageByName: (languagename: string) => Promise<Language | null>;
+  listLanguage: (languageId: string) => Promise<Language | null>;
+  unListLanguage: (languageId: string) => Promise<Language | null>;
   getLanguageById: (id: string) => Promise<Language | null>;
   postLanguage: (language: Language) => Promise<Language | null>;
   editLanguage: (language: Language) => Promise<Language | null>;
@@ -16,6 +19,45 @@ export const languageRepositoryEmpl = (languageModel: MongoDBLanguage): language
       return languages.length > 0 ? languages : null;
     } catch (error) {
       console.error("Error getting languages:", error);
+      return null;
+    }
+  };
+
+  const getLanguagesCount = async (): Promise<number | null> => {
+    try {
+      const count = await languageModel.find().countDocuments();
+      if (count) {
+        return count
+      }
+      return null;
+    } catch (error) {
+      console.error("Error getting languages count:", error);
+      return null;
+    }
+  };
+
+  const listLanguage = async (languageId: string): Promise<Language | null> => {
+    try {
+      const language = await languageModel.findByIdAndUpdate(languageId, { $set: { status: true } }, { new: true });
+      if (language) {
+        return language;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error mute langugae:", error);
+      return null;
+    }
+  };
+
+  const unListLanguage = async (languageId: string): Promise<Language | null> => {
+    try {
+      const language = await languageModel.findByIdAndUpdate(languageId, { $set: { status: false } }, { new: true });
+      if (language) {
+        return language;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error un mute langugae:", error);
       return null;
     }
   };
@@ -68,6 +110,9 @@ export const languageRepositoryEmpl = (languageModel: MongoDBLanguage): language
   return {
     getLanguages,
     getLanguageByName,
+    getLanguagesCount,
+    listLanguage,
+    unListLanguage,
     getLanguageById,
     postLanguage,
     editLanguage,

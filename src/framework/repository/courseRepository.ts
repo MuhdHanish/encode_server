@@ -5,9 +5,10 @@ export type courseRepository = {
   getPopularCourses: () => Promise<Course[] | null>;
   getTutorCourses: (tutorId: string) => Promise<Course[] | null>;
   getCourses: ()=> Promise<Course[] | null>;
-  getCourseByCredential: (credential:Partial<Course>)=> Promise<Course | null>;
-  getCoursesByCredential: (credential:Partial<Course>)=> Promise<Course[] | null>;
   getCourseById: (courseId:string)=> Promise<Course | null>;
+  updateCoursesLanguageName: (oldName: string, newName:string)=> Promise<boolean | null>;
+  listCourse: (courseId:string)=> Promise<Course | null>;
+  unListCourse: (courseId:string)=> Promise<Course | null>;
   postCourse: (course: Course) => Promise<Course | null>;
   updateCourse: (course: Course, _id:string) => Promise<Course | null>;
 };
@@ -43,26 +44,6 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
     }
   };
 
-  const getCoursesByCredential = async (credential: Partial<Course>): Promise<Course[] | null> => {
-    try {
-      const courses = await courseModel.find(credential).exec();
-      return courses.length > 0 ? courses : null;
-    } catch (error) {
-      console.error("Error getting courses by credential:", error);
-      return null;
-    }
-  };
-
-  const getCourseByCredential = async (credential: Partial<Course>): Promise<Course | null> => {
-    try {
-      const course = await courseModel.findOne(credential).exec();
-      return course !== null ? course.toObject() : null;
-    } catch (error) {
-      console.error("Error getting course by credential:", error);
-      return null;
-    }
-  };
-
   const getCourseById = async (courseId: string): Promise<Course | null> => {
     try {
       const course = await courseModel
@@ -75,6 +56,45 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
       return null;
     }
   };
+
+  const updateCoursesLanguageName = async (oldName: string, newName: string): Promise<boolean | null> => {
+    try {
+      const cousers = await courseModel.updateMany({ language: oldName }, { $set: { language: newName } }); 
+      if (cousers) {
+        return true;
+      }
+      return false;
+    } catch (error) {
+      console.error("Error updating courses by langugage:", error);
+      return null;
+    }
+  }
+
+  const listCourse = async (courseId: string): Promise<Course | null> => {
+    try {
+      const course = await courseModel.findByIdAndUpdate(courseId, { $set: { status: true } }, { new: true });
+      if (course) {
+        return course;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error mute course:", error);
+      return null;
+    }
+  }
+
+  const unListCourse = async (courseId: string): Promise<Course | null> => {
+    try {
+      const course = await courseModel.findByIdAndUpdate(courseId, { $set: { status: false } }, { new: true });
+      if (course) {
+        return course;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error mute course:", error);
+      return null;
+    }
+  }
 
   const postCourse = async (courseData: Course): Promise<Course | null> => {
     try {
@@ -101,9 +121,10 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
   return {
     getPopularCourses,
     getCourses,
-    getCourseByCredential,
+    listCourse,
+    unListCourse,
+    updateCoursesLanguageName,
     getTutorCourses,
-    getCoursesByCredential,
     getCourseById,
     postCourse,
     updateCourse,

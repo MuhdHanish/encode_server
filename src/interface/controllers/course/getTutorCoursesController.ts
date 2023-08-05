@@ -10,9 +10,7 @@ const getTutorCoursesController = async (req: Request, res: Response) => {
     const { id } = req.params;
     const courses = await getTutorCourses(courseRepository)(id);
     if (courses) {
-      return res
-        .status(200)
-        .json({ message: "Courses fetched sucessfully", courses });
+      return res.status(200).json({ message: "Courses fetched sucessfully", courses });
     } else {
       return res.status(400).json({ message: "No courses found" });
     }

@@ -1,6 +1,5 @@
 import mongoose, { Model, Schema, Document } from "mongoose";
 import { User } from "../../../domain/models/User";
-import { courseModel } from "./courseModel";
 
 export type MongoDBUser = Model<Document<any, any, any> & User>;
 
@@ -17,7 +16,6 @@ const userSchema = new Schema<User>({
       "https://cdn.create.vista.com/api/media/small/356209164/stock-vector-user-avatar-illustration-anonymous-sign",
   },
   seletedCourses: [Object],
-  uploadedCourses: [Object],
 });
 
 export const userModel: MongoDBUser = mongoose.connection.model<Document<any, any, any> & User>('User', userSchema);
