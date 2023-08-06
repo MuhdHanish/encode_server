@@ -20,7 +20,7 @@ export const postLanguageValidator = [
 
 export const setSelectedCourseValidator = [
   body("userId").notEmpty().withMessage("User Id is required"),
-  body("course").notEmpty().withMessage("Course Id is required"),
+  body("courseId").notEmpty().withMessage("Course Id is required"),
 ];
 
 export const signupValidatorOne = [

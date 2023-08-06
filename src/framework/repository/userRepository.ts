@@ -13,7 +13,6 @@ export type userRepository = {
   blockUser: (userId: string) => Promise<User | null>;
   unBlockUser: (userId: string) => Promise<User | null>;
   googleUserCreate: (user: User) => Promise<User | null>;
-  setSelectedCourse: (userId: string, courseId:string) => Promise<User | null>;
 };
 
 export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
@@ -75,19 +74,6 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
       return null;
     }
   };
-
-  const setSelectedCourse = async (userId: string, courseId:string): Promise<User | null> => {
-    try {
-      const user = await userModel.findByIdAndUpdate(userId, { $push: { seletedCourses: courseId } }, { new: true });
-      if (user) {
-        return user;
-      }
-      return null;
-    } catch (error) {
-      console.error("Error adding course user:", error);
-      return null;
-    }
-  }
 
   const getUsers = async (): Promise<User[] | null> => {
     try {
@@ -201,6 +187,5 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
     unBlockUser,
     getUsersCountByRole,
     googleUserCreate,
-    setSelectedCourse,
   };
 };

@@ -3,11 +3,13 @@ import getTutorCoursesController from "./getTutorCoursesController";
 import getPopularCoursesController from "./getPopularCoursesController";
 import postCourseController from "./postCourseController";
 import updateCourseController from "./updateCourseController";
+import setSelectedCourseController from "./setSelectedCourseController";
 
 export {
   getCourseByIdController,
   getPopularCoursesController,
   postCourseController,
   getTutorCoursesController,
-  updateCourseController
+  updateCourseController,
+  setSelectedCourseController
 };

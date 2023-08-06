@@ -8,7 +8,8 @@ import {
   getPopularCoursesController,
   postCourseController,
   getTutorCoursesController,
-  updateCourseController
+  updateCourseController,
+  setSelectedCourseController
 } from "../controllers/course";
 import { getLanguagesController, getLanguageByIdController, postLanguageController } from "../controllers/language";
 
@@ -26,7 +27,6 @@ import {
   loginValidator, postLanguageValidator, postCourseValidator,setSelectedCourseValidator
 } from "../../middleware/requestValidator";
 import googleSignupController from "../controllers/authentication/signupController/googleSignupController";
-import setSelectedCourseController from "../controllers/course/setSelectedCourseController";
 
 
 const router = Router();

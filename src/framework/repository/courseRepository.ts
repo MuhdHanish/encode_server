@@ -10,7 +10,9 @@ export type courseRepository = {
   listCourse: (courseId:string)=> Promise<Course | null>;
   unListCourse: (courseId:string)=> Promise<Course | null>;
   postCourse: (course: Course) => Promise<Course | null>;
-  updateCourse: (course: Course, _id:string) => Promise<Course | null>;
+  updateCourse: (course: Course, _id: string) => Promise<Course | null>;
+  setSelectedCourse: (courseId:string,userId:string) => Promise<Course | null>;
+  
 };
 
 export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseRepository => {
@@ -83,6 +85,20 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
     }
   }
 
+  
+  const setSelectedCourse = async (courseId: string,userId:string): Promise<Course | null> => {
+    try {
+      const course = await courseModel.findByIdAndUpdate(courseId, { $push: { students: userId } }, { new: true });
+      if (course) {
+        return course;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error adding course user:", error);
+      return null;
+    }
+  }
+
   const unListCourse = async (courseId: string): Promise<Course | null> => {
     try {
       const course = await courseModel.findByIdAndUpdate(courseId, { $set: { status: false } }, { new: true });
@@ -128,5 +144,6 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
     getCourseById,
     postCourse,
     updateCourse,
+    setSelectedCourse,
   };
 };

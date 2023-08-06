@@ -1,12 +1,12 @@
-import { User } from "../../../domain/models/User";
-import { userRepository } from "../../../framework/repository/userRepository";
+import { Course } from "../../../domain/models/Course";
+import { courseRepository } from "../../../framework/repository/courseRepository";
 
 
-export const setSelectedCourse = (userRepository: userRepository) => async (userId:string,courseId:string): Promise<User | null> => {
+export const  setSelectedCourse = (courseRepository: courseRepository) => async (courseId:string,userId:string): Promise<Course | null> => {
   try {
-    const user = await userRepository.setSelectedCourse(userId, courseId);
-    if (user) {
-      return user;
+    const course = await courseRepository.setSelectedCourse(courseId,userId);
+    if (course) {
+      return course;
     } else {
       return null;
     }

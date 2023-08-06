@@ -14,8 +14,7 @@ const userSchema = new Schema<User>({
     type: String,
     default:
       "https://cdn.create.vista.com/api/media/small/356209164/stock-vector-user-avatar-illustration-anonymous-sign",
-  },
-  seletedCourses: [Object],
+  }
 });
 
 export const userModel: MongoDBUser = mongoose.connection.model<Document<any, any, any> & User>('User', userSchema);

@@ -20,4 +20,5 @@ export interface Course {
   status?: boolean;
   rating?: number;
   chapters?: Chapter[];
+  students?: string[]
 }

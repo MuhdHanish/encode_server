@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
-import { userModel } from "../../../framework/database/models/userModel";
-import { userRepositoryEmpl } from "../../../framework/repository/userRepository";
+import { courseModel } from "../../../framework/database/models/courseModel";
+import { courseRepositoryEmpl } from "../../../framework/repository/courseRepository";
 import { setSelectedCourse } from "../../../app/usecases/course/setCourses";
 
-const userRepository = userRepositoryEmpl(userModel);
+const courseRepository = courseRepositoryEmpl(courseModel);
 
 const setSelectedCourseController = async (req: Request, res: Response) => {
   try {
-    const { userId, cousreId } = req.body;
-    const user = await setSelectedCourse(userRepository)(userId, cousreId);
-    if (user) {
-      return res.status(200).json({ message: "Course added to profile" });
+    const { courseId, userId } = req.body;
+    const course = await setSelectedCourse(courseRepository)(courseId,userId);
+    if (course) {
+      return res.status(200).json({ message: "Student added to Course", course });
     } else {
       return res.status(400).json({ message: "No course found" });
     }

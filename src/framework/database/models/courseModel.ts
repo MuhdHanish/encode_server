@@ -18,6 +18,7 @@ const courseSchema = new Schema<Course>({
   demoUrl: { type: String, required: true },
   chapters: {type: [Object],required: true},
   rating: { type: Number, required: true, default: 0 },
+  students: { type: [String] }
 });
 
 export const courseModel: MongoDBCourse = mongoose.connection.model<Document<any, any, any> & Course>('Course', courseSchema);
