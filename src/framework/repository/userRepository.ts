@@ -38,8 +38,8 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
         const passwordMatch = bcrypt.compareSync(password, user.password as string);
         if (passwordMatch) {
           if (user.role === "admin") {
-            const { _id, role, status } = user.toObject();
-            return { _id, role, status };
+            const { _id, role, status, profile } = user.toObject();
+            return { _id, role, status, profile };
           } else {
             const { password, ...userWithoutPassword } = user.toObject();
             return userWithoutPassword;
