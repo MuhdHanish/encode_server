@@ -11,7 +11,13 @@ import {
   updateCourseController,
   setSelectedCourseController
 } from "../controllers/course";
-import { getLanguagesController, getLanguageByIdController, postLanguageController } from "../controllers/language";
+import { getLanguagesController, getLanguageByIdController, postLanguageController, editLanguageController } from "../controllers/language";
+import googleSignupController from "../controllers/authentication/signupController/googleSignupController";
+import {
+  blockUserContorller, getCourseStudentsController, getUsersByRoleController, getUsersController,
+  getUsersCountByRoleController, getUsersCountController, unBlockUserContorller
+} from "../controllers/user/userUseCaseController";
+import { getLanguagesCountController, listLanguageController, unListLanguageController } from "../controllers/language/languageUseCaseController";
 
 // middlewares
 import {
@@ -26,8 +32,6 @@ import {
   getLanguageByIdValidator,getCourseByIdValidator,
   loginValidator, postLanguageValidator, postCourseValidator,setSelectedCourseValidator, getByRoleValidator, muteDataValidator
 } from "../../middleware/requestValidator";
-import googleSignupController from "../controllers/authentication/signupController/googleSignupController";
-import { blockUserContorller, getCourseStudentsController, getUsersByRoleController, getUsersController, getUsersCountByRoleController, getUsersCountController, unBlockUserContorller } from "../controllers/user/userUseCaseController";
 
 
 const router = Router();
@@ -52,6 +56,7 @@ router.get("/get/language/:id([0-9a-fA-F]{24})",userAuthorization, getLanguageBy
 
 // POST language
 router.post("/admin/post/language", adminAuthorization, postLanguageValidator, postLanguageController);
+router.put("/admin/edit/language", adminAuthorization, postLanguageValidator, editLanguageController);
 
 // GET course
 router.get("/get/popular/courses",userAuthorization, getPopularCoursesController);
@@ -64,7 +69,7 @@ router.post("/tutor/post/course", tutorAuthorization, postCourseValidator, postC
 // PATCH course
 router.patch("/set/selected/course", userAuthorization, setSelectedCourseValidator ,setSelectedCourseController)
 
-// PATCH course
+// PUT course
 router.put("/tutor/update/course/:id", tutorAuthorization, postCourseValidator, updateCourseController)
 
 // User usecase
@@ -82,6 +87,16 @@ router.get("/admin/get/course/students/:id", adminAuthorization, getCourseByIdVa
 // PATCH
 router.patch("/admin/block/user/:id", adminAuthorization, muteDataValidator, blockUserContorller);
 router.patch("/admin/unblock/user/:id", adminAuthorization, muteDataValidator, unBlockUserContorller);
+
+
+// Language usecase
+
+// Admin
+// GET
+router.get("/amdin/get/languages/count", adminAuthorization, getLanguagesCountController);
+// PATCH
+router.patch("/admin/unlist/language/:id", adminAuthorization, muteDataValidator, unListLanguageController);
+router.patch("/admin/list/language/:id", adminAuthorization, muteDataValidator, listLanguageController);
 
 
 export default router;

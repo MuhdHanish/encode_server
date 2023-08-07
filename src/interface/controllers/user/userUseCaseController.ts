@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { userModel } from "../../../framework/database/models/userModel";
-import { blockUser, getUsers, getUsersByRole, getUsersCount, getUsersCountByRole } from "../../../app/usecases/user/usersCases";
+import { blockUser, getUsers, getUsersByRole, getUsersCount, getUsersCountByRole,unBlockUser } from "../../../app/usecases/user/usersCases";
 import { userRepositoryEmpl } from "../../../framework/repository/userRepository";
 import { validationResult } from "express-validator";
 import { courseRepositoryEmpl } from "../../../framework/repository/courseRepository";
@@ -74,7 +74,7 @@ export const unBlockUserContorller = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
     const { id } = req.params;
-    const user = await blockUser(userRepository)(id);
+    const user = await unBlockUser(userRepository)(id);
     return res.status(201).json({message:"Unblocked user successfully", user});
   } catch (error) {
     console.log(error);
