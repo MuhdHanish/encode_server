@@ -13,6 +13,10 @@ export const getCourseByIdValidator = [
   param("id").notEmpty().withMessage("Course id is required")
 ];
 
+export const getByRoleValidator = [
+  param("role").notEmpty().withMessage("Role is required")
+];
+
 export const postLanguageValidator = [
   body("languagename").notEmpty().withMessage("Language name is required"),
   body("description").notEmpty().withMessage("Description is required")
