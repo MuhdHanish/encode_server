@@ -39,6 +39,24 @@ export const unListCourse = (courseRepository: courseRepository) => async(course
   }
 }
 
+export const getCoursesByLanguageName = (courseRepository: courseRepository) => async(languageName:string):Promise<Course[]|null> => {
+  const courses = await courseRepository.getCoursesByLanguageName(languageName);
+  if (courses) {
+    return courses;
+  } else {
+    return null;
+  }
+}
+
+export const getCoursesCountByLanguageName = (courseRepository: courseRepository) => async (languageName: string): Promise<number| null> => {
+  const count = await courseRepository.getCoursesCountByLanguageName(languageName);
+  if (count) {
+    return count;
+  } else {
+    return null;
+  }
+}
+
 export const getCourseStudents = (courseRepository: courseRepository) => async (courseId: string): Promise<User[]|null > => {
   const students = await courseRepository.getCourseStudents(courseId);
   if (students) {

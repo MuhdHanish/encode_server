@@ -15,6 +15,9 @@ export type courseRepository = {
   updateCourse: (course: Course, _id: string) => Promise<Course | null>;
   setSelectedCourse: (courseId: string, userId: string) => Promise<Course | null>;
   getCourseStudents: (courseId: string) => Promise<User[] | null>;
+  getCoursesByLanguageName: (languageName: string) => Promise<Course[] | null>;
+  getCoursesCountByLanguageName: (languageName: string) => Promise<number | null>;
+  getStudentCourses: (studentId: string) => Promise<Course[] | null>;
 };
 
 export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseRepository => {
@@ -38,6 +41,31 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
     }
   };
 
+  const getStudentCourses = async (studentId: string): Promise<Course[] | null> => {
+      try {
+       const courses = await courseModel.aggregate([
+         {
+           $match: {
+             students: {
+               $elemMatch: {
+                 $eq: studentId,
+               },
+             },
+           },
+         },
+         {
+           $project: {
+             students: 0, 
+           },
+         },
+       ]);
+        return courses.length > 0 ? courses : null;
+      } catch (error) {
+        console.error("Error getting by student id courses:", error);
+        return null;
+      }
+  }
+
   const getCourseStudents = async (courseId: string): Promise<User[] | null> => {
   try {
     const enrolledStudents = await courseModel
@@ -49,7 +77,7 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
             let: { students: "$students" },
             pipeline: [
               { $match: { $expr: { $in: ["$_id", "$$students"] } } },
-              { $project: { password: 0 } }, // Exclude the 'password' field
+              { $project: { password: 0 } },
             ],
             as: "enrolledStudents",
           },
@@ -104,13 +132,39 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
 
   const updateCoursesLanguageName = async (oldName: string, newName: string): Promise<boolean | null> => {
     try {
-      const cousers = await courseModel.updateMany({ language: oldName }, { $set: { language: newName } }); 
-      if (cousers) {
+      const courses = await courseModel.updateMany({ language: oldName }, { $set: { language: newName } }); 
+      if (courses) {
         return true;
       }
       return false;
     } catch (error) {
       console.error("Error updating courses by langugage:", error);
+      return null;
+    }
+  }
+
+  const getCoursesByLanguageName = async (languageName: string): Promise<Course[] | null> => {
+    try {
+      const courses = await courseModel.find({language:languageName}); 
+      if (courses) {
+        return courses;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error on fetching coruse by languagename:", error);
+      return null;
+    }
+  }
+
+  const getCoursesCountByLanguageName = async (languageName: string): Promise<number | null> => {
+    try {
+      const count = await courseModel.find({language:languageName}).estimatedDocumentCount(); 
+      if (count) {
+        return count;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error on fetching coruse by languagename:", error);
       return null;
     }
   }
@@ -186,9 +240,12 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
     unListCourse,
     updateCoursesLanguageName,
     getTutorCourses,
+    getCoursesByLanguageName,
+    getCoursesCountByLanguageName,
     getCourseById,
     postCourse,
     updateCourse,
+    getStudentCourses,
     setSelectedCourse,
   };
 };

@@ -1,19 +1,22 @@
 import { Request, Response } from "express";
 import { courseModel } from "../../../framework/database/models/courseModel";
 import { courseRepositoryEmpl } from "../../../framework/repository/courseRepository";
-import { getTutorCourses } from "../../../app/usecases/course/getTutorCourses";
 import { validationResult } from "express-validator";
+import { getStudentCourses } from "../../../app/usecases/course/getStudentCourses";
 
 const courseRepository = courseRepositoryEmpl(courseModel);
 
-const getTutorCoursesController = async (req: Request, res: Response) => {
+const getCourseStudentsController = async (req: Request, res: Response) => {
   try {
     const errors = validationResult(req);
-    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+    if (!errors.isEmpty())
+      return res.status(400).json({ errors: errors.array() });
     const { id } = req.params;
-    const courses = await getTutorCourses(courseRepository)(id);
+    const courses = await getStudentCourses(courseRepository)(id);
     if (courses) {
-      return res.status(200).json({ message: "Courses fetched sucessfully", courses });
+      return res
+        .status(200)
+        .json({ message: "Courses fetched sucessfully", courses });
     } else {
       return res.status(400).json({ message: "No courses found" });
     }
@@ -22,4 +25,4 @@ const getTutorCoursesController = async (req: Request, res: Response) => {
   }
 };
 
-export default getTutorCoursesController;
+export default getCourseStudentsController;

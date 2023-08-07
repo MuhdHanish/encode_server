@@ -17,7 +17,13 @@ import {
   blockUserContorller, getCourseStudentsController, getUsersByRoleController, getUsersController,
   getUsersCountByRoleController, getUsersCountController, unBlockUserContorller
 } from "../controllers/user/userUseCaseController";
-import { getLanguagesCountController, listLanguageController, unListLanguageController } from "../controllers/language/languageUseCaseController";
+import {
+  getLanguagesCountController, listLanguageController, unListLanguageController
+} from "../controllers/language/languageUseCaseController";
+import {
+  getCoursesByLanguageNameController, getCoursesCountByLanguageNameController,
+  getCoursesCountController, listCourseController, unListCourseController
+} from "../controllers/course/courseUseCaseController";
 
 // middlewares
 import {
@@ -60,8 +66,12 @@ router.put("/admin/edit/language", adminAuthorization, postLanguageValidator, ed
 
 // GET course
 router.get("/get/popular/courses",userAuthorization, getPopularCoursesController);
-router.get("/get/course/:id([0-9a-fA-F]{24})",userAuthorization, getCourseByIdValidator, getCourseByIdController);
-router.get("/get/tutor/courses/:id([0-9a-fA-F]{24})",tutorAuthorization,getTutorCoursesController);
+router.get("/get/course/:id([0-9a-fA-F]{24})", userAuthorization, getCourseByIdValidator, getCourseByIdController);
+router.get("/get/course/count", userAuthorization, getCoursesCountController);
+router.get("/get/course/language/name/:id", userAuthorization, getCourseByIdValidator, getCoursesByLanguageNameController);
+router.get("/get/course/count/language/name/:id", userAuthorization, getCourseByIdValidator, getCoursesCountByLanguageNameController);
+router.get("/get/student/coruses/:id([0-9a-fA-F]{24})", userAuthorization, getCourseStudentsController);
+router.get("/get/tutor/courses/:id([0-9a-fA-F]{24})", tutorAuthorization, getTutorCoursesController);
 
 // POST course
 router.post("/tutor/post/course", tutorAuthorization, postCourseValidator, postCourseController);
@@ -97,6 +107,13 @@ router.get("/amdin/get/languages/count", adminAuthorization, getLanguagesCountCo
 // PATCH
 router.patch("/admin/unlist/language/:id", adminAuthorization, muteDataValidator, unListLanguageController);
 router.patch("/admin/list/language/:id", adminAuthorization, muteDataValidator, listLanguageController);
+
+// Course usecase
+
+//Admin
+// PATCH
+router.patch("/admin/unlist/course/:id", adminAuthorization, muteDataValidator, unListCourseController);
+router.patch("/amdin/list/course/:id", adminAuthorization, muteDataValidator, listCourseController);
 
 
 export default router;

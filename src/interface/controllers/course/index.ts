@@ -5,6 +5,7 @@ import getCoursesController from "./getCourses";
 import postCourseController from "./postCourseController";
 import updateCourseController from "./updateCourseController";
 import setSelectedCourseController from "./setSelectedCourseController";
+import { getStudentCourses } from "../../../app/usecases/course/getStudentCourses";
 
 export {
   getCourseByIdController,
@@ -13,5 +14,6 @@ export {
   getTutorCoursesController,
   updateCourseController,
   getCoursesController,
+  getStudentCourses,
   setSelectedCourseController
 };
