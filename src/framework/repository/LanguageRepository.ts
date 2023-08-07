@@ -86,15 +86,15 @@ export const languageRepositoryEmpl = (languageModel: MongoDBLanguage): language
 
   const postLanguage = async (languageDetails: Language): Promise<Language | null> => {
     try {
-      const createdCategory = await languageModel.create(languageDetails);
-      return createdCategory !== null ? createdCategory.toObject() : null;
+      const createdLanguage = await languageModel.create(languageDetails);
+      return createdLanguage !== null ? createdLanguage.toObject() : null;
     } catch (error) {
       console.error("Error creating language:", error);
       return null;
     }
   };
 
-  const editLanguage = async (languageDetails: Language): Promise<Language | null> => {
+  const editLanguage = async (languageDetails: Language): Promise<Language  | null> => {
     try {
       const { _id, languagename, description } = languageDetails;
       const updatedLanguage = await languageModel
