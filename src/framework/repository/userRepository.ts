@@ -77,7 +77,7 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
 
   const getUsers = async (): Promise<User[] | null> => {
     try {
-      const users = await userModel.find();
+      const users = await userModel.find({},{password:0});
       if (users) {
         return users;
       }
@@ -103,7 +103,7 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
 
   const getUsersByRole = async (role: string): Promise<User[] | null> => {
     try {
-      const users = await userModel.find({ role });
+      const users = await userModel.find({ role },{password:0});
       if (users) {
         return users;
       }
@@ -130,10 +130,8 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
   const blockUser = async (userId: string): Promise<User | null> => {
     try {
       const user = await userModel.findByIdAndUpdate(userId, { $set: { status: false } }, { new: true });
-      if (user) {
-        return user;
-      }
-      return null;
+      const { password, ...userWthOutPassword} = user?.toObject() as User;
+      return userWthOutPassword ? userWthOutPassword : null;
     } catch (error) {
       console.error("Error block user:", error);
       return null;
@@ -143,9 +141,8 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
   const unBlockUser = async (userId: string): Promise<User | null> => {
     try {
       const user = await userModel.findByIdAndUpdate(userId, { $set: { status: true } }, { new: true });
-      if (user) {
-        return user;
-      }
+     const { password, ...userWthOutPassword } = user?.toObject() as User;
+     return userWthOutPassword ? userWthOutPassword : null;
       return null;
     } catch (error) {
       console.error("Error un block:", error);

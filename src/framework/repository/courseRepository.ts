@@ -38,15 +38,19 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
     }
   };
 
-  const getCourseStudents = async (courseId: string): Promise<User[]|null> => {
-    try {
-      const enrolledStudents = await courseModel.aggregate([
+  const getCourseStudents = async (courseId: string): Promise<User[] | null> => {
+  try {
+    const enrolledStudents = await courseModel
+      .aggregate([
         { $match: { _id: courseId } },
         {
           $lookup: {
-            from: "users", 
-            localField: "students",
-            foreignField: "_id",
+            from: "users",
+            let: { students: "$students" },
+            pipeline: [
+              { $match: { $expr: { $in: ["$_id", "$$students"] } } },
+              { $project: { password: 0 } }, // Exclude the 'password' field
+            ],
             as: "enrolledStudents",
           },
         },
@@ -56,13 +60,14 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
             enrolledStudents: 1,
           },
         },
-      ]).exec();
-      return enrolledStudents.length > 0 ? enrolledStudents.map((course) => course.enrolledStudents) : null;
+      ])
+      .exec();
+    return enrolledStudents.length > 0 ? enrolledStudents.map((course) => course.enrolledStudents) : null;
     } catch (error) {
-      console.error("Error getting students from course:", error);
-      return null;
+    console.error("Error getting students from course:", error);
+    return null;
     }
-  }
+  };
 
   const getCoursesCount = async (): Promise<number| null> => {
     try {

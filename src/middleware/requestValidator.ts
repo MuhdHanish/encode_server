@@ -17,6 +17,10 @@ export const getByRoleValidator = [
   param("role").notEmpty().withMessage("Role is required")
 ];
 
+export const muteDataValidator = [
+  param("id").notEmpty().withMessage("Id is required")
+];
+
 export const postLanguageValidator = [
   body("languagename").notEmpty().withMessage("Language name is required"),
   body("description").notEmpty().withMessage("Description is required")
