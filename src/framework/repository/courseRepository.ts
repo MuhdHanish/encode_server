@@ -181,7 +181,6 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
       return null;
     }
   }
-
   
   const setSelectedCourse = async (courseId: string,userId:string): Promise<Course | null> => {
     try {
