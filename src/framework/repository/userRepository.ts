@@ -77,7 +77,7 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
 
   const getUsers = async (): Promise<User[] | null> => {
     try {
-      const users = await userModel.find({},{password:0});
+      const users = await userModel.find({role:{$ne:"admin"}},{password:0});
       if (users) {
         return users;
       }
@@ -90,7 +90,7 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
 
   const getUsersCount = async (): Promise<number | null> => {
     try {
-      const count = await userModel.find().countDocuments();
+      const count = await userModel.find({role:{$ne:"admin"}}).countDocuments();
       if (count) {
         return count;
       }
@@ -143,7 +143,6 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
       const user = await userModel.findByIdAndUpdate(userId, { $set: { status: true } }, { new: true });
      const { password, ...userWthOutPassword } = user?.toObject() as User;
      return userWthOutPassword ? userWthOutPassword : null;
-      return null;
     } catch (error) {
       console.error("Error un block:", error);
       return null;

@@ -204,7 +204,7 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
       }
       return null;
     } catch (error) {
-      console.error("Error mute course:", error);
+      console.error("Error un mute course:", error);
       return null;
     }
   }

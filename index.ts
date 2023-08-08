@@ -1,7 +1,6 @@
 // import dependencies
 import express from "express";
 import morgan from "morgan";
-import cookieParser from "cookie-parser";
 import cors from "cors";
 
 
@@ -31,8 +30,6 @@ app.use(
 app.use(express.json());
 // middleware for handle form data
 app.use(express.urlencoded({ extended: true }));
-// middleware for cookies
-app.use(cookieParser());
 // middleware for log
 app.use(morgan("dev"));
 

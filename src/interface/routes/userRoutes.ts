@@ -9,7 +9,8 @@ import {
   postCourseController,
   getTutorCoursesController,
   updateCourseController,
-  setSelectedCourseController
+  setSelectedCourseController,
+  getCoursesController
 } from "../controllers/course";
 import { getLanguagesController, getLanguageByIdController, postLanguageController, editLanguageController } from "../controllers/language";
 import googleSignupController from "../controllers/authentication/signupController/googleSignupController";
@@ -66,6 +67,7 @@ router.put("/admin/edit/language", adminAuthorization, postLanguageValidator, ed
 
 // GET course
 router.get("/get/popular/courses",userAuthorization, getPopularCoursesController);
+router.get("/get/courses",userAuthorization, getCoursesController);
 router.get("/get/course/:id([0-9a-fA-F]{24})", userAuthorization, getCourseByIdValidator, getCourseByIdController);
 router.get("/get/course/count", userAuthorization, getCoursesCountController);
 router.get("/get/course/language/name/:id", userAuthorization, getCourseByIdValidator, getCoursesByLanguageNameController);
@@ -113,7 +115,7 @@ router.patch("/admin/list/language/:id", adminAuthorization, muteDataValidator, 
 //Admin
 // PATCH
 router.patch("/admin/unlist/course/:id", adminAuthorization, muteDataValidator, unListCourseController);
-router.patch("/amdin/list/course/:id", adminAuthorization, muteDataValidator, listCourseController);
+router.patch("/admin/list/course/:id", adminAuthorization, muteDataValidator, listCourseController);
 
 
 export default router;
