@@ -44,7 +44,7 @@ export const languageRepositoryEmpl = (languageModel: MongoDBLanguage): language
       }
       return null;
     } catch (error) {
-      console.error("Error mute langugae:", error);
+      console.error("Error on listing langugae:", error);
       return null;
     }
   };
@@ -57,7 +57,7 @@ export const languageRepositoryEmpl = (languageModel: MongoDBLanguage): language
       }
       return null;
     } catch (error) {
-      console.error("Error un mute langugae:", error);
+      console.error("Error on ulisting langugae:", error);
       return null;
     }
   };

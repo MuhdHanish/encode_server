@@ -177,7 +177,7 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
       }
       return null;
     } catch (error) {
-      console.error("Error mute course:", error);
+      console.error("Error on listing course:", error);
       return null;
     }
   }
@@ -204,7 +204,7 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
       }
       return null;
     } catch (error) {
-      console.error("Error un mute course:", error);
+      console.error("Error on un lsit course:", error);
       return null;
     }
   }
