@@ -223,12 +223,7 @@ try {
         },
       },
     ]).exec();
-
-    if (courses.length > 0) {
-      return courses[0];
-    }
-
-    return null;
+    return courses.length > 0 ? courses : null;
   } catch (error) {
     console.error("Error on fetching course by language name:", error);
     return null;
