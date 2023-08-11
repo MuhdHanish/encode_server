@@ -10,7 +10,8 @@ import {
   getTutorCoursesController,
   updateCourseController,
   setSelectedCourseController,
-  getCoursesController
+  getCoursesController,
+  getTutorPopularCoursesController
 } from "../controllers/course";
 import { getLanguagesController, getLanguageByIdController, postLanguageController, editLanguageController } from "../controllers/language";
 import googleSignupController from "../controllers/authentication/signupController/googleSignupController";
@@ -74,6 +75,7 @@ router.get("/get/course/language/name/:id", userAuthorization, getCourseByIdVali
 router.get("/get/course/count/language/name/:id", userAuthorization, getCourseByIdValidator, getCoursesCountByLanguageNameController);
 router.get("/get/student/coruses/:id([0-9a-fA-F]{24})", userAuthorization,getCourseByIdValidator, getCourseStudentsController);
 router.get("/get/tutor/courses/:id([0-9a-fA-F]{24})", tutorAuthorization,getCourseByIdValidator, getTutorCoursesController);
+router.get("/get/tutor/popular/courses/:id([0-9a-fA-F]{24})", tutorAuthorization,getCourseByIdValidator, getTutorPopularCoursesController);
 router.get("/get/tutor/course/data/dashboard/:id([0-9a-fA-F]{24})", tutorAuthorization, getCourseByIdValidator, getDataToTutorDashboardController);
 
 // POST course

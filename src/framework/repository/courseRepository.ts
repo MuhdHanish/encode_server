@@ -20,6 +20,7 @@ export type courseRepository = {
   getCourseDetailsTutorDashborad: (toturId:string) => Promise<{ _id: string, total:number}[] | null>;
   getCoursesCountByLanguageName: (languageName: string) => Promise<number | null>;
   getStudentCourses: (studentId: string) => Promise<Course[] | null>;
+  getTutorPopularCourses: (tutorId: string) => Promise<Course[] | null>;
 };
 
 export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseRepository => {
@@ -55,7 +56,17 @@ try {
 
   const getTutorCourses = async (tutorId:string): Promise<Course[] | null> => {
     try {
-      const courses = await courseModel.find({tutor:tutorId}).exec();
+      const courses = await courseModel.find({tutor:tutorId}).sort({_id:-1}).exec();
+      return courses.length > 0 ? courses : null;
+    } catch (error) {
+      console.error("Error getting courses:", error);
+      return null;
+    }
+  };
+
+  const getTutorPopularCourses = async (tutorId:string): Promise<Course[] | null> => {
+    try {
+      const courses = await courseModel.find({tutor:tutorId}).sort({rating:-1}).limit(4).exec();
       return courses.length > 0 ? courses : null;
     } catch (error) {
       console.error("Error getting courses:", error);
@@ -311,6 +322,9 @@ try {
            total: { $sum: { $multiply: ["$purchaseHistory.price", 0.05] } },
          },
        },
+       {
+         $sort: {_id:-1}
+       }
      ]);
      return details;
     } catch (error) {
@@ -393,6 +407,7 @@ try {
     getCourseById,
     getCourseDetailsDashborad,
     getCourseDetailsTutorDashborad,
+    getTutorPopularCourses,
     postCourse,
     updateCourse,
     getStudentCourses,

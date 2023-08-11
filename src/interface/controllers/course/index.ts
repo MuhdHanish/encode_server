@@ -1,5 +1,5 @@
 import getCourseByIdController from "./getCourseByIdController"; 
-import getTutorCoursesController from "./getTutorCoursesController";
+import {getTutorCoursesController,getTutorPopularCoursesController} from "./getTutorCoursesController";
 import getPopularCoursesController from "./getPopularCoursesController";
 import getCoursesController from "./getCourses";
 import postCourseController from "./postCourseController";
@@ -15,5 +15,6 @@ export {
   updateCourseController,
   getCoursesController,
   getStudentCourses,
-  setSelectedCourseController
+  setSelectedCourseController,
+  getTutorPopularCoursesController
 };

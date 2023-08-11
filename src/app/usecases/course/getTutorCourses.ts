@@ -10,3 +10,12 @@ export const getTutorCourses =
       return null;
     }
   };
+
+export const getTutorPopularCourses = (courseRepository: courseRepository) => async (id: string): Promise<Course[] | null> => {
+  const courses = await courseRepository.getTutorPopularCourses(id);
+  if (courses) {
+    return courses;
+  } else {
+    return null;
+  }
+}
