@@ -25,6 +25,7 @@ import {
   getCoursesByLanguageNameController, getCoursesCountByLanguageNameController,
   getCoursesCountController, listCourseController, unListCourseController
 } from "../controllers/course/courseUseCaseController";
+import { getDataToAdminDashboardController, getDataToTutorDashboardController } from "../controllers/course/getToDashController";
 
 // middlewares
 import {
@@ -39,7 +40,6 @@ import {
   getLanguageByIdValidator,getCourseByIdValidator,
   loginValidator, postLanguageValidator, postCourseValidator,setSelectedCourseValidator, getByRoleValidator, muteDataValidator
 } from "../../middleware/requestValidator";
-
 
 const router = Router();
 
@@ -72,8 +72,9 @@ router.get("/get/course/:id([0-9a-fA-F]{24})", userAuthorization, getCourseByIdV
 router.get("/get/course/count", userAuthorization, getCoursesCountController);
 router.get("/get/course/language/name/:id", userAuthorization, getCourseByIdValidator, getCoursesByLanguageNameController);
 router.get("/get/course/count/language/name/:id", userAuthorization, getCourseByIdValidator, getCoursesCountByLanguageNameController);
-router.get("/get/student/coruses/:id([0-9a-fA-F]{24})", userAuthorization, getCourseStudentsController);
-router.get("/get/tutor/courses/:id([0-9a-fA-F]{24})", tutorAuthorization, getTutorCoursesController);
+router.get("/get/student/coruses/:id([0-9a-fA-F]{24})", userAuthorization,getCourseByIdValidator, getCourseStudentsController);
+router.get("/get/tutor/courses/:id([0-9a-fA-F]{24})", tutorAuthorization,getCourseByIdValidator, getTutorCoursesController);
+router.get("/get/tutor/course/data/dashboard/:id([0-9a-fA-F]{24})", tutorAuthorization, getCourseByIdValidator, getDataToTutorDashboardController);
 
 // POST course
 router.post("/tutor/post/course", tutorAuthorization, postCourseValidator, postCourseController);
@@ -96,6 +97,7 @@ router.get("/admin/get/users/count", adminAuthorization, getUsersCountController
 router.get("/admin/get/users/:role", adminAuthorization, getByRoleValidator, getUsersByRoleController);
 router.get("/admin/get/users/count/:role", adminAuthorization, getByRoleValidator, getUsersCountByRoleController);
 router.get("/admin/get/course/students/:id", adminAuthorization, getCourseByIdValidator, getCourseStudentsController);
+router.get("/admin/get/course/data/dashboard", adminAuthorization,  getDataToAdminDashboardController);
 // PATCH
 router.patch("/admin/block/user/:id", adminAuthorization, muteDataValidator, blockUserContorller);
 router.patch("/admin/unblock/user/:id", adminAuthorization, muteDataValidator, unBlockUserContorller);

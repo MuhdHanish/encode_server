@@ -20,5 +20,13 @@ export interface Course {
   status?: boolean;
   rating?: number;
   chapters?: Chapter[];
-  students?: string[]
+  students?: string[];
+  purchaseHistory?: [
+    {
+      studentId: string,
+      month: string,
+      price: number,
+      date: string,
+    }
+  ]
 }

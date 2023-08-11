@@ -5,30 +5,52 @@ import { MongoDBCourse } from "../database/models/courseModel";
 export type courseRepository = {
   getPopularCourses: () => Promise<Course[] | null>;
   getTutorCourses: (tutorId: string) => Promise<Course[] | null>;
-  getCourses: ()=> Promise<Course[] | null>;
+  getCourses: () => Promise<Course[] | null>;
   getCourseById: (courseId: string) => Promise<Course | null>;
   getCoursesCount: () => Promise<number | null>;
-  updateCoursesLanguageName: (oldName: string, newName:string)=> Promise<boolean | null>;
-  listCourse: (courseId:string)=> Promise<Course | null>;
-  unListCourse: (courseId:string)=> Promise<Course | null>;
+  updateCoursesLanguageName: (oldName: string,newName: string) => Promise<boolean | null>;
+  listCourse: (courseId: string) => Promise<Course | null>;
+  unListCourse: (courseId: string) => Promise<Course | null>;
   postCourse: (course: Course) => Promise<Course | null>;
   updateCourse: (course: Course, _id: string) => Promise<Course | null>;
-  setSelectedCourse: (courseId: string, userId: string) => Promise<Course | null>;
+  setSelectedCourse: (courseId: string,userId: string) => Promise<Course | null>;
   getCourseStudents: (courseId: string) => Promise<User[] | null>;
   getCoursesByLanguageName: (languageName: string) => Promise<Course[] | null>;
+  getCourseDetailsDashborad: () => Promise<{ _id: string, total:number}[] | null>;
+  getCourseDetailsTutorDashborad: (toturId:string) => Promise<{ _id: string, total:number}[] | null>;
   getCoursesCountByLanguageName: (languageName: string) => Promise<number | null>;
   getStudentCourses: (studentId: string) => Promise<Course[] | null>;
 };
 
 export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseRepository => {
+
   const getPopularCourses = async (): Promise<Course[] | null> => {
-    try {
-      const courses = await courseModel.find().sort({rating:-1}).exec();
-      return courses.length > 0 ? courses : null;
-    } catch (error) {
-      console.error("Error getting courses:", error);
-      return null;
-    }
+try {
+  const courses = await courseModel
+    .aggregate([
+      {
+        $lookup: {
+          from: "users", 
+          localField: "tutor",
+          foreignField: "_id",
+          as: "tutorInfo",
+        },
+      },
+      {
+        $match: {
+          "tutorInfo.status": { $ne: false },
+        },
+      },
+      { $sort: { rating: -1 } },
+      { $limit: 6 },
+    ])
+    .exec();
+  
+  return courses.length > 0 ? courses : null;
+} catch (error) {
+  console.error("Error getting courses:", error);
+  return null;
+}
   };
 
   const getTutorCourses = async (tutorId:string): Promise<Course[] | null> => {
@@ -56,6 +78,7 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
          {
            $project: {
              students: 0, 
+             purchaseHistory: 0
            },
          },
        ]);
@@ -99,8 +122,25 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
 
   const getCoursesCount = async (): Promise<number| null> => {
     try {
-      const count = await courseModel.find().countDocuments().exec();
-      return count;
+            const courses = await courseModel
+              .aggregate([
+                {
+                  $lookup: {
+                    from: "users",
+                    localField: "tutor",
+                    foreignField: "_id",
+                    as: "tutorInfo",
+                  },
+                },
+                {
+                  $match: {
+                    "tutorInfo.status": { $ne: false },
+                  },
+                },
+              ])
+              .exec();
+
+            return courses.length > 0 ? courses.length : null;
     } catch (error) {
       console.error("Error getting courses:", error);
       return null;
@@ -109,7 +149,24 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
 
   const getCourses = async (): Promise<Course[] | null> => {
     try {
-      const courses = await courseModel.find().exec();
+      const courses = await courseModel
+        .aggregate([
+          {
+            $lookup: {
+              from: "users",
+              localField: "tutor",
+              foreignField: "_id",
+              as: "tutorInfo",
+            },
+          },
+          {
+            $match: {
+              "tutorInfo.status": { $ne: false },
+            },
+          }
+        ])
+        .exec();
+
       return courses.length > 0 ? courses : null;
     } catch (error) {
       console.error("Error getting courses:", error);
@@ -121,8 +178,13 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
     try {
       const course = await courseModel
         .findById(courseId)
-        .populate("tutor", "-password")
+        .populate({
+          path: "tutor",
+          select: "-password",
+          match: { status: { $ne: false } },
+        })
         .exec();
+
       return course !== null ? course.toObject() : null;
     } catch (error) {
       console.error("Error getting course by ID:", error);
@@ -144,30 +206,62 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
   }
 
   const getCoursesByLanguageName = async (languageName: string): Promise<Course[] | null> => {
-    try {
-      const courses = await courseModel.find({language:languageName}); 
-      if (courses) {
-        return courses;
-      }
-      return null;
-    } catch (error) {
-      console.error("Error on fetching coruse by languagename:", error);
-      return null;
+  try {
+    const courses = await courseModel.aggregate([
+      {
+        $lookup: {
+          from: "users", 
+          localField: "tutor",
+          foreignField: "_id",
+          as: "tutorInfo",
+        },
+      },
+      {
+        $match: {
+          "tutorInfo.status": { $ne: false },
+          language: languageName,
+        },
+      },
+    ]).exec();
+
+    if (courses.length > 0) {
+      return courses[0];
     }
+
+    return null;
+  } catch (error) {
+    console.error("Error on fetching course by language name:", error);
+    return null;
   }
+  };
 
   const getCoursesCountByLanguageName = async (languageName: string): Promise<number | null> => {
     try {
-      const count = await courseModel.find({language:languageName}).estimatedDocumentCount(); 
-      if (count) {
-        return count;
-      }
-      return null;
+      const courses = await courseModel
+        .aggregate([
+          {
+            $lookup: {
+              from: "users",
+              localField: "tutor",
+              foreignField: "_id",
+              as: "tutorInfo",
+            },
+          },
+          {
+            $match: {
+              "tutorInfo.status": { $ne: false },
+              language: languageName,
+            },
+          },
+        ])
+        .exec();
+
+      return courses.length > 0 ? courses.length : null;
     } catch (error) {
-      console.error("Error on fetching coruse by languagename:", error);
+      console.error("Error on fetching course by language name:", error);
       return null;
     }
-  }
+  };
 
   const listCourse = async (courseId: string): Promise<Course | null> => {
     try {
@@ -184,13 +278,73 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
   
   const setSelectedCourse = async (courseId: string,userId:string): Promise<Course | null> => {
     try {
-      const course = await courseModel.findByIdAndUpdate(courseId, { $push: { students: userId } }, { new: true });
+      const prev = await courseModel.findById(courseId);
+      const course = await courseModel.findByIdAndUpdate(
+        courseId,
+        {
+          $push: {
+            students: userId,
+            purchaseHistory: {
+              studentId: userId,
+              date: new Date(),
+              price: prev?.price,
+              month: new Date().toLocaleString('default',{month:'long'}),
+            },
+          },
+        },
+        { new: true }
+      );
       if (course) {
         return course;
       }
       return null;
     } catch (error) {
       console.error("Error adding course user:", error);
+      return null;
+    }
+  }
+
+  const getCourseDetailsDashborad = async (): Promise<{ _id: string, total:number}[]|null> => {
+    try {
+     const details = await courseModel.aggregate([
+       {
+         $unwind: "$purchaseHistory",
+       },
+       {
+         $group: {
+           _id: "$purchaseHistory.month",
+           total: { $sum: { $multiply: ["$purchaseHistory.price", 0.05] } },
+         },
+       },
+     ]);
+     return details;
+    } catch (error) {
+      console.log("error on getting data to dashboard", error);
+      return null;
+    }
+  }
+
+  const getCourseDetailsTutorDashborad = async (tutorId:string): Promise<{ _id: string, total:number}[]|null> => {
+    try {
+      const details = await courseModel.aggregate([
+        {
+          $match: {
+            tutorId
+          }
+        },
+       {
+         $unwind: "$purchaseHistory",
+       },
+       {
+         $group: {
+           _id: "$purchaseHistory.month",
+           total: { $sum: { $multiply: ["$purchaseHistory.price", 0.95] } },
+         },
+       },
+     ]);
+     return details;
+    } catch (error) {
+      console.log("error on getting data to dashboard", error);
       return null;
     }
   }
@@ -242,6 +396,8 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
     getCoursesByLanguageName,
     getCoursesCountByLanguageName,
     getCourseById,
+    getCourseDetailsDashborad,
+    getCourseDetailsTutorDashborad,
     postCourse,
     updateCourse,
     getStudentCourses,
