@@ -21,8 +21,8 @@ export const getCoursesCount = (courseRepository: courseRepository) => async ():
   }
 }
 
-export const listCourse = (courseRepository: courseRepository) => async(courseId:string):Promise<Course|null> => {
-  const course = await courseRepository.listCourse(courseId);
+export const listCourse = (courseRepository: courseRepository) => async(courseId:string, tutorId:string):Promise<Course|null> => {
+  const course = await courseRepository.listCourse(courseId, tutorId);
   if (course) {
     return course;
   } else {
@@ -30,8 +30,8 @@ export const listCourse = (courseRepository: courseRepository) => async(courseId
   }
 }
 
-export const unListCourse = (courseRepository: courseRepository) => async(courseId:string):Promise<Course|null> => {
-  const course = await courseRepository.unListCourse(courseId);
+export const unListCourse = (courseRepository: courseRepository) => async(courseId:string, tutorId:string):Promise<Course|null> => {
+  const course = await courseRepository.unListCourse(courseId, tutorId);
   if (course) {
     return course;
   } else {

@@ -114,10 +114,10 @@ router.patch("/admin/list/language/:id", adminAuthorization, muteDataValidator, 
 
 // Course usecase
 
-//Admin
+//Tutor
 // PATCH
-router.patch("/admin/unlist/course/:id", adminAuthorization, muteDataValidator, unListCourseController);
-router.patch("/admin/list/course/:id", adminAuthorization, muteDataValidator, listCourseController);
+router.patch("/tutor/unlist/course/:id", tutorAuthorization, muteDataValidator, unListCourseController);
+router.patch("/tutor/list/course/:id", tutorAuthorization, muteDataValidator, listCourseController);
 
 
 export default router;

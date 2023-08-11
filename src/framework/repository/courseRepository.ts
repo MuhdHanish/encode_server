@@ -9,8 +9,8 @@ export type courseRepository = {
   getCourseById: (courseId: string) => Promise<Course | null>;
   getCoursesCount: () => Promise<number | null>;
   updateCoursesLanguageName: (oldName: string,newName: string) => Promise<boolean | null>;
-  listCourse: (courseId: string) => Promise<Course | null>;
-  unListCourse: (courseId: string) => Promise<Course | null>;
+  listCourse: (courseId: string,tutorId: string) => Promise<Course | null>;
+  unListCourse: (courseId: string, tutorId: string) => Promise<Course | null>;
   postCourse: (course: Course) => Promise<Course | null>;
   updateCourse: (course: Course, _id: string) => Promise<Course | null>;
   setSelectedCourse: (courseId: string,userId: string) => Promise<Course | null>;
@@ -180,8 +180,7 @@ try {
         .findById(courseId)
         .populate({
           path: "tutor",
-          select: "-password",
-          match: { status: { $ne: false } },
+          select: "-password"
         })
         .exec();
 
@@ -220,6 +219,7 @@ try {
         $match: {
           "tutorInfo.status": { $ne: false },
           language: languageName,
+
         },
       },
     ]).exec();
@@ -263,9 +263,9 @@ try {
     }
   };
 
-  const listCourse = async (courseId: string): Promise<Course | null> => {
+  const listCourse = async (courseId: string, tutorId:string): Promise<Course | null> => {
     try {
-      const course = await courseModel.findByIdAndUpdate(courseId, { $set: { status: true } }, { new: true });
+      const course = await courseModel.findOneAndUpdate({_id:courseId, tutor: tutorId}, { $set: { status: true } }, { new: true });
       if (course) {
         return course;
       }
@@ -349,9 +349,9 @@ try {
     }
   }
 
-  const unListCourse = async (courseId: string): Promise<Course | null> => {
+  const unListCourse = async (courseId: string, tutorId:string): Promise<Course | null> => {
     try {
-      const course = await courseModel.findByIdAndUpdate(courseId, { $set: { status: false } }, { new: true });
+      const course = await courseModel.findOneAndUpdate({_id:courseId, tutor: tutorId}, { $set: { status: false } }, { new: true });
       if (course) {
         return course;
       }

@@ -64,7 +64,7 @@ export const languageRepositoryEmpl = (languageModel: MongoDBLanguage): language
 
   const getLanguageById = async (languageId: string): Promise<Language | null> => {
     try {
-      const language = await languageModel.findOne({ _id: languageId }).exec();
+      const language = await languageModel.findOne({ _id: languageId, status:true }).exec();
       return language !== null ? language.toObject() : null;
     } catch (error) {
       console.error("Error getting language by ID:", error);
@@ -75,7 +75,7 @@ export const languageRepositoryEmpl = (languageModel: MongoDBLanguage): language
   const getLanguageByName = async (languagename: string): Promise<Language | null> => {
     try {
       const category = await languageModel
-        .findOne({ languagename: { $regex: new RegExp(`^${languagename}$`, "i") } })
+        .findOne({ languagename: { $regex: new RegExp(`^${languagename}$`, "i") }, status: true })
         .exec();
       return category !== null ? category.toObject() : null;
     } catch (error) {
