@@ -125,9 +125,21 @@ try {
             as: "enrolledStudents",
           },
         },
+        {
+          $unwind: "$enrolledStudents",
+        },
+        {
+          $project: {
+            _id: 0,
+            enrolledStudents: 1,
+          },
+        },
       ])
       .exec();
-    return enrolledStudents.length > 0 ? enrolledStudents.map((course) => course.enrolledStudents) : null;
+      
+    return enrolledStudents.length > 0
+      ? enrolledStudents.map((course) => course.enrolledStudents)
+      : null;
     } catch (error) {
     console.error("Error getting students from course:", error);
     return null;
