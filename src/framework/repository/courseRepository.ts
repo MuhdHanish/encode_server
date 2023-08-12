@@ -341,7 +341,7 @@ try {
       const details = await courseModel.aggregate([
         {
           $match: {
-            tutorId
+            tutor: new mongoose.Types.ObjectId(tutorId)
           }
         },
        {
@@ -353,7 +353,7 @@ try {
            total: { $sum: { $multiply: ["$purchaseHistory.price", 0.95] } },
          },
        },
-     ]);
+      ]);
      return details;
     } catch (error) {
       console.log("error on getting data to dashboard", error);

@@ -62,7 +62,7 @@ export const unListCourseController = async (req: CustomRequest, res: Response) 
    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
     const { id } = req.params;
     const tutorId = req.userInfo?.id;
-    const course = await listCourse(courseRepository)(id, tutorId as string);
+    const course = await unListCourse (courseRepository)(id, tutorId as string);
    return res.status(200).json({ message: "Un listed the course ", course });
  } catch (error) {
   return res.status(500).json({ message: "Internal server error" });
