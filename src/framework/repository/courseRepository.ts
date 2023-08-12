@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { Course } from "../../domain/models/Course";
 import { User } from "../../domain/models/User";
 import { MongoDBCourse } from "../database/models/courseModel";
@@ -101,25 +102,27 @@ try {
   }
 
   const getCourseStudents = async (courseId: string): Promise<User[] | null> => {
-  try {
+    try {
     const enrolledStudents = await courseModel
       .aggregate([
-        { $match: { _id: courseId } },
+        { $match: { _id: new mongoose.Types.ObjectId(courseId) } },
         {
           $lookup: {
             from: "users",
-            let: { students: "$students" },
+            let: {
+              studentIds: {
+                $map: {
+                  input: "$students",
+                  as: "id",
+                  in: { $toObjectId: "$$id" },
+                },
+              },
+            },
             pipeline: [
-              { $match: { $expr: { $in: ["$_id", "$$students"] } } },
+              { $match: { $expr: { $in: ["$_id", "$$studentIds"] } } },
               { $project: { password: 0 } },
             ],
             as: "enrolledStudents",
-          },
-        },
-        {
-          $project: {
-            _id: 0,
-            enrolledStudents: 1,
           },
         },
       ])
