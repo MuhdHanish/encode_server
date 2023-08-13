@@ -44,7 +44,6 @@ try {
         },
       },
       { $sort: { rating: -1 } },
-      { $limit: 6 },
     ])
     .exec();
   
