@@ -1,18 +1,18 @@
 import { Request, Response } from "express";
 import { courseModel } from "../../../framework/database/models/courseModel";
 import { courseRepositoryEmpl } from "../../../framework/repository/courseRepository";
-import { validationResult } from "express-validator";
 import { getStudentCourses } from "../../../app/usecases/course/getStudentCourses";
 
 const courseRepository = courseRepositoryEmpl(courseModel);
 
-const getCourseStudentsController = async (req: Request, res: Response) => {
+interface CustomRequest extends Request {
+  userInfo?: { id: string; role: string };
+}
+
+
+const getStudentCoursesController = async (req: CustomRequest, res: Response) => {
   try {
-    const errors = validationResult(req);
-    if (!errors.isEmpty())
-      return res.status(400).json({ errors: errors.array() });
-    const { id } = req.params;
-    const courses = await getStudentCourses(courseRepository)(id);
+    const courses = await getStudentCourses(courseRepository)(req.userInfo?.id as string);
     if (courses) {
       return res
         .status(200)
@@ -25,4 +25,4 @@ const getCourseStudentsController = async (req: Request, res: Response) => {
   }
 };
 
-export default getCourseStudentsController;
+export default getStudentCoursesController;
