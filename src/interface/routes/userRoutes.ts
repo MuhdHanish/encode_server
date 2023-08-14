@@ -28,11 +28,13 @@ import {
   getCoursesCountController, listCourseController, unListCourseController
 } from "../controllers/course/courseUseCaseController";
 import { getDataToAdminDashboardController, getDataToTutorDashboardController } from "../controllers/course/getToDashController";
+import forgotPasswordController from "../controllers/authentication/forgotPasswordController";
+import resetUserPasswordController from "../controllers/authentication/resetPasswordController";
 
 // middlewares
 import {
   adminAuthorization, googleLoginMiddleware,
-  googleSignupMiddelware, otpAuthMiddleware, tutorAuthorization, userAuthorization
+  googleSignupMiddelware, otpAuthMiddleware, resetPasswordVerify, tutorAuthorization, userAuthorization
 } from "../../middleware";
 
 
@@ -40,8 +42,9 @@ import {
 import {
   signupValidatorOne, signupValidatorTwo, 
   getLanguageByIdValidator,getCourseByIdValidator,
-  loginValidator, postLanguageValidator, postCourseValidator,setSelectedCourseValidator, getByRoleValidator, muteDataValidator
+  loginValidator, postLanguageValidator, postCourseValidator,setSelectedCourseValidator, getByRoleValidator, muteDataValidator, forgotPasswordValidator
 } from "../../middleware/requestValidator";
+
 
 const router = Router();
 
@@ -66,6 +69,15 @@ router.get("/get/language/:id([0-9a-fA-F]{24})",userAuthorization, getLanguageBy
 // POST language
 router.post("/admin/post/language", adminAuthorization, postLanguageValidator, postLanguageController);
 router.put("/admin/edit/language", adminAuthorization, postLanguageValidator, editLanguageController);
+
+// POST Forgot password request
+router.post("/forgot/password", forgotPasswordValidator, forgotPasswordController);
+
+// POST Verify password request
+router.post("/verify/password/request/:id", resetPasswordVerify);
+
+// PATCH Reset Password
+router.patch("/reset/password", loginValidator, resetUserPasswordController);
 
 // GET course
 router.get("/get/popular/courses",userAuthorization, getPopularCoursesController);

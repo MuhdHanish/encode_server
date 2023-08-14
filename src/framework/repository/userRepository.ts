@@ -5,6 +5,7 @@ import bcrypt from "bcryptjs";
 export type userRepository = {
   findByUsernameAndEmail: (username: string, email: string) => Promise<User | null>;
   findByUsernameOrEmailAndPassword: (usernameOrEmail: string, password: string) => Promise<User | null>;
+  findByUsernameOrEmail: (usernameOrEmail: string) => Promise<User | null>;
   create: (user: User) => Promise<User | null>;
   getUsers: () => Promise<User[] | null>;
   getUsersCount: () => Promise<number | null>;
@@ -13,9 +14,11 @@ export type userRepository = {
   blockUser: (userId: string) => Promise<User | null>;
   unBlockUser: (userId: string) => Promise<User | null>;
   googleUserCreate: (user: User) => Promise<User | null>;
+  resetPassword: (usernameOrEmail: string, newPassword: string) => Promise<User | null>;
 };
 
 export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
+
   const findByUsernameAndEmail = async (username: string, email: string): Promise<User | null> => {
     try {
       const user = await userModel.findOne({ $or: [{ username }, { email }] }).exec();
@@ -52,6 +55,25 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
       return null;
     }
   };
+
+  const findByUsernameOrEmail = async (usernameOrEmail: string): Promise<User | null> => {
+    try {
+      const user = await userModel
+        .findOne({
+          $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+        })
+        .exec();
+      if (user) {
+          const { password, ...userWithoutPassword } = user.toObject();
+          return userWithoutPassword;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error finding user by username or email and password:", error);
+      return null;
+    }
+  };
+
 
   const create = async (userDetails: User): Promise<User | null> => {
     try {
@@ -172,10 +194,30 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
     }
   };
 
+  const resetPassword = async (usernameOrEmail: string, newPassword: string) => {
+    try {
+       const hashPass: string = bcrypt.hashSync(newPassword, 12);
+      const user = await userModel
+        .findOneAndUpdate({
+          $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+        },{$set:{password:hashPass}},{new:true})
+        .exec();
+      if (user) {
+        const { password, ...restoredUser } = user.toObject();
+        return restoredUser;
+      }
+      return null;
+    } catch (error) {
+      console.error("Error on reseting the password:", error);
+      return null;
+    }
+  }
+
   return {
     create,
     findByUsernameAndEmail,
     findByUsernameOrEmailAndPassword,
+    findByUsernameOrEmail,
     getUsersByRole,
     getUsers,
     getUsersCount,
@@ -183,5 +225,6 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
     unBlockUser,
     getUsersCountByRole,
     googleUserCreate,
+    resetPassword,
   };
 };

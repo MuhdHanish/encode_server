@@ -9,6 +9,10 @@ export const getLanguageByIdValidator = [
   param("id").notEmpty().withMessage("Category id is required")
 ];
 
+export const forgotPasswordValidator = [
+  body("identifier").notEmpty().withMessage("Identifier is required (username or email)"),
+];
+
 export const getCourseByIdValidator = [
   param("id").notEmpty().withMessage("Course id is required")
 ];

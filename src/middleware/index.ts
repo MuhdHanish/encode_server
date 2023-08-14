@@ -4,6 +4,7 @@ import {googleLoginMiddleware,googleSignupMiddelware} from "./googleAuthorizatio
 import tutorAuthorization from "./tutorAuthorizationMiddleware";
 import adminAuthorization from "./adminAuthorization";
 import userAuthorization from "./accessAuthorizationMiddleware";
+import resetPasswordVerify from "./resetPasswordVerfiy";
 
 
 export {
@@ -13,5 +14,6 @@ export {
   googleLoginMiddleware,
   tutorAuthorization,
   adminAuthorization,
-  userAuthorization
-}
+  userAuthorization,
+  resetPasswordVerify,
+};
