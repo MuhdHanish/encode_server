@@ -352,18 +352,21 @@ try {
       const details = await courseModel.aggregate([
         {
           $match: {
-            tutor: new mongoose.Types.ObjectId(tutorId)
-          }
+            tutor: new mongoose.Types.ObjectId(tutorId),
+          },
         },
-       {
-         $unwind: "$purchaseHistory",
-       },
-       {
-         $group: {
-           _id: "$purchaseHistory.month",
-           total: { $sum: { $multiply: ["$purchaseHistory.price", 0.95] } },
-         },
-       },
+        {
+          $unwind: "$purchaseHistory",
+        },
+        {
+          $group: {
+            _id: "$purchaseHistory.month",
+            total: { $sum: { $multiply: ["$purchaseHistory.price", 0.95] } },
+          },
+        },
+        {
+          $sort: { _id: -1 },
+        },
       ]);
      return details;
     } catch (error) {
