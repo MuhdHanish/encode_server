@@ -65,3 +65,12 @@ export const getCourseStudents = (courseRepository: courseRepository) => async (
     return null;
   }
 }
+
+export const removeStudentCourse = (courseRepository: courseRepository) => async (courseId: string, studentId:string): Promise<User | null> => {
+  const course = await courseRepository.removeStudentCourse(courseId, studentId);
+  if (course) {
+    return course;
+  } else {
+    return null;
+  }
+}

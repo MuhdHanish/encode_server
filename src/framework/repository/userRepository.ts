@@ -29,10 +29,7 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
     }
   };
 
-  const findByUsernameOrEmailAndPassword = async (
-    usernameOrEmail: string,
-    password: string
-  ): Promise<User | null> => {
+  const findByUsernameOrEmailAndPassword = async (usernameOrEmail: string,password: string): Promise<User | null> => {
     try {
       const user = await userModel.findOne({
         $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
@@ -73,7 +70,6 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
       return null;
     }
   };
-
 
   const create = async (userDetails: User): Promise<User | null> => {
     try {

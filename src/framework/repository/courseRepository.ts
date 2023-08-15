@@ -22,6 +22,7 @@ export type courseRepository = {
   getCoursesCountByLanguageName: (languageName: string) => Promise<number | null>;
   getStudentCourses: (studentId: string) => Promise<Course[] | null>;
   getTutorPopularCourses: (tutorId: string) => Promise<Course[] | null>;
+  removeStudentCourse: (courseId: string, studentId: string) => Promise<Course | null>;
 };
 
 export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseRepository => {
@@ -98,6 +99,20 @@ try {
         console.error("Error getting by student id courses:", error);
         return null;
       }
+  }
+
+  const removeStudentCourse = async (courseId: string, studentId: string): Promise<Course | null> => {
+    try {
+      const course = await courseModel.findByIdAndUpdate(courseId, { $pull: { students: studentId } }, { new: true });
+       if (!course) {
+         console.error("Course not found");
+         return null;
+       }
+       return course;
+    } catch (error) {
+      console.error("Error removing the student in course:", error);
+      return null;
+    }
   }
 
   const getCourseStudents = async (courseId: string): Promise<User[] | null> => {
@@ -429,5 +444,6 @@ try {
     updateCourse,
     getStudentCourses,
     setSelectedCourse,
+    removeStudentCourse
   };
 };

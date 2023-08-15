@@ -30,11 +30,6 @@ export const postLanguageValidator = [
   body("description").notEmpty().withMessage("Description is required")
 ]
 
-export const setSelectedCourseValidator = [
-  body("userId").notEmpty().withMessage("User Id is required"),
-  body("courseId").notEmpty().withMessage("Course Id is required"),
-];
-
 export const signupValidatorOne = [
   body("username").notEmpty().withMessage("Username is required"),
   body("email").notEmpty().withMessage("Email is required"),

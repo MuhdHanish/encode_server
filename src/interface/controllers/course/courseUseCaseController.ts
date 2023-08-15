@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { courseModel } from "../../../framework/database/models/courseModel";
 import { courseRepositoryEmpl } from "../../../framework/repository/courseRepository";
-import { getCoursesByLanguageName, getCoursesCount, getCoursesCountByLanguageName, listCourse, unListCourse } from "../../../app/usecases/course/courseCases";
+import { getCoursesByLanguageName, getCoursesCount, getCoursesCountByLanguageName, listCourse, removeStudentCourse, unListCourse } from "../../../app/usecases/course/courseCases";
 import { validationResult } from "express-validator";
 
 const courseRepository = courseRepositoryEmpl(courseModel);
@@ -67,4 +67,19 @@ export const unListCourseController = async (req: CustomRequest, res: Response) 
  } catch (error) {
   return res.status(500).json({ message: "Internal server error" });
  }
+}
+
+
+export const removeStudentCourseController = async (req: CustomRequest, res: Response) => {
+   try {
+   const errors = validationResult(req);
+   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+   const { id } = req.params;
+   const studentId = req.userInfo?.id;
+   const course = await removeStudentCourse(courseRepository)(id,studentId as string);
+     if (course) { return res.status(200).json({ message: "Removed student", course }) };
+     return res.status(400).json({ message: "Not found the course, Un expected error occured" });
+  } catch (error) {
+    return res.status(500).json({ message: "Internal server error" });
+  }
 }

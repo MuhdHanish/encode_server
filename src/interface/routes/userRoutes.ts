@@ -25,7 +25,7 @@ import {
 } from "../controllers/language/languageUseCaseController";
 import {
   getCoursesByLanguageNameController, getCoursesCountByLanguageNameController,
-  getCoursesCountController, listCourseController, unListCourseController
+  getCoursesCountController, listCourseController, removeStudentCourseController, unListCourseController
 } from "../controllers/course/courseUseCaseController";
 import { getDataToAdminDashboardController, getDataToTutorDashboardController } from "../controllers/course/getToDashController";
 import forgotPasswordController from "../controllers/authentication/forgotPasswordController";
@@ -42,7 +42,7 @@ import {
 import {
   signupValidatorOne, signupValidatorTwo, 
   getLanguageByIdValidator,getCourseByIdValidator,
-  loginValidator, postLanguageValidator, postCourseValidator,setSelectedCourseValidator, getByRoleValidator, muteDataValidator, forgotPasswordValidator
+  loginValidator, postLanguageValidator, postCourseValidator, getByRoleValidator, muteDataValidator, forgotPasswordValidator
 } from "../../middleware/requestValidator";
 
 
@@ -91,11 +91,14 @@ router.get("/get/tutor/courses/:id([0-9a-fA-F]{24})", tutorAuthorization,getCour
 router.get("/get/tutor/popular/courses/:id([0-9a-fA-F]{24})", tutorAuthorization,getCourseByIdValidator, getTutorPopularCoursesController);
 router.get("/get/tutor/course/data/dashboard/:id([0-9a-fA-F]{24})", tutorAuthorization, getCourseByIdValidator, getDataToTutorDashboardController);
 
+// PATCH remvove student from course
+router.patch("/remove/student/course/:id([0-9a-fA-F]{24})", userAuthorization, getCourseByIdValidator, removeStudentCourseController);
+
 // POST course
 router.post("/tutor/post/course", tutorAuthorization, postCourseValidator, postCourseController);
 
 // PATCH course
-router.patch("/set/selected/course", userAuthorization, setSelectedCourseValidator ,setSelectedCourseController)
+router.patch("/set/selected/course/:id([0-9a-fA-F]{24})", userAuthorization, getCourseByIdValidator ,setSelectedCourseController)
 
 // PUT course
 router.put("/tutor/update/course/:id", tutorAuthorization, postCourseValidator, updateCourseController)

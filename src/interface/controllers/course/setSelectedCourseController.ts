@@ -2,13 +2,21 @@ import { Request, Response } from "express";
 import { courseModel } from "../../../framework/database/models/courseModel";
 import { courseRepositoryEmpl } from "../../../framework/repository/courseRepository";
 import { setSelectedCourse } from "../../../app/usecases/course/setCourses";
+import { validationResult } from "express-validator";
 
 const courseRepository = courseRepositoryEmpl(courseModel);
 
-const setSelectedCourseController = async (req: Request, res: Response) => {
+interface CustomRequest extends Request {
+  userInfo?: { id: string; role: string };
+}
+
+const setSelectedCourseController = async (req: CustomRequest, res: Response) => {
   try {
-    const { courseId, userId } = req.body;
-    const course = await setSelectedCourse(courseRepository)(courseId,userId);
+    const { id } = req.params
+    const errors = validationResult(req);
+   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+   const studentId = req.userInfo?.id;
+    const course = await setSelectedCourse(courseRepository)(id,studentId as string);
     if (course) {
       return res.status(200).json({ message: "Student added to Course", course });
     } else {
