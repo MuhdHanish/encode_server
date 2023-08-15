@@ -89,7 +89,6 @@ try {
          },
          {
            $project: {
-             students: 0, 
              purchaseHistory: 0
            },
          },
