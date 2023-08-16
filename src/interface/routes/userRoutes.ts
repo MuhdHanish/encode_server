@@ -68,7 +68,7 @@ router.get("/get/language/:id([0-9a-fA-F]{24})",userAuthorization, getLanguageBy
 
 // POST language
 router.post("/admin/post/language", adminAuthorization, postLanguageValidator, postLanguageController);
-router.put("/admin/edit/language", adminAuthorization, postLanguageValidator, editLanguageController);
+router.put("/admin/edit/language/:id", adminAuthorization, postLanguageValidator, editLanguageController);
 
 // POST Forgot password request
 router.post("/forgot/password", forgotPasswordValidator, forgotPasswordController);

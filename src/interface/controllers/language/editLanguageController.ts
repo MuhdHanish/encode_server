@@ -15,9 +15,10 @@ const courseRepository = courseRepositoryEmpl(courseModel);
 const editLanguageController = async (req: Request, res: Response) => {
  try {
   const errors = validationResult(req);
-  if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+   if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+   const { id } = req.params;
   const { languagename, description }: Language = req.body;
-  const exist = await getLanguageByName(languageRepository)(languagename as string);
+  const exist = await getLanguageByName(languageRepository)(id as string);
   if (exist) {
    const language = await postLanguage(languageRepository)(languagename as string, description as string);
     if (language) {
