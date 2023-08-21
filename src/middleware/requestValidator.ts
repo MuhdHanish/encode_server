@@ -64,4 +64,11 @@ export const postCourseValidator = [
 ];
 
 
+export const postReviewValidator = [
+  param("id").notEmpty().withMessage("Course id is required"),
+  body("review").notEmpty().withMessage("Review  is required"),
+  body("rating").notEmpty().withMessage("Rating  is required"),
+];
+
+
 

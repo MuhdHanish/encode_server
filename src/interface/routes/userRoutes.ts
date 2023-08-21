@@ -30,6 +30,7 @@ import {
 import { getDataToAdminDashboardController, getDataToTutorDashboardController } from "../controllers/course/getToDashController";
 import forgotPasswordController from "../controllers/authentication/forgotPasswordController";
 import resetUserPasswordController from "../controllers/authentication/resetPasswordController";
+import { getAllReviewsController, postReviewController } from "../controllers/review/reviewController";
 
 // middlewares
 import {
@@ -42,7 +43,7 @@ import {
 import {
   signupValidatorOne, signupValidatorTwo, 
   getLanguageByIdValidator,getCourseByIdValidator,
-  loginValidator, postLanguageValidator, postCourseValidator, getByRoleValidator, muteDataValidator, forgotPasswordValidator
+  loginValidator, postLanguageValidator, postCourseValidator, getByRoleValidator, muteDataValidator, forgotPasswordValidator, postReviewValidator
 } from "../../middleware/requestValidator";
 
 
@@ -91,6 +92,12 @@ router.get("/get/tutor/courses/:id([0-9a-fA-F]{24})", tutorAuthorization,getCour
 router.get("/get/tutor/popular/courses/:id([0-9a-fA-F]{24})", tutorAuthorization,getCourseByIdValidator, getTutorPopularCoursesController);
 router.get("/get/tutor/course/data/dashboard/:id([0-9a-fA-F]{24})", tutorAuthorization, getCourseByIdValidator, getDataToTutorDashboardController);
 
+// GET review
+router.get("/get/all/reviews/:id([0-9a-fA-F]{24})", userAuthorization, getCourseByIdValidator, getAllReviewsController);
+
+// POST review
+router.post("/post/review/:id([0-9a-fA-F]{24})", userAuthorization, postReviewValidator ,postReviewController);
+
 // PATCH remvove student from course
 router.patch("/remove/student/course/:id([0-9a-fA-F]{24})", userAuthorization, getCourseByIdValidator, removeStudentCourseController);
 
@@ -104,7 +111,6 @@ router.patch("/set/selected/course/:id([0-9a-fA-F]{24})", userAuthorization, get
 router.put("/tutor/update/course/:id", tutorAuthorization, postCourseValidator, updateCourseController)
 
 // User usecase
-
 // Tutor
 router.get("/tutor/get/course/students/:id", tutorAuthorization, getCourseByIdValidator, getCourseStudentsController);
 
