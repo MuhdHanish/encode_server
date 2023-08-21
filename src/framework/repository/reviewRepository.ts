@@ -3,13 +3,13 @@ import { MongoDBReview } from "../database/models/reviewModel";
 import { Review } from "../../domain/models/Review";
 
 export type reviewRepository = {
-  getAllReviews: (courseId: string) => Promise<Review[] | null>;
+  getAllReviews: (course: string) => Promise<Review[] | null>;
   postReview: (course: string, user: mongoose.Types.ObjectId, review: string, rating: number) => Promise<Review | null>;
 };
 
 export const reviewRepositoryEmpl = (reviewModel: MongoDBReview): reviewRepository => {
    const getAllReviews = async(course: string): Promise<Review[] | null> => {
-     const reviews = await reviewModel.find({ course }).populate("user", "username email profile").exec();
+     const reviews = await reviewModel.find({ course: new mongoose.Types.ObjectId(course) }).populate("user", "username email profile").exec();
      return reviews.length > 0 ? reviews : null;
    }
   const postReview = async(course: string, user: mongoose.Types.ObjectId, review: string, rating: number): Promise<Review | null> => {
