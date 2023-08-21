@@ -19,7 +19,9 @@ const courseSchema = new Schema<Course>({
   chapters: { type: [Object], required: true },
   rating: { type: Number, required: true, default: 0 },
   students: { type: [String] },
-  purchaseHistory:{type:[Object]},
+  purchaseHistory: { type: [Object] },
 });
 
-export const courseModel: MongoDBCourse = mongoose.connection.model<Document<any, any, any> & Course>('Course', courseSchema);
+export const courseModel: MongoDBCourse = mongoose.connection.model<
+  Document<any, any, any> & Course
+>("Course", courseSchema);

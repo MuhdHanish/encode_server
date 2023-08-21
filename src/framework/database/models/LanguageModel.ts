@@ -9,4 +9,6 @@ const languageSchema = new Schema<Language>({
   status: { type: Boolean, required: true, default: true },
 });
 
-export const LanguageModel: MongoDBLanguage = mongoose.connection.model<Document<any, any, any> & Language>('Language',languageSchema);
+export const LanguageModel: MongoDBLanguage = mongoose.connection.model<
+  Document<any, any, any> & Language
+>("Language", languageSchema);

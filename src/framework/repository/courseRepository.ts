@@ -28,7 +28,7 @@ export type courseRepository = {
 export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseRepository => {
 
   const getPopularCourses = async (): Promise<Course[] | null> => {
-try {
+  try {
   const courses = await courseModel
     .aggregate([
       {
@@ -49,10 +49,10 @@ try {
     .exec();
   
   return courses.length > 0 ? courses : null;
-} catch (error) {
+  } catch (error) {
   console.error("Error getting courses:", error);
   return null;
-}
+  }
   };
 
   const getTutorCourses = async (tutorId:string): Promise<Course[] | null> => {
