@@ -10,6 +10,6 @@ const reviewSchema = new Schema<Review>({
   rating: { type:Number, required: true}
 });
 
-export const LanguageModel: MongoDBReview = mongoose.connection.model<
+export const reviewModel: MongoDBReview = mongoose.connection.model<
   Document<any, any, any> & Review
 >("Review", reviewSchema);
