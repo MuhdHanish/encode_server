@@ -6,6 +6,7 @@ export type reviewRepository = {
   getAllReviews: (course: string) => Promise<Review[] | null>;
   getReviewsCount: (course: string) => Promise<number | null>;
   postReview: (course: string, user: string, review: string, rating: number) => Promise<Review | null>;
+  isRecorded: (coruse: string, user: string) => Promise<Review | null>;
 };
 
 export const reviewRepositoryEmpl = (reviewModel: MongoDBReview): reviewRepository => {
@@ -28,9 +29,14 @@ export const reviewRepositoryEmpl = (reviewModel: MongoDBReview): reviewReposito
     const count = await reviewModel.find({ course: new mongoose.Types.ObjectId(course) }).countDocuments();
     return count;
   }
+  const isRecorded = async (course: string, user: string): Promise<Review | null> => {
+    const review = await reviewModel.findOne({ $and: [{ course: new mongoose.Types.ObjectId(course), user: new mongoose.Types.ObjectId(user) }] }).exec();
+    return review ? review.toObject() : null;
+  }
 return {
     getAllReviews,
     postReview,
-    getReviewsCount
+    getReviewsCount,
+    isRecorded
   };
 };

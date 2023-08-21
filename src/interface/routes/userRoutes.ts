@@ -30,7 +30,7 @@ import {
 import { getDataToAdminDashboardController, getDataToTutorDashboardController } from "../controllers/course/getToDashController";
 import forgotPasswordController from "../controllers/authentication/forgotPasswordController";
 import resetUserPasswordController from "../controllers/authentication/resetPasswordController";
-import { getAllReviewsController, postReviewController } from "../controllers/review/reviewController";
+import { getAllReviewsController, postReviewController } from "../controllers/review";
 
 // middlewares
 import {
