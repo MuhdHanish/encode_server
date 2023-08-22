@@ -20,3 +20,13 @@ export const isRecorded = (reviewRepository: reviewRepository) => async (course:
   const review = await reviewRepository.isRecorded(course, user);
   return review ? true : false;
 }
+
+export const updateReview = (reviewRepository: reviewRepository) => async (id: string, review: Review): Promise<Review | null> => {
+  const updatedReview = await reviewRepository.editReview(id, review);
+  return updatedReview ? updatedReview : null;
+}
+
+export const deleteReview = (reviewRepository: reviewRepository) => async (id: string): Promise<Review | null> => {
+  const deletedReview = await reviewRepository.deleteReview(id);
+  return deletedReview ? deletedReview : null;
+}
