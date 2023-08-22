@@ -15,6 +15,8 @@ export type userRepository = {
   unBlockUser: (userId: string) => Promise<User | null>;
   googleUserCreate: (user: User) => Promise<User | null>;
   resetPassword: (usernameOrEmail: string, newPassword: string) => Promise<User | null>;
+  updateProfileImage: (id: string, url: string) => Promise<User | null>;
+  updateCredentials: (id: string, email: string, username: string) => Promise<User | null>;
 };
 
 export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
@@ -190,13 +192,13 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
     }
   };
 
-  const resetPassword = async (usernameOrEmail: string, newPassword: string) => {
+  const resetPassword = async (usernameOrEmail: string, newPassword: string): Promise<User | null> => {
     try {
-       const hashPass: string = bcrypt.hashSync(newPassword, 12);
+      const hashPass: string = bcrypt.hashSync(newPassword, 12);
       const user = await userModel
         .findOneAndUpdate({
           $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
-        },{$set:{password:hashPass}},{new:true})
+        }, { $set: { password: hashPass } }, { new: true })
         .exec();
       if (user) {
         const { password, ...restoredUser } = user.toObject();
@@ -207,7 +209,37 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
       console.error("Error on reseting the password:", error);
       return null;
     }
+  };
+
+  const updateProfileImage = async (id: string, url: string): Promise<User | null> => {
+    try {
+    const updatedProfile = await userModel.findByIdAndUpdate(
+      id,
+      { $set: { profile: url } },
+      { new: true } 
+    );
+
+    return updatedProfile ? updatedProfile.toObject() : null;
+  } catch (error) {
+    console.error("Error updating profile image:", error);
+      return null;
   }
+  };
+
+ const updateCredentials = async (id: string, email: string, username: string): Promise<User | null> => {
+  try {
+    const updatedProfile = await userModel.findByIdAndUpdate(
+      id,
+      { $set: { email, username } },
+      { new: true }
+    );
+
+    return updatedProfile ? updatedProfile.toObject() : null;
+  } catch (error) {
+    console.error("Error updating credentials:", error);
+    return null;
+  }
+ };
 
   return {
     create,
@@ -222,5 +254,7 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
     getUsersCountByRole,
     googleUserCreate,
     resetPassword,
+    updateProfileImage,
+    updateCredentials
   };
 };
