@@ -70,5 +70,14 @@ export const postReviewValidator = [
   body("rating").notEmpty().withMessage("Rating  is required"),
 ];
 
+export const reviewValidator = [
+  param("id").notEmpty().withMessage("Review id is required"),
+  body("course").notEmpty().withMessage("Course id is required"),
+  body("review").notEmpty().withMessage("Review  is required"),
+  body("rating").notEmpty().withMessage("Rating  is required"),
+];
+
+
+
 
 

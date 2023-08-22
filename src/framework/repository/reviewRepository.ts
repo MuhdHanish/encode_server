@@ -5,9 +5,9 @@ import { Review } from "../../domain/models/Review";
 export type reviewRepository = {
   getAllReviews: (course: string) => Promise<Review[] | null>;
   getReviewsCount: (course: string) => Promise<number | null>;
-  postReview: (course: string, user: string, review: string, rating: number) => Promise<Review | null>;
+  postReview: (course: string,user: string,review: string,rating: number) => Promise<Review | null>;
   isRecorded: (coruse: string, user: string) => Promise<Review | null>;
-  getReviewById: (id: string) => Promise<Review | null>;
+  getReviewByCredential: (id: string, course: string, user:string) => Promise<Review | null>;
   editReview: (id: string, review: Review) => Promise<Review | null>;
   deleteReview: (id: string) => Promise<Review | null>;
 };
@@ -17,8 +17,8 @@ export const reviewRepositoryEmpl = (reviewModel: MongoDBReview): reviewReposito
     const reviews = await reviewModel.find({ course: new mongoose.Types.ObjectId(course) }).populate("user", "username email profile").exec();
     return reviews.length > 0 ? reviews : null;
   };
-  const getReviewById = async (id: string): Promise<Review | null> => {
-    const review = await reviewModel.findById(id);
+  const getReviewByCredential = async (id: string, course:string, user:string): Promise<Review | null> => {
+    const review = await reviewModel.findOne({_id:new mongoose.Types.ObjectId(id),course: new mongoose.Types.ObjectId(course),user: new mongoose.Types.ObjectId(user)});
     return review ? review.toObject() : null;
   }
   const editReview = async (id: string, review: Review): Promise<Review | null> => {
@@ -56,6 +56,6 @@ return {
     isRecorded,
     deleteReview,
     editReview,
-    getReviewById
+    getReviewByCredential
   };
 };

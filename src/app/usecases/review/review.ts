@@ -30,3 +30,8 @@ export const deleteReview = (reviewRepository: reviewRepository) => async (id: s
   const deletedReview = await reviewRepository.deleteReview(id);
   return deletedReview ? deletedReview : null;
 }
+
+export const getReviewByCredential = (reviewRepository: reviewRepository) => async(id:string, course:string, user:string): Promise<Review|null> =>{
+  const review = await reviewRepository.getReviewByCredential(id, course, user);
+  return review ? review : null;
+}

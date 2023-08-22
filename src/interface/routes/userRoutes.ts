@@ -30,7 +30,7 @@ import {
 import { getDataToAdminDashboardController, getDataToTutorDashboardController } from "../controllers/course/getToDashController";
 import forgotPasswordController from "../controllers/authentication/forgotPasswordController";
 import resetUserPasswordController from "../controllers/authentication/resetPasswordController";
-import { getAllReviewsController, postReviewController } from "../controllers/review";
+import { deleteReviewController, getAllReviewsController, postReviewController, updateReviewController } from "../controllers/review";
 
 // middlewares
 import {
@@ -43,7 +43,7 @@ import {
 import {
   signupValidatorOne, signupValidatorTwo, 
   getLanguageByIdValidator,getCourseByIdValidator,
-  loginValidator, postLanguageValidator, postCourseValidator, getByRoleValidator, muteDataValidator, forgotPasswordValidator, postReviewValidator
+  loginValidator, postLanguageValidator, postCourseValidator, getByRoleValidator, muteDataValidator, forgotPasswordValidator, postReviewValidator, reviewValidator
 } from "../../middleware/requestValidator";
 
 
@@ -96,7 +96,13 @@ router.get("/get/tutor/course/data/dashboard/:id([0-9a-fA-F]{24})", tutorAuthori
 router.get("/get/all/reviews/:id([0-9a-fA-F]{24})", userAuthorization, getCourseByIdValidator, getAllReviewsController);
 
 // POST review
-router.post("/post/review/:id([0-9a-fA-F]{24})", userAuthorization, postReviewValidator ,postReviewController);
+router.post("/post/review/:id([0-9a-fA-F]{24})", userAuthorization, postReviewValidator, postReviewController);
+
+// PUT review
+router.put("/update/review/:id([0-9a-fA-F]{24})", userAuthorization, reviewValidator, updateReviewController);
+
+// DELETE review
+router.delete("/delete/review/:id([0-9a-fA-F]{24})", userAuthorization, reviewValidator,deleteReviewController)
 
 // PATCH remvove student from course
 router.patch("/remove/student/course/:id([0-9a-fA-F]{24})", userAuthorization, getCourseByIdValidator, removeStudentCourseController);
