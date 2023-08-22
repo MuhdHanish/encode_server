@@ -77,7 +77,14 @@ export const reviewValidator = [
   body("rating").notEmpty().withMessage("Rating  is required"),
 ];
 
+export const editImageValidator = [
+  body("profile").notEmpty().withMessage("Profile is required"),
+];
 
+export const editCredentialsValidator = [
+  body("email").notEmpty().withMessage("Email is required"),
+  body("username").notEmpty().withMessage("Username is required"),
+];
 
 
 

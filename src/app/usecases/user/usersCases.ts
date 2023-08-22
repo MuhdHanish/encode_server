@@ -56,8 +56,8 @@ export const unBlockUser = (userRepository: userRepository) => async (userId: st
   }
 };
 
-export const editProfileImage = (userRepository: userRepository) => async (id: string, url: string): Promise<User | null> => {
-  const user = await userRepository.updateProfileImage(id, url);
+export const editProfileImage = (userRepository: userRepository) => async (id: string, profile: string): Promise<User | null> => {
+  const user = await userRepository.updateProfileImage(id, profile);
   if (user) {
     return user;
   } else {

@@ -15,7 +15,7 @@ export type userRepository = {
   unBlockUser: (userId: string) => Promise<User | null>;
   googleUserCreate: (user: User) => Promise<User | null>;
   resetPassword: (usernameOrEmail: string, newPassword: string) => Promise<User | null>;
-  updateProfileImage: (id: string, url: string) => Promise<User | null>;
+  updateProfileImage: (id: string, profile: string) => Promise<User | null>;
   updateCredentials: (id: string, email: string, username: string) => Promise<User | null>;
 };
 
@@ -211,11 +211,11 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
     }
   };
 
-  const updateProfileImage = async (id: string, url: string): Promise<User | null> => {
+  const updateProfileImage = async (id: string, profile: string): Promise<User | null> => {
     try {
     const updatedProfile = await userModel.findByIdAndUpdate(
       id,
-      { $set: { profile: url } },
+      { $set: { profile: profile } },
       { new: true } 
     );
 

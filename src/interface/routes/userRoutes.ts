@@ -1,7 +1,7 @@
 import { Router } from "express";
 
 // controllers
-import { loginController, googleLoginController } from "../controllers/authentication";
+import { loginController, googleLoginController, forgotPasswordController, resetUserPasswordController } from "../controllers/authentication";
 import { stepOneController, stepTwoController } from "../controllers/authentication/signupController";
 import {
   getCourseByIdController,
@@ -17,7 +17,7 @@ import {
 import { getLanguagesController, getLanguageByIdController, postLanguageController, editLanguageController } from "../controllers/language";
 import googleSignupController from "../controllers/authentication/signupController/googleSignupController";
 import {
-  blockUserContorller, getCourseStudentsController, getUsersByRoleController, getUsersController,
+  blockUserContorller, editUserCredentialController, editUserProfileImageController, getCourseStudentsController, getUsersByRoleController, getUsersController,
   getUsersCountByRoleController, getUsersCountController, unBlockUserContorller
 } from "../controllers/user/userUseCaseController";
 import {
@@ -28,8 +28,6 @@ import {
   getCoursesCountController, listCourseController, removeStudentCourseController, unListCourseController
 } from "../controllers/course/courseUseCaseController";
 import { getDataToAdminDashboardController, getDataToTutorDashboardController } from "../controllers/course/getToDashController";
-import forgotPasswordController from "../controllers/authentication/forgotPasswordController";
-import resetUserPasswordController from "../controllers/authentication/resetPasswordController";
 import { deleteReviewController, getAllReviewsController, postReviewController, updateReviewController } from "../controllers/review";
 
 // middlewares
@@ -77,8 +75,6 @@ router.post("/forgot/password", forgotPasswordValidator, forgotPasswordControlle
 // POST Verify password request
 router.post("/verify/password/request/:id", resetPasswordVerify);
 
-// PATCH Reset Password
-router.patch("/reset/password", loginValidator, resetUserPasswordController);
 
 // GET course
 router.get("/get/popular/courses",userAuthorization, getPopularCoursesController);
@@ -117,6 +113,14 @@ router.patch("/set/selected/course/:id([0-9a-fA-F]{24})", userAuthorization, get
 router.put("/tutor/update/course/:id", tutorAuthorization, postCourseValidator, updateCourseController)
 
 // User usecase
+
+// Common
+router.patch("/edit/profile/image", userAuthorization, editUserProfileImageController);
+router.patch("/edit/profile/credentials", userAuthorization, editUserCredentialController);
+
+// PATCH Reset Password
+router.patch("/reset/password", loginValidator, resetUserPasswordController);
+
 // Tutor
 router.get("/tutor/get/course/students/:id", tutorAuthorization, getCourseByIdValidator, getCourseStudentsController);
 

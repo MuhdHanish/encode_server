@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { userModel } from "../../../framework/database/models/userModel";
-import { blockUser, getUsers, getUsersByRole, getUsersCount, getUsersCountByRole,unBlockUser } from "../../../app/usecases/user/usersCases";
+import { blockUser, editCredentials, editProfileImage, getUsers, getUsersByRole, getUsersCount, getUsersCountByRole,unBlockUser } from "../../../app/usecases/user/usersCases";
 import { userRepositoryEmpl } from "../../../framework/repository/userRepository";
 import { validationResult } from "express-validator";
 import { courseRepositoryEmpl } from "../../../framework/repository/courseRepository";
@@ -9,6 +9,10 @@ import { getCourseStudents } from "../../../app/usecases/course/courseCases";
 
 const courseRepository = courseRepositoryEmpl(courseModel);
 const userRepository = userRepositoryEmpl(userModel);
+
+interface CustomRequest extends Request {
+  userInfo?: { id: string; role: string };
+};
 
 export const getUsersController = async (req: Request, res: Response) => {
   try {
@@ -88,9 +92,43 @@ export const getCourseStudentsController = async (req: Request, res: Response) =
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
     const { id } = req.params;
     const students = await getCourseStudents(courseRepository)(id);
-    return res.status(201).json({message:"Students fetched successfully", students});
+    return res.status(201).json({ message: "Students fetched successfully", students });
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal server error" });
   }
-}
+};
+
+export const editUserProfileImageController = async (req: CustomRequest, res: Response) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+    const { profile } = req.body;
+    const updatedUser = await editProfileImage(userRepository)(req.userInfo?.id as string, profile);
+    if (updatedUser) {
+      return res.status(200).json({ message: "updated profile image", updatedUser });
+    } else {
+      return res.status(400).json({ message: "Cannot update credentials" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export const editUserCredentialController = async (req: CustomRequest, res: Response) => {
+  try {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
+    const { email, username } = req.body;
+    const updatedUser = await editCredentials(userRepository)(req.userInfo?.id as string, email, username);
+    if (updatedUser) {
+      return res.status(200).json({ message: "Updated credentials", updatedUser });
+    } else {
+      return res.status(400).json({ message: "Cannot update credentials" });
+    }
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({ message: "Internal server error" });
+  }
+};
