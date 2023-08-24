@@ -41,7 +41,7 @@ import {
 import {
   signupValidatorOne, signupValidatorTwo, 
   getLanguageByIdValidator,getCourseByIdValidator,
-  loginValidator, postLanguageValidator, postCourseValidator, getByRoleValidator, muteDataValidator, forgotPasswordValidator, postReviewValidator, reviewValidator, deleteReviewValidator, editImageValidator, editCredentialsValidator
+  loginValidator, postLanguageValidator, postCourseValidator, getByRoleValidator, muteDataValidator, forgotPasswordValidator, postReviewValidator, reviewValidator, deleteReviewValidator, editImageValidator, editCredentialsValidator, followUnfollowValidator
 } from "../../middleware/requestValidator";
 
 
@@ -118,8 +118,8 @@ router.put("/tutor/update/course/:id", tutorAuthorization, postCourseValidator, 
 router.patch("/edit/profile/image", userAuthorization,editImageValidator, editUserProfileImageController);
 router.patch("/edit/profile/credentials", userAuthorization, editCredentialsValidator, editUserCredentialController);
 
-router.patch("/follow/user/:id([0-9a-fA-F]{24})", userAuthorization, followMethodsController);
-router.patch("/unfollow/user/:id([0-9a-fA-F]{24})", userAuthorization, unfollowMethodsController);
+router.patch("/follow/user/:id([0-9a-fA-F]{24})", userAuthorization,followUnfollowValidator, followMethodsController);
+router.patch("/unfollow/user/:id([0-9a-fA-F]{24})", userAuthorization,followUnfollowValidator, unfollowMethodsController);
 
 // PATCH Reset Password
 router.patch("/reset/password", loginValidator, resetUserPasswordController);

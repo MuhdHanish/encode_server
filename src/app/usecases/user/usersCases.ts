@@ -84,7 +84,7 @@ export const followMethods =  (userRepository: userRepository) => async (id: str
 };
 
 export const unfollowMethods =  (userRepository: userRepository) => async (id: string, userId:string): Promise<User | null> => {
-  const user = await userRepository.followMethods(id, userId);
+  const user = await userRepository.unfollowMethods(id, userId);
   if (user) {
     return user;
   } else {

@@ -92,5 +92,7 @@ export const editCredentialsValidator = [
   body("username").notEmpty().withMessage("Username is required"),
 ];
 
-
+export const followUnfollowValidator = [
+  param("id").notEmpty().withMessage("User id is required"),
+];
 

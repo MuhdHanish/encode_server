@@ -1,4 +1,5 @@
 // import dependencies
+import { Socket } from "socket.io";
 import express from "express";
 import morgan from "morgan";
 import cors from "cors";
@@ -14,14 +15,16 @@ import connnectDatabase from "./src/framework/database/config/dbConfig";
 // import the route file
 import userRoute from "./src/interface/routes/userRoutes";
 import tokenRoute from "./src/interface/routes/tokenRoutes"
+import { User } from "./src/domain/models/User";
 
 // creat express application
 const app = express();
 
 // cors setting
+const allowedOrigins = ["*", process.env.CORS_ORIGIN_URL as string];
 app.use(
   cors({
-    origin: ["http://localhost:5173", process.env.CORS_ORIGIN_URL as string],
+    origin: allowedOrigins,
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
   })
 );
@@ -42,6 +45,19 @@ const port = process.env.PORT || 8000;
 connnectDatabase()
   .then((res) => {
     console.log(res);
-    app.listen(port, (): void => console.log(`Server running...`));
+    const server = app.listen(port, (): void => console.log(`Server running...`));
+    const io = require("socket.io")(server, {
+      pingTimeout: 60000,
+      cors: {
+        origin: allowedOrigins,
+      },
+    });
+    io.on("connection", (socket: Socket) => {
+     socket.on("join-following-rooms", (followedUsers) => {
+       followedUsers.forEach((followedUser:User) => {
+         socket.join(followedUser._id?.toString() as string); 
+       });
+     });
+  });
   })
   .catch((error) => console.log(`Failed to connect database`, error));
