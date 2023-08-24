@@ -140,10 +140,10 @@ export const followMethodsController = async (req: CustomRequest, res: Response)
     const { id } = req.params;
     const user = await followMethods(userRepository)(req.userInfo?.id as string, id);
     if (user) {
-      return res.status(200).json({ message: "Followed user", user });
-    } else {
-      return res.status(400).json({ message: "Cannot follow user" });
-    }
+  return res.status(200).json({ success: true, message: "User followed successfully", user });
+  } else {
+  return res.status(400).json({ success: false, message: "Unable to follow user" });
+  }
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal server error" });
@@ -156,11 +156,11 @@ export const unfollowMethodsController = async (req: CustomRequest, res: Respons
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
     const { id } = req.params;
     const user = await unfollowMethods(userRepository)(req.userInfo?.id as string, id);
-    if (user) {
-      return res.status(200).json({ message: "Followed user", user });
-    } else {
-      return res.status(400).json({ message: "Cannot follow user" });
-    }
+   if (user) {
+  return res.status(200).json({ success: true, message: "User unfollowed successfully", user });
+  } else {
+  return res.status(400).json({ success: false, message: "Unable to unfollow user" });
+  }   
   } catch (error) {
     console.log(error);
     return res.status(500).json({ message: "Internal server error" });
