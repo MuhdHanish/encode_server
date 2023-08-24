@@ -1,6 +1,4 @@
 import mongoose from "mongoose";
-import { Course } from "./Course";
-
 export interface User {
   _id?: mongoose.Types.ObjectId;
   username?: string;
@@ -10,5 +8,6 @@ export interface User {
   status?: boolean;
   isGoogle?: boolean;
   profile?: string;
-  seletedCourses?: [Course];
+  followers?: [mongoose.Types.ObjectId];
+  following?: [mongoose.Types.ObjectId];
 };

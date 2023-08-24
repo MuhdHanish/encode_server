@@ -74,3 +74,20 @@ export const editCredentials = (userRepository: userRepository) => async (id: st
   }
 };
 
+export const followMethods =  (userRepository: userRepository) => async (id: string, userId:string): Promise<User | null> => {
+  const user = await userRepository.followMethods(id, userId);
+  if (user) {
+    return user;
+  } else {
+    return null;
+  }
+};
+
+export const unfollowMethods =  (userRepository: userRepository) => async (id: string, userId:string): Promise<User | null> => {
+  const user = await userRepository.followMethods(id, userId);
+  if (user) {
+    return user;
+  } else {
+    return null;
+  }
+};

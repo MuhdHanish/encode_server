@@ -17,8 +17,8 @@ import {
 import { getLanguagesController, getLanguageByIdController, postLanguageController, editLanguageController } from "../controllers/language";
 import googleSignupController from "../controllers/authentication/signupController/googleSignupController";
 import {
-  blockUserContorller, editUserCredentialController, editUserProfileImageController, getCourseStudentsController, getUsersByRoleController, getUsersController,
-  getUsersCountByRoleController, getUsersCountController, unBlockUserContorller
+  blockUserContorller, editUserCredentialController, editUserProfileImageController, followMethodsController, getCourseStudentsController, getUsersByRoleController, getUsersController,
+  getUsersCountByRoleController, getUsersCountController, unBlockUserContorller, unfollowMethodsController
 } from "../controllers/user/userUseCaseController";
 import {
   getLanguagesCountController, listLanguageController, unListLanguageController
@@ -116,7 +116,10 @@ router.put("/tutor/update/course/:id", tutorAuthorization, postCourseValidator, 
 
 // Common
 router.patch("/edit/profile/image", userAuthorization,editImageValidator, editUserProfileImageController);
-router.patch("/edit/profile/credentials", userAuthorization,editCredentialsValidator, editUserCredentialController);
+router.patch("/edit/profile/credentials", userAuthorization, editCredentialsValidator, editUserCredentialController);
+
+router.patch("/follow/user/:id([0-9a-fA-F]{24})", userAuthorization, followMethodsController);
+router.patch("/unfollow/user/:id([0-9a-fA-F]{24})", userAuthorization, unfollowMethodsController);
 
 // PATCH Reset Password
 router.patch("/reset/password", loginValidator, resetUserPasswordController);

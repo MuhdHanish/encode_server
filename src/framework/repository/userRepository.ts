@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import { User } from "../../domain/models/User";
 import { MongoDBUser } from "../database/models/userModel";
 import bcrypt from "bcryptjs";
@@ -17,6 +18,8 @@ export type userRepository = {
   resetPassword: (usernameOrEmail: string, newPassword: string) => Promise<User | null>;
   updateProfileImage: (id: string, profile: string) => Promise<User | null>;
   updateCredentials: (id: string, email: string, username: string) => Promise<User | null>;
+  followMethods: (id: string, userId: string) => Promise<User | null>;
+  unfollowMethods: (id: string, userId: string) => Promise<User | null>;
 };
 
 export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
@@ -33,9 +36,13 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
 
   const findByUsernameOrEmailAndPassword = async (usernameOrEmail: string,password: string): Promise<User | null> => {
     try {
-      const user = await userModel.findOne({
-        $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
-      }).exec();
+      const user = await userModel
+        .findOne({
+          $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
+        })
+        .populate("following")
+        .populate("followers")
+        .exec();
       if (user) {
         const passwordMatch = bcrypt.compareSync(password, user.password as string);
         if (passwordMatch) {
@@ -240,6 +247,44 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
     return null;
   }
  };
+ 
+  const followMethods = async (id: string, userId: string): Promise<User | null> => {
+    try {
+      const user = await userModel.findByIdAndUpdate(
+        id,
+        { $push: { following: new mongoose.Types.ObjectId(userId) } },
+        { new: true }
+      );
+      await userModel.findByIdAndUpdate(
+        userId,
+        { $push: { followers: new mongoose.Types.ObjectId(id) } },
+        { new: true }
+      )
+      return user ? user.toObject() : null;
+    } catch (error) {
+      console.error("Error updating credentials:", error);
+      return null;
+    }
+  };
+
+  const unfollowMethods = async (id: string, userId: string): Promise<User | null> => {
+    try{ 
+      const user = await userModel.findByIdAndUpdate(
+        id,
+        { $pull:{following:new mongoose.Types.ObjectId(userId)}},
+        { new: true }
+      );
+      await userModel.findByIdAndUpdate(
+        userId, 
+        { $pull: { followers: new mongoose.Types.ObjectId(id) } },
+        {new:true}
+      )
+      return user  ? user.toObject() : null;
+    } catch (error) {
+      console.error("Error updating credentials:", error);
+      return null;
+    }
+  }
 
   return {
     create,
@@ -255,6 +300,8 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
     googleUserCreate,
     resetPassword,
     updateProfileImage,
-    updateCredentials
+    updateCredentials,
+    followMethods,
+    unfollowMethods,
   };
 };
