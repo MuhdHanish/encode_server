@@ -252,12 +252,12 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
     try {
       const user = await userModel.findByIdAndUpdate(
         id,
-        { $push: { following: new mongoose.Types.ObjectId(userId) } },
+        { $addToSet: { following: new mongoose.Types.ObjectId(userId) } },
         { new: true }
       );
       await userModel.findByIdAndUpdate(
         userId,
-        { $push: { followers: new mongoose.Types.ObjectId(id) } },
+        { $addToSet: { followers: new mongoose.Types.ObjectId(id) } },
         { new: true }
       )
       return user ? user.toObject() : null;
