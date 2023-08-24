@@ -41,7 +41,7 @@ import {
 import {
   signupValidatorOne, signupValidatorTwo, 
   getLanguageByIdValidator,getCourseByIdValidator,
-  loginValidator, postLanguageValidator, postCourseValidator, getByRoleValidator, muteDataValidator, forgotPasswordValidator, postReviewValidator, reviewValidator, deleteReviewValidator
+  loginValidator, postLanguageValidator, postCourseValidator, getByRoleValidator, muteDataValidator, forgotPasswordValidator, postReviewValidator, reviewValidator, deleteReviewValidator, editImageValidator, editCredentialsValidator
 } from "../../middleware/requestValidator";
 
 
@@ -115,8 +115,8 @@ router.put("/tutor/update/course/:id", tutorAuthorization, postCourseValidator, 
 // User usecase
 
 // Common
-router.patch("/edit/profile/image", userAuthorization, editUserProfileImageController);
-router.patch("/edit/profile/credentials", userAuthorization, editUserCredentialController);
+router.patch("/edit/profile/image", userAuthorization,editImageValidator, editUserProfileImageController);
+router.patch("/edit/profile/credentials", userAuthorization,editCredentialsValidator, editUserCredentialController);
 
 // PATCH Reset Password
 router.patch("/reset/password", loginValidator, resetUserPasswordController);

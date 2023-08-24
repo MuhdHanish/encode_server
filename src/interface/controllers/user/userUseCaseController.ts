@@ -104,9 +104,9 @@ export const editUserProfileImageController = async (req: CustomRequest, res: Re
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
     const { profile } = req.body;
-    const updatedUser = await editProfileImage(userRepository)(req.userInfo?.id as string, profile);
-    if (updatedUser) {
-      return res.status(200).json({ message: "updated profile image", updatedUser });
+    const user = await editProfileImage(userRepository)(req.userInfo?.id as string, profile);
+    if (user) {
+      return res.status(200).json({ message: "updated profile image", user });
     } else {
       return res.status(400).json({ message: "Cannot update credentials" });
     }
@@ -121,9 +121,9 @@ export const editUserCredentialController = async (req: CustomRequest, res: Resp
     const errors = validationResult(req);
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
     const { email, username } = req.body;
-    const updatedUser = await editCredentials(userRepository)(req.userInfo?.id as string, email, username);
-    if (updatedUser) {
-      return res.status(200).json({ message: "Updated credentials", updatedUser });
+    const user = await editCredentials(userRepository)(req.userInfo?.id as string, email, username);
+    if (user) {
+      return res.status(200).json({ message: "Updated credentials", user });
     } else {
       return res.status(400).json({ message: "Cannot update credentials" });
     }
