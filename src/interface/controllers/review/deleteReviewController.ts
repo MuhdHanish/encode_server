@@ -20,7 +20,7 @@ const deleteReviewController = async (req: CustomRequest, res: Response) => {
     const { course } = req.body;
     const exist = await getReviewByCredential(reviewRepository)(id, course, req.userInfo?.id as string);
     if (exist) {
-      const deletedReview = await deleteReview(reviewRepository)(id);
+      const deletedReview  = await deleteReview(reviewRepository)(id);
       if (deletedReview) {
         return res.status(200).json({ message: "Review deleted successfully", deletedReview });
       } else {

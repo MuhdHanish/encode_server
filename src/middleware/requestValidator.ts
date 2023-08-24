@@ -77,6 +77,12 @@ export const reviewValidator = [
   body("rating").notEmpty().withMessage("Rating  is required"),
 ];
 
+
+export const deleteReviewValidator = [
+  param("id").notEmpty().withMessage("Review id is required"),
+  body("course").notEmpty().withMessage("Course id is required"),
+];
+
 export const editImageValidator = [
   body("profile").notEmpty().withMessage("Profile is required"),
 ];

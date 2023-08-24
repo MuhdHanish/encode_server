@@ -41,7 +41,7 @@ import {
 import {
   signupValidatorOne, signupValidatorTwo, 
   getLanguageByIdValidator,getCourseByIdValidator,
-  loginValidator, postLanguageValidator, postCourseValidator, getByRoleValidator, muteDataValidator, forgotPasswordValidator, postReviewValidator, reviewValidator
+  loginValidator, postLanguageValidator, postCourseValidator, getByRoleValidator, muteDataValidator, forgotPasswordValidator, postReviewValidator, reviewValidator, deleteReviewValidator
 } from "../../middleware/requestValidator";
 
 
@@ -97,8 +97,8 @@ router.post("/post/review/:id([0-9a-fA-F]{24})", userAuthorization, postReviewVa
 // PUT review
 router.put("/update/review/:id([0-9a-fA-F]{24})", userAuthorization, reviewValidator, updateReviewController);
 
-// DELETE review
-router.delete("/delete/review/:id([0-9a-fA-F]{24})", userAuthorization, reviewValidator,deleteReviewController)
+// DELETE  review
+router.patch("/delete/review/:id([0-9a-fA-F]{24})", userAuthorization, deleteReviewValidator,deleteReviewController)
 
 // PATCH remvove student from course
 router.patch("/remove/student/course/:id([0-9a-fA-F]{24})", userAuthorization, getCourseByIdValidator, removeStudentCourseController);

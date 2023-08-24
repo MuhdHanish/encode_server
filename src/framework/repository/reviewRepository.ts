@@ -14,7 +14,7 @@ export type reviewRepository = {
 export const reviewRepositoryEmpl = (reviewModel: MongoDBReview): reviewRepository => {
   const getAllReviews = async (course: string): Promise<Review[] | null> => {
     try {
-      const reviews = await reviewModel.find({ course: new mongoose.Types.ObjectId(course) }).populate("user", "username email profile").exec();
+      const reviews = await reviewModel.find({ course: new mongoose.Types.ObjectId(course) }).populate("user", "username email profile isGoogle status role __v").exec();
       return reviews.length > 0 ? reviews : null;
     } catch (error) {
       console.error("Error getting all reviews:", error);
