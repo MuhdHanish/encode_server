@@ -21,7 +21,7 @@ import { User } from "./src/domain/models/User";
 const app = express();
 
 // cors setting
-const allowedOrigins = ["*", process.env.CORS_ORIGIN_URL as string];
+const allowedOrigins = ["http://localhost:5173", process.env.CORS_ORIGIN_URL as string];
 app.use(
   cors({
     origin: allowedOrigins,

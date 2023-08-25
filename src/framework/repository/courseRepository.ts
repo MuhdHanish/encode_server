@@ -244,7 +244,7 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
         .findById(courseId)
         .populate({
           path: "tutor",
-          select: "-password"
+          select: "-password -isGoogle -followers -following -__v -status -role"
         })
         .exec();
 

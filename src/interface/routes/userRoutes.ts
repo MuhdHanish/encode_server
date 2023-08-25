@@ -18,7 +18,7 @@ import { getLanguagesController, getLanguageByIdController, postLanguageControll
 import googleSignupController from "../controllers/authentication/signupController/googleSignupController";
 import {
   blockUserContorller, editUserCredentialController, editUserProfileImageController, followMethodsController, getCourseStudentsController, getUsersByRoleController, getUsersController,
-  getUsersCountByRoleController, getUsersCountController, unBlockUserContorller, unfollowMethodsController
+  getUsersCountByRoleController, getUsersCountController, removeMethodsController, unBlockUserContorller, unfollowMethodsController
 } from "../controllers/user/userUseCaseController";
 import {
   getLanguagesCountController, listLanguageController, unListLanguageController
@@ -77,13 +77,13 @@ router.post("/verify/password/request/:id", resetPasswordVerify);
 
 
 // GET course
-router.get("/get/popular/courses",userAuthorization, getPopularCoursesController);
 router.get("/get/courses",userAuthorization, getCoursesController);
-router.get("/get/course/:id([0-9a-fA-F]{24})", userAuthorization, getCourseByIdValidator, getCourseByIdController);
 router.get("/get/course/count", userAuthorization, getCoursesCountController);
+router.get("/get/popular/courses",userAuthorization, getPopularCoursesController);
+router.get("/get/student/courses", userAuthorization, getStudentCoursesController);
+router.get("/get/course/:id([0-9a-fA-F]{24})", userAuthorization, getCourseByIdValidator, getCourseByIdController);
 router.get("/get/course/language/name/:id", userAuthorization, getCourseByIdValidator, getCoursesByLanguageNameController);
 router.get("/get/course/count/language/name/:id", userAuthorization, getCourseByIdValidator, getCoursesCountByLanguageNameController);
-router.get("/get/student/courses", userAuthorization,getStudentCoursesController);
 router.get("/get/tutor/courses/:id([0-9a-fA-F]{24})", tutorAuthorization,getCourseByIdValidator, getTutorCoursesController);
 router.get("/get/tutor/popular/courses/:id([0-9a-fA-F]{24})", tutorAuthorization,getCourseByIdValidator, getTutorPopularCoursesController);
 router.get("/get/tutor/course/data/dashboard/:id([0-9a-fA-F]{24})", tutorAuthorization, getCourseByIdValidator, getDataToTutorDashboardController);
@@ -120,6 +120,7 @@ router.patch("/edit/profile/credentials", userAuthorization, editCredentialsVali
 
 router.patch("/follow/user/:id([0-9a-fA-F]{24})", userAuthorization,followUnfollowValidator, followMethodsController);
 router.patch("/unfollow/user/:id([0-9a-fA-F]{24})", userAuthorization,followUnfollowValidator, unfollowMethodsController);
+router.patch("/remove/user/:id([0-9a-fA-F]{24})", userAuthorization,followUnfollowValidator, removeMethodsController);
 
 // PATCH Reset Password
 router.patch("/reset/password", loginValidator, resetUserPasswordController);

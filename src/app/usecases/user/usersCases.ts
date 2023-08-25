@@ -91,3 +91,12 @@ export const unfollowMethods =  (userRepository: userRepository) => async (id: s
     return null;
   }
 };
+
+export const removeMethods =  (userRepository: userRepository) => async (id: string, userId:string): Promise<User | null> => {
+  const user = await userRepository.removeMethods(id, userId);
+  if (user) {
+    return user;
+  } else {
+    return null;
+  }
+};

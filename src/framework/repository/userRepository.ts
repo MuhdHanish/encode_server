@@ -20,6 +20,7 @@ export type userRepository = {
   updateCredentials: (id: string, email: string, username: string) => Promise<User | null>;
   followMethods: (id: string, userId: string) => Promise<User | null>;
   unfollowMethods: (id: string, userId: string) => Promise<User | null>;
+  removeMethods: (id: string, userId: string) => Promise<User | null>;
 };
 
 export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
@@ -40,8 +41,8 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
         .findOne({
           $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
         })
-        .populate("following")
-        .populate("followers")
+        .populate("following","_id username email profile")
+        .populate("followers","_id username email profile")
         .exec();
       if (user) {
         const passwordMatch = bcrypt.compareSync(password, user.password as string);
@@ -250,11 +251,15 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
  
   const followMethods = async (id: string, userId: string): Promise<User | null> => {
     try {
-      const user = await userModel.findByIdAndUpdate(
-        id,
-        { $addToSet: { following: new mongoose.Types.ObjectId(userId) } },
-        { new: true }
-      );
+      const user = await userModel
+        .findByIdAndUpdate(
+          id,
+          { $addToSet: { following: new mongoose.Types.ObjectId(userId) } },
+          { new: true }
+        )
+        .populate("following", "_id username email profile")
+        .populate("followers", "_id username email profile")
+        .exec();
       await userModel.findByIdAndUpdate(
         userId,
         { $addToSet: { followers: new mongoose.Types.ObjectId(id) } },
@@ -262,7 +267,7 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
       )
       return user ? user.toObject() : null;
     } catch (error) {
-      console.error("Error updating credentials:", error);
+      console.error("Error following user:", error);
       return null;
     }
   };
@@ -273,7 +278,9 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
         id,
         { $pull:{following:new mongoose.Types.ObjectId(userId)}},
         { new: true }
-      );
+      ) .populate("following","_id username email profile")
+        .populate("followers","_id username email profile")
+        .exec();
       await userModel.findByIdAndUpdate(
         userId, 
         { $pull: { followers: new mongoose.Types.ObjectId(id) } },
@@ -281,7 +288,30 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
       )
       return user  ? user.toObject() : null;
     } catch (error) {
-      console.error("Error updating credentials:", error);
+      console.error("Error unfollowing user:", error);
+      return null;
+    }
+  }
+
+  const removeMethods = async (id: string, userId: string): Promise<User | null> => {
+    try {
+      const user = await userModel
+        .findByIdAndUpdate(
+          id,
+          { $pull: { followers: new mongoose.Types.ObjectId(userId) } },
+          { new: true }
+        )
+        .populate("following", "_id username email profile")
+        .populate("followers", "_id username email profile")
+        .exec();
+      await userModel.findByIdAndUpdate(
+        userId,
+        { $pull: { following: new mongoose.Types.ObjectId(id) } },
+        { new: true }
+      );
+      return user ? user.toObject() : null;
+    } catch (error) {
+      console.error("Error unfollowing user:", error);
       return null;
     }
   }
@@ -303,5 +333,6 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
     updateCredentials,
     followMethods,
     unfollowMethods,
+    removeMethods
   };
 };
