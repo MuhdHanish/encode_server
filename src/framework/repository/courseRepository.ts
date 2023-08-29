@@ -15,27 +15,15 @@ export type courseRepository = {
   unListCourse: (courseId: string, tutorId: string) => Promise<Course | null>;
   postCourse: (course: Course) => Promise<Course | null>;
   updateCourse: (course: Course, _id: string) => Promise<Course | null>;
-  setSelectedCourse: (
-    courseId: string,
-    userId: string
-  ) => Promise<Course | null>;
+  setSelectedCourse: (courseId: string,userId: string ) => Promise<Course | null>;
   getCourseStudents: (courseId: string) => Promise<User[] | null>;
   getCoursesByLanguageName: (languageName: string) => Promise<Course[] | null>;
-  getCourseDetailsDashborad: () => Promise<
-    { _id: string; total: number }[] | null
-  >;
-  getCourseDetailsTutorDashborad: (
-    toturId: string
-  ) => Promise<{ _id: string; total: number }[] | null>;
-  getCoursesCountByLanguageName: (
-    languageName: string
-  ) => Promise<number | null>;
+  getCourseDetailsDashborad: () => Promise<{ _id: string; total: number }[] | null>;
+  getCourseDetailsTutorDashborad: (toturId: string) => Promise<{ _id: string; total: number }[] | null>;
+  getCoursesCountByLanguageName: (languageName: string) => Promise<number | null>;
   getStudentCourses: (studentId: string) => Promise<Course[] | null>;
   getTutorPopularCourses: (tutorId: string) => Promise<Course[] | null>;
-  removeStudentCourse: (
-    courseId: string,
-    studentId: string
-  ) => Promise<Course | null>;
+  removeStudentCourse: (courseId: string,studentId: string) => Promise<Course | null>;
 };
 
 export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseRepository => {
@@ -68,7 +56,8 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
   }
   };
 
-  const changeReview = async(course: mongoose.Types.ObjectId, rating: number, count: number): Promise<Course | null> => {
+  const changeReview = async (course: mongoose.Types.ObjectId, rating: number, count: number): Promise<Course | null> => {
+    console.log(rating,count)
     const changeCourse = await courseModel.findById(course);
     if (changeCourse) {
       const oldRating = changeCourse?.rating as number;

@@ -3,6 +3,8 @@ import { getReviewByCredential, updateReview } from "../../../app/usecases/revie
 import { reviewModel } from "../../../framework/database/models/reviewModel";
 import { reviewRepositoryEmpl } from "../../../framework/repository/reviewRepository";
 import { validationResult } from "express-validator";
+import { Review } from "../../../domain/models/Review";
+import mongoose from "mongoose";
 
 interface CustomRequest extends Request {
   userInfo?: { id: string; role: string };
@@ -18,7 +20,7 @@ const updateReviewController = async (req: CustomRequest, res: Response) => {
     const { course, review, rating } = req.body;
     const exist = await getReviewByCredential(reviewRepository)(id, course, req.userInfo?.id as string);
     if(exist){
-      const updatedReview = await updateReview(reviewRepository)(id, { review, rating });
+      const updatedReview = await updateReview(reviewRepository)(id,{review, rating})
       if (updatedReview) {
         return res.status(200).json({ message: "Review updated successfully", updatedReview });
       } else {

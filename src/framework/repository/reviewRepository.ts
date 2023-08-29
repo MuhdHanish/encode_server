@@ -12,9 +12,13 @@ export type reviewRepository = {
   deleteReview: (id: string) => Promise<Review | null>;
 };
 export const reviewRepositoryEmpl = (reviewModel: MongoDBReview): reviewRepository => {
+  
   const getAllReviews = async (course: string): Promise<Review[] | null> => {
     try {
-      const reviews = await reviewModel.find({ course: new mongoose.Types.ObjectId(course) }).populate("user", "username email profile isGoogle status role __v").exec();
+      const reviews = await reviewModel
+        .find({ course: new mongoose.Types.ObjectId(course) })
+        .populate("user", "-password")
+        .exec();
       return reviews.length > 0 ? reviews : null;
     } catch (error) {
       console.error("Error getting all reviews:", error);
@@ -61,7 +65,7 @@ export const reviewRepositoryEmpl = (reviewModel: MongoDBReview): reviewReposito
         rating
       }
       const createdReview = await reviewModel.create(newReview);
-      const savedReview = await createdReview.populate("user", "username email profile");
+      const savedReview = await createdReview.populate("user", "-password");
       return savedReview ? savedReview.toObject() : null;
     } catch (error) {
       console.error("Error posting review:", error);
