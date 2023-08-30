@@ -62,7 +62,7 @@ connnectDatabase()
        });
       });
       socket.on("tutor-on-live", (user: User) => {
-        socket.to(user?._id?.toString() as string).emit("on-live-reminder", (user));
+        socket.to(user?._id?.toString() as string).emit("on-live-reminder", ({tutor:user}));
       });
     });
   })
