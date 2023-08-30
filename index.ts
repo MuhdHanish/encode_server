@@ -61,8 +61,8 @@ connnectDatabase()
          socket.join(followedUser._id?.toString() as string); 
        });
       });
-      socket.on("tutor-on-live", (user: User) => {
-        socket.to(user?._id?.toString() as string).emit("on-live-reminder", ({tutor:user}));
+      socket.on("tutor-on-live", (notification) => {
+        socket.to(notification.user?._id?.toString() as string).emit("on-live-reminder", ({ tutor: notification.user }));
       });
     });
   })
