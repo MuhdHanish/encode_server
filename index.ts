@@ -53,6 +53,24 @@ connnectDatabase()
       },
     });
     io.on("connection", (socket: Socket) => {
+      socket.on("connnect-to-online", (roomId:string) => {
+        socket.join(roomId);
+        socket.emit("connected-to-online");
+      });
+      socket.on("join-to-chat", (roomId:string) => {
+        socket.join(roomId);
+        console.log(`User joined to room: ${roomId}`);
+      });
+      socket.on("typing", (roomId:string) => socket.to(roomId).emit("typing"));
+      socket.on("stop-typing", (roomId: string) => socket.to(roomId).emit("stop-typing"));
+      socket.on("new-message", (newMessageRecieved) => {
+         let chat = newMessageRecieved?.chat;
+         if (!chat?.users) return console.log(`in this chat no users found`);
+         chat?.users.forEach((user:User) => {
+           if (user?._id === newMessageRecieved?.sender?._id) return;
+           socket.to(user?._id?.toString() as string).emit("message-recieved", newMessageRecieved);
+         });
+      });
     });
   })
   .catch((error) => console.log(`Failed to connect database`, error));
