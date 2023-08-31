@@ -53,17 +53,6 @@ connnectDatabase()
       },
     });
     io.on("connection", (socket: Socket) => {
-      socket.on("create-room", (user:User) => {
-        socket.join(user._id?.toString() as string);
-      });
-      socket.on("join-following-rooms", (user:User) => {
-        user?.following?.forEach((followedUser: User) => {
-         socket.join(followedUser._id?.toString() as string); 
-       });
-      });
-      socket.on("tutor-on-live", (notification) => {
-        socket.to(notification.user?._id?.toString() as string).emit("on-live-reminder", ({ tutor: notification.user }));
-      });
     });
   })
   .catch((error) => console.log(`Failed to connect database`, error));
