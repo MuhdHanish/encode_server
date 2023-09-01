@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import { Chat } from "../../domain/models/Chat";
 import { MongoDBChat } from "../database/models/chatModel";
 import { Message } from "../../domain/models/Message";
+import { userModel } from "../database/models/userModel";
 
 export type chatRepository = {
   accessChat: (userId: string, secUserId: string) => Promise<Chat | null>;
@@ -22,6 +23,12 @@ export const chatRepositoryEmpl = (chatModel: MongoDBChat): chatRepository => {
         })
         .populate("users", "-password -following -followers -isGoogle -role -status")
         .populate("latestMessage");
+
+        isChat = await userModel.populate(isChat, {
+         path: "latestMessage.sender",
+         select: "name email profile",
+        });
+      
       if (isChat) {
         return isChat;
       } else {
@@ -44,7 +51,7 @@ export const chatRepositoryEmpl = (chatModel: MongoDBChat): chatRepository => {
          })
          .populate("users", "-password -following -followers -isGoogle -role -status")
          .populate("latestMessage")
-         .sort({ updatedAt: -1 });
+         .sort({ updatedAt: -1 })
       return chats.length > 0 ? chats : null;
     } catch (error) {
       console.log("Error on fetching chats :", error);
