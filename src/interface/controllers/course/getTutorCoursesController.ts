@@ -12,11 +12,7 @@ export const getTutorCoursesController = async (req: Request, res: Response) => 
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
     const { id } = req.params;
     const courses = await getTutorCourses(courseRepository)(id);
-    if (courses) {
       return res.status(200).json({ message: "Courses fetched sucessfully", courses });
-    } else {
-      return res.status(400).json({ message: "No courses found" });
-    }
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
@@ -28,11 +24,7 @@ export const getTutorPopularCoursesController = async (req: Request, res: Respon
     if (!errors.isEmpty()) return res.status(400).json({ errors: errors.array() });
     const { id } = req.params;
     const courses = await getTutorPopularCourses(courseRepository)(id);
-    if (courses) {
       return res.status(200).json({ message: "Courses fetched sucessfully", courses });
-    } else {
-      return res.status(400).json({ message: "No courses found" });
-    }
   } catch (error) {
      res.status(500).json({ message: "Internal server error" });
   }

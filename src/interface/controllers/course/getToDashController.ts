@@ -28,7 +28,6 @@ export const getDataToTutorDashboardController = async (req: Request, res: Respo
 
 export const getDataToAdminDashboardController = async (req: Request, res: Response) => {
   try {
-    const errors = validationResult(req);
     const data = await getDataToAdminDashboard(courseRepository)();
     if (data) {
       return res

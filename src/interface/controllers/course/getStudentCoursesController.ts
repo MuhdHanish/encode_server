@@ -13,13 +13,7 @@ interface CustomRequest extends Request {
 const getStudentCoursesController = async (req: CustomRequest, res: Response) => {
   try {
     const courses = await getStudentCourses(courseRepository)(req.userInfo?.id as string);
-    if (courses) {
-      return res
-        .status(200)
-        .json({ message: "Courses fetched sucessfully", courses });
-    } else {
-      return res.status(400).json({ message: "No courses found" });
-    }
+      return res.status(200).json({ message: "Courses fetched sucessfully", courses });
   } catch (error) {
     res.status(500).json({ message: "Internal server error" });
   }
