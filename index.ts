@@ -53,13 +53,11 @@ connnectDatabase()
       },
     });
     io.on("connection", (socket: Socket) => {
-      socket.on("connect-to-online", (roomId:string) => {
+      socket.on("connect-to-online", (roomId: string) => {
         socket.join(roomId);
-        socket.emit("connected-to-online",roomId);
       });
       socket.on("join-to-chat", (roomId:string) => {
         socket.join(roomId);
-        socket.emit("joined-to-chat",roomId);
       });
       socket.on("typing", (roomId:string) => socket.to(roomId).emit("typing"));
       socket.on("stop-typing", (roomId: string) => socket.to(roomId).emit("stop-typing"));
