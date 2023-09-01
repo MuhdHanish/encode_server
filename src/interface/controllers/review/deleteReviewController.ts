@@ -3,8 +3,6 @@ import { deleteReview, getReviewByCredential } from "../../../app/usecases/revie
 import { reviewModel } from "../../../framework/database/models/reviewModel";
 import { reviewRepositoryEmpl } from "../../../framework/repository/reviewRepository";
 import { validationResult } from "express-validator";
-import { Review } from "../../../domain/models/Review";
-import mongoose from "mongoose";
 
 interface CustomRequest extends Request {
   userInfo?: { id: string; role: string };
