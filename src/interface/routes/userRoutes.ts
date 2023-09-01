@@ -41,8 +41,11 @@ import {
 import {
   signupValidatorOne, signupValidatorTwo, 
   getLanguageByIdValidator,getCourseByIdValidator,
-  loginValidator, postLanguageValidator, postCourseValidator, getByRoleValidator, muteDataValidator, forgotPasswordValidator, postReviewValidator, reviewValidator, deleteReviewValidator, editImageValidator, editCredentialsValidator, followUnfollowValidator
+  loginValidator, postLanguageValidator, postCourseValidator, getByRoleValidator, muteDataValidator, forgotPasswordValidator, postReviewValidator, reviewValidator, deleteReviewValidator, editImageValidator, editCredentialsValidator, followUnfollowValidator, accessChatValidator, fethcMessagesValidator, sendMessageValidator
 } from "../../middleware/requestValidator";
+import { accessChatController, fetchChatsController } from "../controllers/chat";
+import fetchMessagesController from "../controllers/message/fetchMessagesController";
+import { sendMessageController } from "../controllers/message";
 
 
 const router = Router();
@@ -134,7 +137,7 @@ router.get("/admin/get/users", adminAuthorization, getUsersController);
 router.get("/admin/get/users/count", adminAuthorization, getUsersCountController);
 router.get("/admin/get/users/:role", adminAuthorization, getByRoleValidator, getUsersByRoleController);
 router.get("/admin/get/users/count/:role", adminAuthorization, getByRoleValidator, getUsersCountByRoleController);
-router.get("/admin/get/course/students/:id", adminAuthorization, getCourseByIdValidator, getCourseStudentsController);
+router.get("/admin/get/course/students/:id([0-9a-fA-F]{24})", adminAuthorization, getCourseByIdValidator, getCourseStudentsController);
 router.get("/admin/get/course/data/dashboard", adminAuthorization,  getDataToAdminDashboardController);
 // PATCH
 router.patch("/admin/block/user/:id", adminAuthorization, muteDataValidator, blockUserContorller);
@@ -146,15 +149,27 @@ router.patch("/admin/unblock/user/:id", adminAuthorization, muteDataValidator, u
 // GET
 router.get("/amdin/get/languages/count", adminAuthorization, getLanguagesCountController);
 // PATCH
-router.patch("/admin/unlist/language/:id", adminAuthorization, muteDataValidator, unListLanguageController);
-router.patch("/admin/list/language/:id", adminAuthorization, muteDataValidator, listLanguageController);
+router.patch("/admin/unlist/language/:id([0-9a-fA-F]{24})", adminAuthorization, muteDataValidator, unListLanguageController);
+router.patch("/admin/list/language/:id([0-9a-fA-F]{24})", adminAuthorization, muteDataValidator, listLanguageController);
 
 // Course usecase
 
 //Tutor
 // PATCH
-router.patch("/tutor/unlist/course/:id", tutorAuthorization, muteDataValidator, unListCourseController);
-router.patch("/tutor/list/course/:id", tutorAuthorization, muteDataValidator, listCourseController);
+router.patch("/tutor/unlist/course/:id([0-9a-fA-F]{24})", tutorAuthorization, muteDataValidator, unListCourseController);
+router.patch("/tutor/list/course/:id([0-9a-fA-F]{24})", tutorAuthorization, muteDataValidator, listCourseController);
+
+// Chat
+// GET
+router.get("/get/chats", userAuthorization, fetchChatsController);
+// POST
+router.post("/access/chat/id:id([0-9a-fA-F]{24})", userAuthorization, accessChatValidator, accessChatController);
+
+// Message
+// GET
+router.get("/get/all/messages/:id([0-9a-fA-F]{24})", userAuthorization,fethcMessagesValidator, fetchMessagesController);
+// POST
+router.post("/send/message/:id([0-9a-fA-F]{24})", userAuthorization,sendMessageValidator, sendMessageController);
 
 
 export default router;

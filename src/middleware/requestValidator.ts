@@ -96,3 +96,15 @@ export const followUnfollowValidator = [
   param("id").notEmpty().withMessage("User id is required"),
 ];
 
+export const accessChatValidator = [
+  param("id").notEmpty().withMessage("Second user id is required"),
+];
+
+export const fethcMessagesValidator = [
+  param("id").notEmpty().withMessage("Chat id is required"),
+];
+
+export const sendMessageValidator = [
+  param("id").notEmpty().withMessage("Chat id is required"),
+  body("content").notEmpty().withMessage("Content is required")
+];
