@@ -13,7 +13,7 @@ export const postReview =  (reviewRepository: reviewRepository) =>  async(course
 
 export const getReviewsCount = (reviewRepository: reviewRepository) => async (course: string): Promise<number | null> => { 
   const count = await reviewRepository.getReviewsCount(course);
-  return count;
+  return count ? count : null;
 }
 
 export const isRecorded = (reviewRepository: reviewRepository) => async (course:string,user: string): Promise<boolean> => {

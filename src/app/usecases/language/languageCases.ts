@@ -3,28 +3,16 @@ import { languageRepository } from "../../../framework/repository/LanguageReposi
 
 export const getLanguagesCount = (languageRepository: languageRepository) => async ():Promise<number|null> => {
   const count = await languageRepository.getLanguagesCount();
-  if (count) {
-    return count;
-  } else {
-    return null;
-  }
+  return count ? count : null;
 }
 
 export const listLanguage = (languageRepository: languageRepository) => async(languageId:string):Promise<Language|null> => {
   const language = await languageRepository.listLanguage(languageId);
-  if (language) {
-    return language;
-  } else {
-    return null;
-  }
+  return language ? language : null;
 }
 
 export const unListLanguage = (languageRepository: languageRepository) => async(languageId:string):Promise<Language|null> => {
   const language = await languageRepository.unListLanguage(languageId);
-  if (language) {
-    return language;
-  } else {
-    return null;
-  }
+  return language ? language : null;
 }
 

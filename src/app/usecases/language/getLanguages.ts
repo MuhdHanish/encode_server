@@ -3,9 +3,5 @@ import { languageRepository } from "../../../framework/repository/LanguageReposi
 
 export const getLanguages = (languageRepository: languageRepository) => async ():Promise<Language[]|null> => {
   const languages = await languageRepository.getLanguages();
-  if (languages) {
-    return languages;
-  } else {
-    return null;
-  }
+  return languages ? languages : null;
 }

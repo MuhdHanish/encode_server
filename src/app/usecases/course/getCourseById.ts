@@ -3,9 +3,5 @@ import { courseRepository } from "../../../framework/repository/courseRepository
 
 export const getCourseById = (courseRepository: courseRepository) => async (courseId: string):Promise<Course|null> => {
   const course = await courseRepository.getCourseById(courseId);
-  if (course) {
-    return course;
-  } else {
-    return null;
-  }
+  return course ? course : null;
 }

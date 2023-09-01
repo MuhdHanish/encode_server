@@ -6,9 +6,5 @@ export const signupStepTwo =
   async (username: string,email: string,password: string,role: string): Promise<User | null> => {
     const userDetails: User = { username, email, password, role };
     const user = await userRepository.create(userDetails);
-    if (user) {
-     return user
-    } else {
-      return null;
-    }
+    return user ? user : null;
 };

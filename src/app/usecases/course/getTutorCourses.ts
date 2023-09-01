@@ -4,18 +4,10 @@ import { courseRepository } from "../../../framework/repository/courseRepository
 export const getTutorCourses =
   (courseRepository: courseRepository) =>async (id:string): Promise<Course[] | null> => {
     const courses = await courseRepository.getTutorCourses(id);
-    if (courses) {
-      return courses;
-    } else {
-      return null;
-    }
+    return courses ? courses : null;
   };
 
 export const getTutorPopularCourses = (courseRepository: courseRepository) => async (id: string): Promise<Course[] | null> => {
   const courses = await courseRepository.getTutorPopularCourses(id);
-  if (courses) {
-    return courses;
-  } else {
-    return null;
-  }
+  return courses ? courses : null;
 }
