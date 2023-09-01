@@ -25,7 +25,7 @@ const sendMessageController = async (req: CustomRequest, res: Response) => {
     if (message) {
       const chat = await updateLatestMessage(chatRepository)(id, message);
       if (chat) {
-        return res.status(201).json({ message: "Message sent successfully", sendedMessage:message });
+        return res.status(201).json({ message: "Message sent successfully", newMessage:message });
       } else {
         res.status(400).json({message: "Failed to update latest message in chat",});
       }

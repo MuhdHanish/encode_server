@@ -16,6 +16,8 @@ import connnectDatabase from "./src/framework/database/config/dbConfig";
 import userRoute from "./src/interface/routes/userRoutes";
 import tokenRoute from "./src/interface/routes/tokenRoutes"
 import { User } from "./src/domain/models/User";
+import { Message } from "./src/domain/models/Message";
+import { Chat } from "./src/domain/models/Chat";
 
 // creat express application
 const app = express();
@@ -54,19 +56,19 @@ connnectDatabase()
     });
     io.on("connection", (socket: Socket) => {
       socket.on("connect-to-online", (roomId: string) => {
-        socket.join(roomId);
+        socket.join(roomId.toString());
       });
-      socket.on("join-to-chat", (roomId:string) => {
-        socket.join(roomId);
+      socket.on("join-to-chat", (roomId: string) => {
+        socket.join(roomId.toString());
       });
-      socket.on("typing", (roomId:string) => socket.to(roomId).emit("typing"));
-      socket.on("stop-typing", (roomId: string) => socket.to(roomId).emit("stop-typing"));
-      socket.on("new-message", (newMessageRecieved) => {
-         let chat = newMessageRecieved?.chat;
-         if (!chat?.users) return console.log(`in this chat no users found`);
-         chat?.users.forEach((user:User) => {
-           if (user?._id === newMessageRecieved?.sender?._id) return;
-           socket.to(user?._id?.toString() as string).emit("message-recieved", newMessageRecieved);
+      socket.on("typing", (roomId:string) => socket.to(roomId.toString()).emit("typing"));
+      socket.on("stop-typing", (roomId: string) => socket.to(roomId.toString()).emit("stop-typing"));
+      socket.on("new-message", (newMessage: Message) => {
+         let chat = newMessage?.chat as Chat;
+        if (!chat?.users) { return; }
+           chat?.users.forEach((user: User) => {
+             if (user?.toString() === newMessage?.sender?._id?.toString()) { return console.log("same user") };
+           socket.to(user.toString() as string).emit("message-recieved", newMessage);
          });
       });
     });
