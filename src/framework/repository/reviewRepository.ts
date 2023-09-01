@@ -17,7 +17,7 @@ export const reviewRepositoryEmpl = (reviewModel: MongoDBReview): reviewReposito
     try {
       const reviews = await reviewModel
         .find({ course: new mongoose.Types.ObjectId(course) })
-        .populate("user", "-password")
+        .populate("user", "-password -isGoogle -role -status -following -followers")
         .exec();
       return reviews.length > 0 ? reviews : null;
     } catch (error) {
@@ -65,7 +65,7 @@ export const reviewRepositoryEmpl = (reviewModel: MongoDBReview): reviewReposito
         rating
       }
       const createdReview = await reviewModel.create(newReview);
-      const savedReview = await createdReview.populate("user", "-password");
+      const savedReview = await createdReview.populate("user", "-password -isGoogle -role -status -following -followers");
       return savedReview ? savedReview.toObject() : null;
     } catch (error) {
       console.error("Error posting review:", error);

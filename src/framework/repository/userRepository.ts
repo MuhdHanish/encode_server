@@ -41,8 +41,8 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
         .findOne({
           $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }],
         })
-        .populate("following", "-password")
-        .populate("followers", "-password")
+        .populate("following", "-password -isGoogle -role -status")
+        .populate("followers", "-password -isGoogle -role -status")
         .exec();
       if (user) {
         const passwordMatch = bcrypt.compareSync(password, user.password as string);
@@ -257,8 +257,8 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
           { $addToSet: { following: new mongoose.Types.ObjectId(userId) } },
           { new: true }
         )
-        .populate("following", "-password")
-        .populate("followers", "-password")
+        .populate("following", "-password -isGoogle -role -status")
+        .populate("followers", "-password -isGoogle -role -status")
         .exec();
       await userModel.findByIdAndUpdate(
         userId,
@@ -274,12 +274,14 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
 
   const unfollowMethods = async (id: string, userId: string): Promise<User | null> => {
     try{ 
-      const user = await userModel.findByIdAndUpdate(
-        id,
-        { $pull:{following:new mongoose.Types.ObjectId(userId)}},
-        { new: true }
-      ) .populate("following","-password")
-        .populate("followers","-password")
+      const user = await userModel
+        .findByIdAndUpdate(
+          id,
+          { $pull: { following: new mongoose.Types.ObjectId(userId) } },
+          { new: true }
+        )
+        .populate("following", "-password -isGoogle -role -status")
+        .populate("followers", "-password -isGoogle -role -status")
         .exec();
       await userModel.findByIdAndUpdate(
         userId, 
@@ -301,8 +303,8 @@ export const userRepositoryEmpl = (userModel: MongoDBUser): userRepository => {
           { $pull: { followers: new mongoose.Types.ObjectId(userId) } },
           { new: true }
         )
-        .populate("following", "-password")
-        .populate("followers", "-password")
+        .populate("following", "-password -isGoogle -role -status")
+        .populate("followers", "-password -isGoogle -role -status")
         .exec();
       await userModel.findByIdAndUpdate(
         userId,

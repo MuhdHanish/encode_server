@@ -20,14 +20,14 @@ export const chatRepositoryEmpl = (chatModel: MongoDBChat): chatRepository => {
             { users: { $elemMatch: { $eq: new mongoose.Types.ObjectId(secUserId) } } },
           ],
         })
-        .populate("users", "-password -following -followers")
+        .populate("users", "-password -following -followers -isGoogle -role -status")
         .populate("latestMessage");
       if (isChat) {
         return isChat;
       } else {
         const chatData = { users: [userId, secUserId] };
         const createdChat = await chatModel.create(chatData);
-        isChat = await chatModel.findById(createdChat._id).populate("users", "-password -following -followers");
+        isChat = await chatModel.findById(createdChat._id).populate("users", "-password -following -followers -isGoogle -role -status");
         return isChat ? isChat : null;
       }
     } catch (error) {
@@ -42,7 +42,7 @@ export const chatRepositoryEmpl = (chatModel: MongoDBChat): chatRepository => {
          .find({
            users: { $elemMatch: { $eq: new mongoose.Types.ObjectId(userId) } },
          })
-         .populate("users", "-password following -followers")
+         .populate("users", "-password -following -followers -isGoogle -role -status")
          .populate("latestMessage")
          .sort({ updatedAt: -1 });
       return chats.length > 0 ? chats : null;

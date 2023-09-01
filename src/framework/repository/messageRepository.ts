@@ -12,7 +12,7 @@ export const messageRepositoryEmpl = (messageModel: MongoDBMessage): messageRepo
   const fetchMessages = async (chatId: string): Promise<Message[] | null> => {
     try {
       const messages = await messageModel.find({ chat: new mongoose.Types.ObjectId(chatId) })
-        .populate("sender", "-password -following -followers")
+        .populate("sender", "-password -following -followers -isGoogle -role -status")
         .populate("chat");
       return messages.length > 0 ? messages : null;
     } catch (error) {
@@ -29,7 +29,7 @@ export const messageRepositoryEmpl = (messageModel: MongoDBMessage): messageRepo
         content
       };
       let message = (await messageModel.create(newMessage));
-      message = await message.populate("sender", "-password -following -followers");
+      message = await message.populate("sender", "-password -following -followers -isGoogle -role -status");
       message = await message.populate("chat");
       return message ? message : null;
     } catch (error) {

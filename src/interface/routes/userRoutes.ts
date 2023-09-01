@@ -163,11 +163,11 @@ router.patch("/tutor/list/course/:id([0-9a-fA-F]{24})", tutorAuthorization, mute
 // GET
 router.get("/get/chats", userAuthorization, fetchChatsController);
 // POST
-router.post("/access/chat/id:id([0-9a-fA-F]{24})", userAuthorization, accessChatValidator, accessChatController);
+router.post("/access/chat/:id([0-9a-fA-F]{24})", userAuthorization, accessChatValidator, accessChatController);
 
 // Message
 // GET
-router.get("/get/all/messages/:id([0-9a-fA-F]{24})", userAuthorization,fethcMessagesValidator, fetchMessagesController);
+router.get("/get/messages/:id([0-9a-fA-F]{24})", userAuthorization,fethcMessagesValidator, fetchMessagesController);
 // POST
 router.post("/send/message/:id([0-9a-fA-F]{24})", userAuthorization,sendMessageValidator, sendMessageController);
 

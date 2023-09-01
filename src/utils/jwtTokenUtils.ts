@@ -2,7 +2,7 @@ import jwt from "jsonwebtoken";
 import mongoose from "mongoose";
 
 export const generateAccessToken = async (id: mongoose.Types.ObjectId, role: string) => {
-  const expiresIn = "5m";
+  const expiresIn = "1hr";
   const accessToken =  jwt.sign({id,role}, process.env.JWT_ACCESS_SECRET as jwt.Secret, { expiresIn });
   return accessToken;
 };
