@@ -7,6 +7,7 @@ import { userModel } from "../database/models/userModel";
 export type chatRepository = {
   accessChat: (userId: string, secUserId: string) => Promise<Chat | null>;
   fetchChats: (userId: string) => Promise<Chat[] | null>;
+  updateLatestMessage: (chatId: string, message: Message) => Promise<Chat | null>;
 };
 
 export const chatRepositoryEmpl = (chatModel: MongoDBChat): chatRepository => {
@@ -58,8 +59,19 @@ export const chatRepositoryEmpl = (chatModel: MongoDBChat): chatRepository => {
     }
   };
 
+  const updateLatestMessage = async (chatId: string, message: Message): Promise<Chat|null> => {
+    try {
+      const updatedChat = await chatModel.findByIdAndUpdate(chatId, { $set: { latestMessage: message } }, { new: true });
+      return updatedChat ? updatedChat : null;
+    } catch (error) {
+      console.log("Error on updating latest message :", error);
+      return null;
+    }
+  }
+
   return {
     accessChat,
     fetchChats,
+    updateLatestMessage
   };
 }
