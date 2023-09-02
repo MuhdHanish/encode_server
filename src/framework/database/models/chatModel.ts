@@ -5,8 +5,7 @@ export type MongoDBChat = Model<Document<any, any, any> & Chat>;
 
 const chatSchema = new Schema<Chat>(
   {
-  users: [{ type: mongoose.Types.ObjectId, ref: "User" }],
-    latestMessage: { type: mongoose.Types.ObjectId, ref: "Message" },
+  users: [{ type: mongoose.Types.ObjectId, ref: "User" }]
   },
   {
     timestamps: true
