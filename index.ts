@@ -61,16 +61,14 @@ connnectDatabase()
       socket.on("join-to-chat", (roomId: string) => {
         socket.join(roomId.toString());
       });
-      socket.on("typing", (roomId:string) => socket.to(roomId.toString()).emit("typing"));
-      socket.on("stop-typing", (roomId: string) => socket.to(roomId.toString()).emit("stop-typing"));
       socket.on("new-message", (newMessage: Message) => {
          let chat = newMessage?.chat as Chat;
         if (!chat?.users) { return; }
-           chat?.users.forEach((user: User) => {
-             if (user?.toString() === newMessage?.sender?._id?.toString()) { return console.log("same user") };
+          chat?.users.forEach((user: User) => {
+             if (user?.toString() === newMessage?.sender?._id?.toString()) { return };
            socket.to(user.toString() as string).emit("message-recieved", newMessage);
-         });
-      });
+          });
+       });
     });
   })
   .catch((error) => console.log(`Failed to connect database`, error));
