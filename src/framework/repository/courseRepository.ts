@@ -51,7 +51,7 @@ export const courseRepositoryEmpl = (courseModel: MongoDBCourse): courseReposito
   
   return courses.length > 0 ? courses : null;
   } catch (error) {
-  console.error("Error getting courses:", error);
+  console.error("Error popular getting courses:", error);
   return null;
   }
   };
