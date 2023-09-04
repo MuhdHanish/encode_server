@@ -34,13 +34,13 @@
     "@types/jsonwebtoken": "^9.0.2",
     "@types/morgan": "^1.9.4",
     "@types/node": "^20.4.1",
+    "@types/socket.io": "^3.0.2",
     "@types/uuid": "^9.0.2",
     "morgan": "^1.10.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.1.6"
   },
   "dependencies": {
-    "@types/socket.io": "^3.0.2",
     "bcryptjs": "^2.4.3",
     "cors": "^2.8.5",
     "dotenv": "^16.3.1",
@@ -50,7 +50,6 @@
     "mongoose": "^7.3.2",
     "node-cache": "^5.1.2",
     "node-otp-sender": "^1.0.2",
-    "redis": "^4.6.7",
     "socket.io": "^4.7.2",
     "uuid": "^9.0.0"
   }
