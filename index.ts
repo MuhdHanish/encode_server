@@ -23,7 +23,7 @@ import { Chat } from "./src/domain/models/Chat";
 const app = express();
 
 // cors setting
-const allowedOrigins = ["http://localhost:5173", process.env.CORS_ORIGIN_URL as string];
+const allowedOrigins = ["http://localhost:5173","http://localhost:4173", process.env.CORS_ORIGIN_URL as string];
 app.use(
   cors({
     origin: allowedOrigins,
