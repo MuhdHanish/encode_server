@@ -2,10 +2,12 @@
   "name": "en-code-server",
   "version": "1.0.0",
   "description": "The server side of Encode is built with Node.js and uses a clean architecture with TypeScript. It powers the backend functionality of the web application.",
-  "main": "index.ts",
+  "main": "dist/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "ts-node-dev --respawn index.ts"
+    "build": "tsc -outDir dist",
+    "start":  "npm run build && node dist/app.js",
+    "dev": "ts-node-dev --respawn index.ts"
   },
   "repository": {
     "type": "git",
