@@ -49,7 +49,7 @@ app.use('/', userRoute);
 app.use('/refresh/token', tokenRoute);
 
 // database connecting & app listen
-const port = process.env.PORT || 8000;
+const port = process.env.PORT;
 connnectDatabase()
   .then((res) => {
     console.log(res);
