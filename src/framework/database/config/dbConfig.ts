@@ -1,6 +1,6 @@
 import mongoose, { ConnectOptions } from "mongoose";
 
-const uri = process.env.MONGO_URI as string ;
+const uri = process.env.MONGO_CLOUD_URI as string; 
 const connectOptions: ConnectOptions | any = {
   useNewUrlParser: true,
   useUnifiedTopology: true,
