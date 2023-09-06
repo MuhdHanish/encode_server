@@ -1,0 +1,21 @@
+"use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.resetPasswordVerify = exports.userAuthorization = exports.adminAuthorization = exports.tutorAuthorization = exports.googleLoginMiddleware = exports.googleSignupMiddelware = exports.refreshAuthorization = exports.otpAuthMiddleware = void 0;
+const otpAuthMiddleware_1 = __importDefault(require("./otpAuthMiddleware"));
+exports.otpAuthMiddleware = otpAuthMiddleware_1.default;
+const refreshAuthorization_1 = __importDefault(require("./refreshAuthorization"));
+exports.refreshAuthorization = refreshAuthorization_1.default;
+const googleAuthorizationMiddleware_1 = require("./googleAuthorizationMiddleware");
+Object.defineProperty(exports, "googleLoginMiddleware", { enumerable: true, get: function () { return googleAuthorizationMiddleware_1.googleLoginMiddleware; } });
+Object.defineProperty(exports, "googleSignupMiddelware", { enumerable: true, get: function () { return googleAuthorizationMiddleware_1.googleSignupMiddelware; } });
+const tutorAuthorizationMiddleware_1 = __importDefault(require("./tutorAuthorizationMiddleware"));
+exports.tutorAuthorization = tutorAuthorizationMiddleware_1.default;
+const adminAuthorization_1 = __importDefault(require("./adminAuthorization"));
+exports.adminAuthorization = adminAuthorization_1.default;
+const accessAuthorizationMiddleware_1 = __importDefault(require("./accessAuthorizationMiddleware"));
+exports.userAuthorization = accessAuthorizationMiddleware_1.default;
+const resetPasswordVerfiy_1 = __importDefault(require("./resetPasswordVerfiy"));
+exports.resetPasswordVerify = resetPasswordVerfiy_1.default;
