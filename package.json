@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "tsc -outDir dist",
-    "start":  "npm run build && node dist/index.js",
+    "start": "npm run build && pm2 start dist/index.js",
     "dev": "ts-node-dev --respawn index.ts"
   },
   "repository": {
