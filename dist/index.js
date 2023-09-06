@@ -37,7 +37,7 @@ app.use((0, morgan_1.default)("dev"));
 app.use('/', userRoutes_1.default);
 app.use('/refresh/token', tokenRoutes_1.default);
 // database connecting & app listen
-const port = process.env.PORT;
+const port = process.env.PORT || 8000;
 (0, dbConfig_1.default)()
     .then((res) => {
     console.log(res);
